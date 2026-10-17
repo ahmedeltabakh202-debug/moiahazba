@@ -1749,7 +1749,7 @@
       return JSON.parse(JSON.stringify(DEFAULT_SITE));
     })();
     // restore admin session within same browser tab session
-    let isAdmin = sessionStorage.getItem('ma_admin') === '1';
+    let isAdmin = localStorage.getItem('ma_admin') === '1';
     const PH = "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect fill=%22%23e0f2fe%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%230a4d8c%22 font-size=%2214%22%3Eفلتر%3C/text%3E%3C/svg%3E";
     let invoiceItems = [];
     let lastInvoice = null;
@@ -2523,7 +2523,7 @@
       const pass = document.getElementById('adminPassword').value;
       if (pass === ADMIN_PASS) {
         isAdmin = true;
-        try { sessionStorage.setItem('ma_admin', '1'); } catch (e) {}
+        try { localStorage.setItem('ma_admin', '1'); } catch (e) {}
         document.body.classList.add('is-admin');
         closeLoginModal();
         showSection('admin');
@@ -2540,7 +2540,7 @@
 
     function logoutAdmin() {
       isAdmin = false;
-      try { sessionStorage.removeItem('ma_admin'); } catch (e) {}
+      try { localStorage.removeItem('ma_admin'); } catch (e) {}
       document.body.classList.remove('is-admin');
       navStack.length = 0;
       updateAdminUI();
@@ -2983,140 +2983,325 @@
       });
     }
 
+    // بيانات المنشأة (فاتورة ضريبية)
+    const SELLER = {
+      nameAr: 'مؤسسة مويه عذبه لتنقية المياه',
+      nameEn: 'Moyah Adhba Water Purification Est.',
+      vat: '312826280300003',
+      cr: '4032283866',
+      addressAr: 'جيزان حي السويس شارع ابي عبيدة بن الجراح',
+      addressEn: 'Jizan, Al-Suez Dist., Abi Ubaidah St.',
+      phone: '0510572080',
+      bankName: 'Al-Rajhi',
+      bankNameAr: 'مصرف الراجحي',
+      accountNo: '232000010005986318206',
+      iban: 'SA688000232608015318206'
+    };
+
+    function zatcaTLV(tag, value) {
+      const enc = new TextEncoder();
+      const bytes = enc.encode(String(value));
+      const out = new Uint8Array(2 + bytes.length);
+      out[0] = tag; out[1] = bytes.length; out.set(bytes, 2);
+      return out;
+    }
+    function buildZatcaQRPayload(sellerName, vatNo, isoTs, total, vatAmt) {
+      const parts = [
+        zatcaTLV(1, sellerName),
+        zatcaTLV(2, vatNo),
+        zatcaTLV(3, isoTs),
+        zatcaTLV(4, Number(total).toFixed(2)),
+        zatcaTLV(5, Number(vatAmt).toFixed(2))
+      ];
+      let len = 0; parts.forEach(p => len += p.length);
+      const all = new Uint8Array(len);
+      let o = 0; parts.forEach(p => { all.set(p, o); o += p.length; });
+      let s = '';
+      all.forEach(b => s += String.fromCharCode(b));
+      return btoa(s);
+    }
+    async function loadQRImage(text, size) {
+      const url = 'https://api.qrserver.com/v1/create-qr-code/?size=' + size + 'x' + size + '&margin=8&data=' + encodeURIComponent(text);
+      return new Promise(res => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => res(img);
+        img.onerror = () => res(null);
+        img.src = url;
+      });
+    }
+
     async function buildInvoiceCanvas(data) {
-      try { await document.fonts.load('800 40px Cairo'); await document.fonts.load('600 30px Cairo'); } catch (e) {}
+      try { await document.fonts.load('700 28px Cairo'); await document.fonts.load('600 22px Cairo'); await document.fonts.load('400 18px Cairo'); } catch (e) {}
       const logo = await loadLogoImg();
-      const W = 1240, M = 70, ROW = 84;
-      const H = Math.max(1754, 720 + data.items.length * ROW + 700 + (data.notes ? 260 : 0));
+      const isQuote = data.kind === 'quote';
+      const vatPct = Number(data.vatPct) || 0;
+      const items = data.items || [];
+      // احتساب بنود الضريبة لكل سطر (السعر بدون ضريبة)
+      const rows = items.map((it, i) => {
+        const qty = Number(it.qty) || 0;
+        const price = Number(it.price) || 0;
+        const taxable = qty * price;
+        const vatAmt = taxable * (vatPct / 100);
+        const amount = taxable + vatAmt;
+        return { i: i + 1, name: it.name || '', qty, price, taxable, vatPct, vatAmt, amount };
+      });
+      const subtotal = rows.reduce((s, r) => s + r.taxable, 0);
+      const vatTotal = rows.reduce((s, r) => s + r.vatAmt, 0);
+      const discount = Number(data.discount) || 0;
+      const grand = Math.max(0, subtotal + vatTotal - discount);
+
+      const W = 1240, M = 48;
+      const tableRows = Math.max(rows.length, 1);
+      const H = Math.max(1754, 920 + tableRows * 52 + 420);
       const c = document.createElement('canvas'); c.width = W; c.height = H;
-      const x = c.getContext('2d'); x.direction = 'rtl';
+      const x = c.getContext('2d');
       const F = (w, sz) => `${w} ${sz}px Cairo, Tahoma, Arial, sans-serif`;
       const T = (txt, px, py, o = {}) => {
-        x.font = F(o.w || 600, o.sz || 30); x.fillStyle = o.c || '#1e293b'; x.textAlign = o.a || 'right'; x.textBaseline = 'middle';
-        x.fillText(txt, px, py);
+        x.font = F(o.w || 600, o.sz || 20);
+        x.fillStyle = o.c || '#1e293b';
+        x.textAlign = o.a || 'right';
+        x.textBaseline = 'middle';
+        x.fillText(String(txt), px, py);
       };
-      const fit = (txt, maxW) => {
-        if (x.measureText(txt).width <= maxW) return txt;
-        while (txt.length > 1 && x.measureText(txt + '…').width > maxW) txt = txt.slice(0, -1);
-        return txt + '…';
+      const fit = (txt, maxW, weight, size) => {
+        x.font = F(weight || 600, size || 18);
+        let t = String(txt);
+        if (x.measureText(t).width <= maxW) return t;
+        while (t.length > 1 && x.measureText(t + '…').width > maxW) t = t.slice(0, -1);
+        return t + '…';
       };
-      const rr = (px, py, w, h, r) => { x.beginPath(); x.roundRect(px, py, w, h, r); };
-      const drop = (cx, cy, s, col) => {
-        x.fillStyle = col; x.beginPath();
-        x.moveTo(cx, cy - s); x.bezierCurveTo(cx + s * .15, cy - s * .55, cx + s * .8, cy - s * .1, cx + s * .8, cy + s * .3);
-        x.arc(cx, cy + s * .3, s * .8, 0, Math.PI, false);
-        x.bezierCurveTo(cx - s * .8, cy - s * .1, cx - s * .15, cy - s * .55, cx, cy - s); x.fill();
+      const lineH = (x1, y1, x2, y2, col, w) => {
+        x.strokeStyle = col || '#cbd5e1'; x.lineWidth = w || 1;
+        x.beginPath(); x.moveTo(x1, y1); x.lineTo(x2, y2); x.stroke();
+      };
+      const rect = (px, py, w, h, fill, stroke) => {
+        if (fill) { x.fillStyle = fill; x.fillRect(px, py, w, h); }
+        if (stroke) { x.strokeStyle = stroke; x.lineWidth = 1; x.strokeRect(px, py, w, h); }
       };
 
-      // background
+      // خلفية بيضاء رسمية
       x.fillStyle = '#ffffff'; x.fillRect(0, 0, W, H);
-      // watermark drops
-      drop(W / 2, H / 2 + 100, 300, 'rgba(30,144,255,0.045)');
 
-      // header band
-      const g = x.createLinearGradient(0, 0, W, 330);
-      g.addColorStop(0, '#052f57'); g.addColorStop(.6, '#0a4d8c'); g.addColorStop(1, '#1e90ff');
-      x.fillStyle = g; x.fillRect(0, 0, W, 320);
-      drop(180, 70, 60, 'rgba(255,255,255,0.08)'); drop(330, 250, 36, 'rgba(255,255,255,0.1)'); drop(560, 60, 28, 'rgba(255,255,255,0.08)');
-      x.fillStyle = '#fff'; x.beginPath(); x.moveTo(0, 290);
-      x.bezierCurveTo(300, 340, 520, 240, 780, 290); x.bezierCurveTo(960, 325, 1100, 270, W, 300); x.lineTo(W, 330); x.lineTo(0, 330); x.fill();
-      // logo
-      const lx = W - M - 105, ly = 150;
-      x.fillStyle = '#fff'; x.beginPath(); x.arc(lx, ly, 112, 0, Math.PI * 2); x.fill();
-      if (logo) { x.save(); x.beginPath(); x.arc(lx, ly, 104, 0, Math.PI * 2); x.clip(); x.drawImage(logo, lx - 104, ly - 104, 208, 208); x.restore(); }
-      // shop title
-      T('مويه عذبه', lx - 140, 105, { w: 800, sz: 78, c: '#fff' });
-      T('فلاتر ـ بيع وتركيب وصيانة', lx - 140, 175, { w: 600, sz: 34, c: '#bfe3ff' });
-      T('نقاء الماء ... نقاء الحياة', lx - 140, 225, { w: 600, sz: 30, c: '#e0f2fe' });
-      // invoice label
-      rr(M, 70, 300, 120, 24); x.fillStyle = 'rgba(255,255,255,0.16)'; x.fill();
-      x.strokeStyle = 'rgba(255,255,255,0.5)'; x.lineWidth = 2; x.stroke();
-      T(data.title || 'فاتورة مبيعات', M + 150, 110, { w: 800, sz: 40, c: '#fff', a: 'center' });
-      T('# ' + data.no, M + 150, 160, { w: 700, sz: 32, c: '#bfe3ff', a: 'center' });
+      // شريط علوي رفيع
+      rect(0, 0, W, 6, '#0a4d8c');
 
-      // customer / date box
-      let y = 365;
-      rr(M, y, W - 2 * M, 150, 26); x.fillStyle = '#f0f7ff'; x.fill(); x.strokeStyle = '#cfe6ff'; x.lineWidth = 2; x.stroke();
-      T('اسم العميل', W - M - 30, y + 42, { sz: 26, c: '#64748b' });
-      T(fit(data.customer || '—', 500), W - M - 30, y + 98, { w: 800, sz: 42, c: '#0a4d8c' });
-      T('التاريخ', 600, y + 42, { sz: 26, c: '#64748b', a: 'right' });
-      T(data.date, 600, y + 98, { w: 700, sz: 30, c: '#1e293b', a: 'right' });
-      if (data.phone) { T('الجوال', M + 30, y + 42, { sz: 26, c: '#64748b', a: 'left' }); T(data.phone, M + 30, y + 98, { w: 700, sz: 30, c: '#1e293b', a: 'left' }); }
-
-      // table
-      y = 560;
-      const cols = { n: W - M - 20, name: W - M - 110, qty: 560, price: 420, total: M + 30 };
-      rr(M, y, W - 2 * M, 80, 18); x.fillStyle = '#0a4d8c'; x.fill();
-      T('م', cols.n, y + 40, { w: 800, sz: 30, c: '#fff' });
-      T('الصنف', cols.name, y + 40, { w: 800, sz: 30, c: '#fff' });
-      T('الكمية', cols.qty, y + 40, { w: 800, sz: 30, c: '#fff', a: 'center' });
-      T('السعر', cols.price, y + 40, { w: 800, sz: 30, c: '#fff', a: 'center' });
-      T('الإجمالي', cols.total + 90, y + 40, { w: 800, sz: 30, c: '#fff', a: 'center' });
-      y += 80;
-      data.items.forEach((it, i) => {
-        if (i % 2 === 0) { x.fillStyle = '#f0f7ff'; x.fillRect(M, y, W - 2 * M, ROW); }
-        x.font = F(700, 32);
-        T(String(i + 1), cols.n, y + ROW / 2, { w: 700, sz: 30, c: '#64748b' });
-        x.font = F(700, 32);
-        T(fit(it.name, 440), cols.name, y + ROW / 2, { w: 700, sz: 32 });
-        T(String(it.qty), cols.qty, y + ROW / 2, { w: 700, sz: 32, a: 'center' });
-        T(it.price.toFixed(2), cols.price, y + ROW / 2, { w: 600, sz: 32, a: 'center' });
-        T((it.price * it.qty).toFixed(2), cols.total + 90, y + ROW / 2, { w: 800, sz: 32, c: '#0a4d8c', a: 'center' });
-        y += ROW;
-      });
-      x.strokeStyle = '#0a4d8c'; x.lineWidth = 3; x.beginPath(); x.moveTo(M, y); x.lineTo(W - M, y); x.stroke();
-
-      // totals
-      y += 40;
-      const bx = M, bw = 600;
-      const line = (label, val, bold) => { T(label, bx + bw - 20, y + 30, { sz: 30, c: '#64748b' }); T(val, bx + 20, y + 30, { w: bold ? 800 : 600, sz: 32, a: 'left' }); y += 62; };
-      line('المجموع', data.subtotal.toFixed(2) + ' ر.س');
-      if (data.vatPct > 0 && data.vat > 0) line('ضريبة ' + data.vatPct + '%', data.vat.toFixed(2) + ' ر.س');
-      if (data.discount > 0) line('الخصم', '- ' + data.discount.toFixed(2) + ' ر.س');
-      if (data.companyName) line('الشركة', data.companyName);
-      if (data.payLabel) line('طريقة الدفع', data.payLabel);
-      if (data.payMethod === 'credit') {
-        line('المدفوع', (data.paidNow || 0).toFixed(2) + ' ر.س');
-        line('المتبقي', (data.remaining || 0).toFixed(2) + ' ر.س');
-        if (data.dueDate) line('الاستحقاق', data.dueDate);
-      }
-      y += 6;
-      const tg = x.createLinearGradient(bx, y, bx + bw, y);
-      tg.addColorStop(0, '#0a4d8c'); tg.addColorStop(1, '#1e90ff');
-      rr(bx, y, bw, 110, 22); x.fillStyle = tg; x.fill();
-      T(data.kind === 'quote' ? 'الإجمالي بعد الخصم' : 'الإجمالي المستحق', bx + bw - 28, y + 55, { w: 800, sz: 28, c: '#fff' });
-      T(data.total.toFixed(2) + ' ر.س', bx + 28, y + 55, { w: 800, sz: 44, c: '#fff', a: 'left' });
-      if (data.kind === 'quote') {
-        T('نسعد بخدمتكم 💙', W - M, y + 55, { w: 800, sz: 40, c: '#0a4d8c' });
-        T('هذا العرض صالح حتى ' + data.validUntil, W - M, y + 112, { w: 700, sz: 28, c: '#b45309' });
+      // ===== رأس الفاتورة =====
+      let y = 28;
+      // شعار في الوسط
+      const logoS = 88;
+      if (logo) {
+        x.drawImage(logo, W / 2 - logoS / 2, y, logoS, logoS);
       } else {
-        T('شكرًا لثقتكم بنا 💙', W - M, y + 55, { w: 800, sz: 40, c: '#0a4d8c' });
-        T('نتمنى لكم مياه نقية وصحة دائمة', W - M, y + 112, { sz: 28, c: '#64748b' });
-      }
-      if (data.notes) {
-        const ny = y + 190;
-        T('ملاحظات وشروط:', W - M, ny, { w: 800, sz: 30, c: '#0a4d8c' });
-        x.font = F(600, 28);
-        const words = data.notes.split(/\s+/); const lines = []; let cur = '';
-        words.forEach(w => { const t = cur ? cur + ' ' + w : w; if (x.measureText(t).width > W - 2 * M && cur) { lines.push(cur); cur = w; } else cur = t; });
-        if (cur) lines.push(cur);
-        lines.slice(0, 6).forEach((ln, k) => T(ln, W - M, ny + 50 + k * 44, { sz: 28, c: '#334155' }));
+        x.fillStyle = '#e0f2fe';
+        x.beginPath(); x.arc(W / 2, y + logoS / 2, logoS / 2, 0, Math.PI * 2); x.fill();
       }
 
-      // footer
-      const fy = H - 230;
-      const fg = x.createLinearGradient(0, fy, W, H);
-      fg.addColorStop(0, '#0a4d8c'); fg.addColorStop(1, '#052f57');
-      x.fillStyle = fg; x.fillRect(0, fy + 30, W, H - fy);
-      x.fillStyle = fg; x.beginPath(); x.moveTo(0, fy + 40);
-      x.bezierCurveTo(260, fy - 20, 520, fy + 80, 800, fy + 20); x.bezierCurveTo(980, fy - 10, 1100, fy + 30, W, fy + 10); x.lineTo(W, fy + 60); x.lineTo(0, fy + 60); x.fill();
-      x.fillStyle = 'rgba(255,255,255,0.35)'; x.beginPath(); x.moveTo(0, fy + 34);
-      x.bezierCurveTo(260, fy - 28, 520, fy + 72, 800, fy + 12); x.bezierCurveTo(980, fy - 18, 1100, fy + 22, W, fy + 2); x.lineTo(W, fy + 8); x.bezierCurveTo(1100, fy + 28, 980, fy - 12, 800, fy + 18); x.bezierCurveTo(520, fy + 78, 260, fy - 20, 0, fy + 40); x.fill();
-      T('مويه عذبه — فلاتر', W / 2, fy + 100, { w: 800, sz: 44, c: '#fff', a: 'center' });
-      T('📍 حي السويس - جيزان', W - M, fy + 165, { w: 600, sz: 32, c: '#e0f2fe' });
-      T('📞 0510572080', M, fy + 165, { w: 700, sz: 34, c: '#fff', a: 'left' });
+      // اسم المنشأة يمين ويسار
+      T(SELLER.nameAr, W - M, y + 28, { w: 800, sz: 26, c: '#0a4d8c' });
+      T(SELLER.nameAr, M, y + 28, { w: 800, sz: 26, c: '#0a4d8c', a: 'left' });
+      T(SELLER.nameEn, W - M, y + 56, { w: 600, sz: 14, c: '#64748b' });
+      T(SELLER.nameEn, M, y + 56, { w: 600, sz: 14, c: '#64748b', a: 'left' });
+
+      y = 28 + logoS + 10;
+      // بيانات المنشأة
+      T('الرقم الضريبي: ' + SELLER.vat, W - M, y, { w: 600, sz: 15, c: '#334155' });
+      T('VAT Number: ' + SELLER.vat, M, y, { w: 600, sz: 14, c: '#64748b', a: 'left' });
+      y += 22;
+      T('السجل التجاري: ' + SELLER.cr, W - M, y, { w: 600, sz: 15, c: '#334155' });
+      T('CR: ' + SELLER.cr, M, y, { w: 600, sz: 14, c: '#64748b', a: 'left' });
+      y += 22;
+      T(SELLER.addressAr, W - M, y, { w: 600, sz: 14, c: '#475569' });
+      T(SELLER.addressEn, M, y, { w: 600, sz: 13, c: '#64748b', a: 'left' });
+      y += 22;
+      T('جوال: ' + SELLER.phone, W - M, y, { w: 600, sz: 14, c: '#475569' });
+      T('Tel: ' + SELLER.phone, M, y, { w: 600, sz: 13, c: '#64748b', a: 'left' });
+
+      y += 28;
+      lineH(M, y, W - M, y, '#0a4d8c', 2);
+      y += 28;
+
+      // عنوان الفاتورة
+      const titleAr = isQuote ? 'عرض سعر' : 'الفاتورة الضريبية';
+      const titleEn = isQuote ? 'Quotation' : 'Tax Invoice';
+      T(titleEn + '  |  ' + titleAr, W / 2, y, { w: 800, sz: 30, c: '#0a4d8c', a: 'center' });
+      y += 36;
+      lineH(M, y, W - M, y, '#e2e8f0', 1);
+      y += 18;
+
+      // ===== بيانات العميل والفاتورة =====
+      const boxTop = y;
+      const colMid = W / 2;
+      // خلفية خفيفة
+      rect(M, y, W - M * 2, 130, '#f8fafc', '#e2e8f0');
+      y += 18;
+      const invNo = isQuote ? String(data.no) : ('I-' + String(data.no));
+      const invDate = data.date || '';
+      const dueDate = data.dueDate || data.validUntil || '';
+
+      // يمين: العميل
+      T('اسم العميل / Customer', W - M - 12, y, { w: 700, sz: 13, c: '#64748b' });
+      T(fit(data.customer || '-', 420, 700, 18), W - M - 12, y + 22, { w: 700, sz: 18, c: '#0f172a' });
+      T('الجوال / Phone', W - M - 12, y + 48, { w: 700, sz: 13, c: '#64748b' });
+      T(data.phone || '-', W - M - 12, y + 70, { w: 600, sz: 16, c: '#0f172a' });
+      if (data.companyName) {
+        T('الشركة / Company', W - M - 12, y + 92, { w: 700, sz: 13, c: '#64748b' });
+        T(fit(data.companyName, 400, 600, 15), W - M - 12, y + 112, { w: 600, sz: 15, c: '#0f172a' });
+      }
+
+      // يسار: أرقام الفاتورة
+      T('رقم الفاتورة / Invoice No.', M + 12, y, { w: 600, sz: 13, c: '#64748b', a: 'left' });
+      T(invNo, M + 12, y + 22, { w: 700, sz: 18, c: '#0f172a', a: 'left' });
+      T('التاريخ / Date', M + 12, y + 48, { w: 600, sz: 13, c: '#64748b', a: 'left' });
+      T(invDate, M + 12, y + 70, { w: 600, sz: 16, c: '#0f172a', a: 'left' });
+      if (dueDate) {
+        T((isQuote ? 'صالح حتى / Valid Until' : 'تاريخ الاستحقاق / Due Date'), M + 12, y + 92, { w: 600, sz: 13, c: '#64748b', a: 'left' });
+        T(dueDate, M + 12, y + 112, { w: 600, sz: 15, c: '#0f172a', a: 'left' });
+      }
+
+      y = boxTop + 130 + 20;
+
+      // ===== جدول البنود =====
+      // أعمدة من اليمين لليسار (RTL visual): # | الوصف | الكمية | السعر | المبلغ الخاضع | الضريبة% | المبلغ
+      // إحداثيات من اليسار للرسم:
+      // Amount | VAT% | Taxable | Price | Qty | Description | #
+      const cols = [
+        { key: 'amount', labelAr: 'المبلغ', labelEn: 'Amount', w: 110 },
+        { key: 'vatp', labelAr: 'ضريبة %', labelEn: 'VAT', w: 80 },
+        { key: 'taxable', labelAr: 'المبلغ الخاضع', labelEn: 'Taxable', w: 130 },
+        { key: 'price', labelAr: 'سعر', labelEn: 'Price', w: 100 },
+        { key: 'qty', labelAr: 'الكمية', labelEn: 'Qty', w: 70 },
+        { key: 'name', labelAr: 'الوصف / الصنف', labelEn: 'Description', w: 0 }, // flex
+        { key: 'num', labelAr: '#', labelEn: '#', w: 50 }
+      ];
+      const tableW = W - M * 2;
+      const nameW = tableW - cols.filter(c => c.key !== 'name').reduce((s, c) => s + c.w, 0);
+      cols.find(c => c.key === 'name').w = nameW;
+
+      // رأس الجدول
+      const headH = 48;
+      rect(M, y, tableW, headH, '#0a4d8c');
+      let cx = M;
+      cols.forEach(col => {
+        const centerX = cx + col.w / 2;
+        T(col.labelEn, centerX, y + 14, { w: 600, sz: 12, c: '#bfdbfe', a: 'center' });
+        T(col.labelAr, centerX, y + 32, { w: 700, sz: 14, c: '#ffffff', a: 'center' });
+        cx += col.w;
+      });
+      y += headH;
+
+      // صفوف
+      const rowH = 48;
+      if (!rows.length) {
+        rect(M, y, tableW, rowH, '#fff', '#e2e8f0');
+        T('لا توجد بنود', W / 2, y + rowH / 2, { w: 600, sz: 16, c: '#94a3b8', a: 'center' });
+        y += rowH;
+      } else {
+        rows.forEach((r, idx) => {
+          const bg = idx % 2 === 0 ? '#ffffff' : '#f8fafc';
+          rect(M, y, tableW, rowH, bg, '#e2e8f0');
+          cx = M;
+          const vals = {
+            amount: r.amount.toFixed(2),
+            vatp: (r.vatPct ? r.vatPct + '%' : '0%'),
+            taxable: r.taxable.toFixed(2),
+            price: r.price.toFixed(2),
+            qty: String(r.qty),
+            name: fit(r.name, nameW - 16, 600, 15),
+            num: String(r.i)
+          };
+          cols.forEach(col => {
+            const centerX = cx + col.w / 2;
+            const align = col.key === 'name' ? 'right' : 'center';
+            const px = col.key === 'name' ? cx + col.w - 10 : centerX;
+            T(vals[col.key], px, y + rowH / 2, { w: 600, sz: 15, c: '#1e293b', a: align });
+            cx += col.w;
+          });
+          y += rowH;
+        });
+      }
+
+      y += 20;
+
+      // ===== المجاميع + QR =====
+      const sumBoxW = 420;
+      const sumX = M;
+      const qrSize = 160;
+      const qrX = W - M - qrSize;
+
+      // QR
+      const isoTs = data.dateIso || new Date().toISOString();
+      const qrPayload = buildZatcaQRPayload(SELLER.nameAr, SELLER.vat, isoTs, grand, vatTotal);
+      const qrImg = await loadQRImage(qrPayload, 200);
+      if (qrImg) {
+        x.drawImage(qrImg, qrX, y, qrSize, qrSize);
+      } else {
+        rect(qrX, y, qrSize, qrSize, '#f8fafc', '#cbd5e1');
+        T('QR', qrX + qrSize / 2, y + qrSize / 2, { w: 700, sz: 18, c: '#94a3b8', a: 'center' });
+      }
+      T('رمز الاستجابة السريعة', qrX + qrSize / 2, y + qrSize + 16, { w: 600, sz: 12, c: '#64748b', a: 'center' });
+      T('ZATCA e-invoicing QR', qrX + qrSize / 2, y + qrSize + 32, { w: 600, sz: 11, c: '#94a3b8', a: 'center' });
+
+      // مجاميع
+      const sumLines = [
+        { ar: 'المجموع الفرعي', en: 'Subtotal', val: subtotal.toFixed(2) + ' SAR', bold: false },
+        { ar: 'ضريبة القيمة المضافة' + (vatPct ? ' (' + vatPct + '%)' : ''), en: 'VAT', val: vatTotal.toFixed(2) + ' SAR', bold: false }
+      ];
+      if (discount > 0) {
+        sumLines.push({ ar: 'الخصم', en: 'Discount', val: '- ' + discount.toFixed(2) + ' SAR', bold: false });
+      }
+      sumLines.push({ ar: 'الإجمالي', en: 'Total', val: grand.toFixed(2) + ' SAR', bold: true });
+
+      let sy = y;
+      sumLines.forEach((ln, i) => {
+        const isLast = i === sumLines.length - 1;
+        if (isLast) {
+          rect(sumX, sy, sumBoxW, 44, '#0a4d8c');
+          T(ln.en + '  |  ' + ln.ar, sumX + sumBoxW - 14, sy + 22, { w: 700, sz: 16, c: '#fff' });
+          T(ln.val, sumX + 14, sy + 22, { w: 800, sz: 18, c: '#fff', a: 'left' });
+          sy += 50;
+        } else {
+          T(ln.en + '  |  ' + ln.ar, sumX + sumBoxW - 4, sy + 12, { w: 600, sz: 14, c: '#64748b' });
+          T(ln.val, sumX + 4, sy + 12, { w: 700, sz: 16, c: '#1e293b', a: 'left' });
+          sy += 28;
+        }
+      });
+
+      if (data.payLabel) {
+        T('طريقة الدفع: ' + data.payLabel, sumX + sumBoxW - 4, sy + 6, { w: 600, sz: 14, c: '#334155' });
+        sy += 22;
+      }
+      if (data.payMethod === 'credit') {
+        T('المدفوع: ' + (Number(data.paidNow) || 0).toFixed(2) + ' | المتبقي: ' + (Number(data.remaining) || 0).toFixed(2), sumX + sumBoxW - 4, sy + 6, { w: 600, sz: 14, c: '#c2410c' });
+        sy += 22;
+      }
+
+      y = Math.max(y + qrSize + 50, sy + 20);
+      lineH(M, y, W - M, y, '#e2e8f0', 1);
+      y += 20;
+
+      // ملاحظات + بنك
+      T('ملاحظات / Notes', W - M, y, { w: 700, sz: 14, c: '#64748b' });
+      T('Bank Account Details', M, y, { w: 700, sz: 14, c: '#64748b', a: 'left' });
+      y += 24;
+      const notes = data.notes || (isQuote ? 'هذا العرض صالح للمدة المحددة أعلاه.' : 'شكراً لتعاملكم معنا');
+      T(fit(notes, 520, 600, 15), W - M, y, { w: 600, sz: 15, c: '#334155' });
+      T('Bank Name: ' + SELLER.bankName, M, y, { w: 600, sz: 14, c: '#334155', a: 'left' });
+      y += 22;
+      T('Account No: ' + SELLER.accountNo, M, y, { w: 600, sz: 13, c: '#475569', a: 'left' });
+      y += 20;
+      T('IBAN: ' + SELLER.iban, M, y, { w: 600, sz: 13, c: '#475569', a: 'left' });
+      y += 28;
+      T(SELLER.nameAr, M, y, { w: 600, sz: 13, c: '#0a4d8c', a: 'left' });
+
+      // تذييل
+      y = H - 36;
+      lineH(M, y - 12, W - M, y - 12, '#e2e8f0', 1);
+      T('مؤسسة مويه عذبه لتنقية المياه — جيزان', W / 2, y, { w: 600, sz: 13, c: '#94a3b8', a: 'center' });
+
       return c;
     }
+
 
     // Records the sale once; both PDF and Excel reuse the same invoice
     function finalizeInvoice() {
@@ -3154,7 +3339,7 @@
       const iso = now.toISOString();
       const date = now.toLocaleDateString('en-GB') + '  ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
       const data = {
-        no, customer, phone, custId, date,
+        no, customer, phone, custId, date, dateIso: iso,
         items: invoiceItems.map(i => ({ ...i })),
         subtotal, discount, vatPct, vat, total,
         companyId, companyName,
