@@ -3554,17 +3554,24 @@
       return `${d.kind === 'quote' ? 'عرض-سعر' : 'فاتورة'}-${d.no}-${d.customer.replace(/[\\/:*?"<>|]/g, '')}.${ext}`;
     }
 
-    async function downloadInvoicePDF() {
-      const data = finalizeInvoice(); if (!data) return;
-      showLoading('جاري تجهيز الفاتورة PDF...');
-      let canvas;
-      try { canvas = await buildInvoiceCanvas(data); }
-      catch (e) { hideLoading(); alert('تعذر إنشاء الفاتورة: ' + e.message); return; }
+    async function buildPdfBlobFromData(data) {
+      const canvas = await buildInvoiceCanvas(data);
       const { jsPDF } = window.jspdf;
       const wMM = 210, hMM = wMM * canvas.height / canvas.width;
       const doc = new jsPDF({ unit: 'mm', format: [wMM, Math.max(297, hMM)], compress: true });
       doc.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, wMM, hMM);
-      showFileReady(doc.output('blob'), invFileName(data, 'pdf'), 'application/pdf');
+      return doc.output('blob');
+    }
+    async function downloadInvoicePDF() {
+      const data = finalizeInvoice(); if (!data) return;
+      showLoading('جاري تجهيز الفاتورة PDF...');
+      try {
+        const blob = await buildPdfBlobFromData(data);
+        showFileReady(blob, invFileName(data, 'pdf'), 'application/pdf');
+      } catch (e) {
+        hideLoading();
+        alert('تعذر إنشاء الفاتورة: ' + (e.message || e));
+      }
     }
 
     function loadXlsxLib() {
@@ -4021,54 +4028,116 @@
       if (p.length === 9 && p.startsWith('5')) p = '966' + p;
       return p;
     }
-    function shareInvoiceWhatsApp() {
-      const data = lastInvoice;
-      if (!data) { alert('أنشئ الفاتورة أولاً (PDF أو Excel) ثم أرسلها واتساب'); return; }
-      const phone = normalizeWaPhone(data.phone);
-      if (!phone) { alert('لا يوجد رقم جوال مسجل للعميل — أضف الرقم في الفاتورة'); return; }
-      const lines = [
-        '📄 *فاتورة ضريبية — مويه عذبه*',
-        'رقم الفاتورة: I-' + data.no,
-        'العميل: ' + data.customer,
-        'التاريخ: ' + data.date,
-        'الإجمالي: ' + Number(data.total).toFixed(2) + ' ر.س',
-        data.payLabel ? 'الدفع: ' + data.payLabel : '',
-        data.notes ? 'ملحوظة: ' + data.notes : '',
-        '',
-        '📍 منطقة جيزان',
-        '📞 0510572080'
-      ].filter(Boolean);
-      window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(lines.join('\\n')), '_blank');
+    async function sharePdfToWhatsApp(blob, fileName, phone, caption) {
+      const file = new File([blob], fileName, { type: 'application/pdf' });
+      // 1) مشاركة ملف PDF مباشرة (الموبايل يفتح واتساب مع المرفق)
+      try {
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: fileName,
+            text: caption || ''
+          });
+          toast('اختر واتساب لإرسال ملف PDF');
+          return true;
+        }
+      } catch (e) {
+        if (e && e.name === 'AbortError') return false;
+      }
+      // 2) Fallback: تنزيل PDF + فتح محادثة العميل
+      try {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = fileName;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 20000);
+      } catch (e) {}
+      const tip = (caption || 'مرفق PDF') + '\n\n(تم تنزيل ملف PDF — اضغط 📎 في واتساب وأرفقه من التنزيلات)';
+      if (phone) {
+        window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(tip), '_blank');
+        toast('تم تنزيل PDF — أرفقه من التنزيلات في واتساب');
+      } else {
+        alert('تم تنزيل PDF. افتح واتساب وأرفق الملف من التنزيلات.');
+      }
+      return false;
     }
-    let lastQuote = null;
-    function shareQuoteWhatsApp() {
-      const phoneEl = document.getElementById('qPhone');
-      const phone = normalizeWaPhone(phoneEl ? phoneEl.value : (lastQuote && lastQuote.phone));
-      const data = lastQuote;
+
+    async function shareInvoiceWhatsApp() {
+      let data = lastInvoice;
       if (!data) {
-        // حاول من الحقول الحالية
-        const customer = document.getElementById('qCustomer')?.value.trim();
-        const total = document.getElementById('qTotal')?.textContent || '';
-        if (!customer) { alert('أنشئ عرض السعر PDF أولاً أو اكتب بيانات العميل'); return; }
-        if (!phone) { alert('أدخل رقم جوال العميل لإرسال العرض'); return; }
-        const text = '📝 *عرض سعر — مويه عذبه*\\nالعميل: ' + customer + '\\nالإجمالي: ' + total + '\\n📍 منطقة جيزان\\n📞 0510572080';
-        window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(text), '_blank');
+        data = finalizeInvoice();
+        if (!data) return;
+      }
+      const phone = normalizeWaPhone(data.phone);
+      if (!phone) {
+        alert('أدخل رقم جوال العميل في الفاتورة لإرسال الـ PDF على واتساب');
         return;
       }
-      if (!phone) { alert('لا يوجد رقم جوال — أضفه في عرض السعر'); return; }
-      const lines = [
-        '📝 *عرض سعر — مويه عذبه*',
-        'رقم العرض: ' + data.no,
-        'العميل: ' + data.customer,
-        'التاريخ: ' + data.date,
-        'الإجمالي: ' + Number(data.total).toFixed(2) + ' ر.س',
-        data.validUntil ? 'صالح حتى: ' + data.validUntil : '',
-        data.notes ? 'ملحوظة: ' + data.notes : '',
-        '',
-        '📍 منطقة جيزان',
-        '📞 0510572080'
-      ].filter(Boolean);
-      window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(lines.join('\\n')), '_blank');
+      showLoading('جاري تجهيز فاتورة PDF للإرسال...');
+      try {
+        const blob = await buildPdfBlobFromData(data);
+        hideLoading();
+        const name = invFileName(data, 'pdf');
+        const caption = '📄 فاتورة ضريبية — مويه عذبه\nرقم: I-' + data.no + '\nالعميل: ' + data.customer + '\nالإجمالي: ' + Number(data.total).toFixed(2) + ' ر.س';
+        await sharePdfToWhatsApp(blob, name, phone, caption);
+      } catch (e) {
+        hideLoading();
+        alert('تعذر تجهيز PDF: ' + (e.message || e));
+      }
+    }
+
+    let lastQuote = null;
+    function buildQuoteDataFromForm() {
+      if (!qItems.length) { alert('أضف منتجات لعرض السعر أولاً'); return null; }
+      const customer = (document.getElementById('qCustomer')?.value || '').trim();
+      if (!customer) { alert('اكتب اسم العميل'); return null; }
+      const phone = (document.getElementById('qPhone')?.value || '').trim();
+      if (!normalizeWaPhone(phone)) { alert('أدخل رقم جوال العميل'); return null; }
+      const { sub, vatPct, vat, disc, total } = calcQuote();
+      const no = parseInt(localStorage.getItem('ma_qno') || '1000') + 1;
+      localStorage.setItem('ma_qno', String(no));
+      const now = new Date();
+      const days = Math.max(1, parseInt(document.getElementById('qValid')?.value) || 7);
+      const until = new Date(now.getTime() + days * 86400000);
+      const data = {
+        kind: 'quote', title: 'عرض سعر', no: 'Q-' + no, customer,
+        custId: document.getElementById('qCustId')?.value || '',
+        phone,
+        date: now.toLocaleDateString('en-GB') + '  ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+        dateIso: now.toISOString(),
+        items: qItems.map(i => ({ ...i })),
+        subtotal: sub, discount: disc, vatPct, vat, total,
+        validUntil: until.toLocaleDateString('en-GB'),
+        notes: (document.getElementById('qNotes')?.value || '').trim()
+      };
+      try {
+        const qs = JSON.parse(localStorage.getItem('ma_quotes') || '[]');
+        qs.push({ ...data });
+        localStorage.setItem('ma_quotes', JSON.stringify(qs));
+        markDirty();
+      } catch (e) {}
+      lastQuote = data;
+      return data;
+    }
+    async function shareQuoteWhatsApp() {
+      let data = lastQuote;
+      if (!data) {
+        data = buildQuoteDataFromForm();
+        if (!data) return;
+      }
+      const phone = normalizeWaPhone(data.phone || document.getElementById('qPhone')?.value);
+      if (!phone) { alert('أدخل رقم جوال العميل'); return; }
+      showLoading('جاري تجهيز عرض السعر PDF للإرسال...');
+      try {
+        const blob = await buildPdfBlobFromData(data);
+        hideLoading();
+        const name = invFileName(data, 'pdf');
+        const caption = '📝 عرض سعر — مويه عذبه\nرقم: ' + data.no + '\nالعميل: ' + data.customer + '\nالإجمالي: ' + Number(data.total).toFixed(2) + ' ر.س';
+        await sharePdfToWhatsApp(blob, name, phone, caption);
+      } catch (e) {
+        hideLoading();
+        alert('تعذر تجهيز PDF: ' + (e.message || e));
+      }
     }
 
     // ==================== COMPANIES ====================
