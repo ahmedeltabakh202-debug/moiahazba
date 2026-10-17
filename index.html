@@ -657,6 +657,26 @@
     .cd-form input, .cd-form textarea { margin-bottom: 8px; }
     /* Admin dashboard */
     .admin-hero { display: flex; align-items: center; gap: 12px; background: linear-gradient(135deg, #052f57, #0a4d8c 60%, #1e90ff); color: #fff; border-radius: 18px; padding: 14px 16px; margin-bottom: 14px; box-shadow: var(--shadow); }
+    .qc-banner {
+      display: flex; align-items: center; gap: 14px; width: 100%;
+      background: linear-gradient(135deg, #047857 0%, #10b981 50%, #34d399 100%);
+      color: #fff; border: none; border-radius: 18px; padding: 18px 16px;
+      margin-bottom: 14px; box-shadow: 0 10px 24px rgba(16,185,129,.35);
+      cursor: pointer; text-align: right; font-family: inherit;
+      transition: transform .15s ease, box-shadow .15s;
+    }
+    .qc-banner:active { transform: scale(.98); }
+    .qc-banner .qc-ic {
+      width: 58px; height: 58px; border-radius: 16px; flex-shrink: 0;
+      background: rgba(255,255,255,.22); display: flex; align-items: center; justify-content: center;
+      font-size: 1.85rem;
+    }
+    .qc-banner b { display: block; font-size: 1.2rem; font-weight: 800; }
+    .qc-banner small { display: block; opacity: .92; font-size: .85rem; margin-top: 2px; }
+    .qc-banner .qc-arrow { margin-right: auto; font-size: 1.4rem; opacity: .9; }
+    .qc-item { display: flex; align-items: center; gap: 8px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 10px; margin-bottom: 8px; }
+    .qc-item b { flex: 1; font-size: .9rem; }
+    .qc-item input { width: 70px; margin: 0; padding: 6px 8px; }
     .admin-hero .ah-ic { font-size: 1.9rem; background: rgba(255,255,255,.18); width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; }
     .admin-hero b { display: block; font-size: 1.15rem; }
     .admin-hero small { opacity: .85; }
@@ -887,6 +907,7 @@
     }
     body.dark #adminPanelBack { background: #152033; border-color: #1e3a5f; color: #93c5fd; }
     body.admin-panel-open #adminPanelBack { display: flex; }
+    body.admin-panel-open .qc-banner,
     body.admin-panel-open .admin-hero,
     body.admin-panel-open .admin-group,
     body.admin-panel-open .save-bar { display: none !important; }
@@ -1025,9 +1046,16 @@
           <span class="hl-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg></span>
           الأسئلة
         </button>
-        <button class="home-link admin-only" id="homeAdminBtn" style="display:none" onclick="showSection('admin')">
+        <button class="home-link admin-only" id="homeAdminBtn" style="display:none" onclick="openAdminFromHome()">
           <span class="hl-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
           لوحة التحكم
+        </button>
+      </div>
+      <div id="homeAdminOpen" style="display:none;margin:12px 0 4px;">
+        <button type="button" class="qc-banner" onclick="showSection('admin')">
+          <span class="qc-ic">⚙️</span>
+          <span style="flex:1"><b>لوحة التحكم</b><small>مفتوحة — اضغط للدخول · بعد الخروج تختفي من هنا</small></span>
+          <span class="qc-arrow">←</span>
         </button>
       </div>
       <div class="block-label">تواصل معنا</div>
@@ -1166,6 +1194,11 @@
       <span id="adminPanelBackLabel">العودة للقائمة</span>
     </button>
     <div class="admin-hero"><span class="ah-ic">⚙️</span><div><b>لوحة التحكم</b><small>مويه عذبه - إدارة المحل</small></div></div>
+    <button type="button" class="qc-banner" onclick="openAdminPanel('quickCash')">
+      <span class="qc-ic">⚡</span>
+      <span style="flex:1"><b>كاشير سريع</b><small>بيع سريع بدون عميل — للمنتجات الجاهزة</small></span>
+      <span class="qc-arrow">←</span>
+    </button>
     <div class="save-bar">
       <button class="btn btn-save" onclick="saveFileDownload()">💾 احفظ الملف</button>
       <div id="dirtyNote">✓ لا توجد تغييرات جديدة</div>
@@ -1214,6 +1247,39 @@
       </div>
       <div class="admin-tabs grid" style="margin-top:10px;">
         <button class="admin-tab tile" data-tab="siteContent"><span class="ti">📝</span>من نحن و FAQ</button>
+      </div>
+    </div>
+
+    <!-- Quick Cashier Panel -->
+    <div id="quickCash" class="admin-panel">
+      <div class="card">
+        <h3 style="margin-bottom:6px;">⚡ كاشير سريع</h3>
+        <p style="color:var(--muted);font-size:.88rem;margin-bottom:14px;">بيع فوري بدون عميل أو شركة — مناسب للشراء السريع من المحل.</p>
+        <label>اختر منتج</label>
+        <select id="qcProductSelect"><option value="">-- اختر منتج --</option></select>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:8px;">
+          <input type="number" id="qcQty" value="1" min="1" style="width:90px;margin:0" placeholder="الكمية">
+          <button class="btn btn-primary" style="flex:1" onclick="addQcItem()">➕ إضافة</button>
+        </div>
+        <div id="qcItems" style="margin-top:14px;"></div>
+        <div style="margin-top:12px;">
+          <label>ضريبة القيمة المضافة %</label>
+          <input type="number" id="qcVat" placeholder="0" min="0" max="100" step="0.01" value="15" oninput="calcQcTotal()">
+        </div>
+        <div class="total-box">
+          <div id="qcSubLabel">الإجمالي قبل الخصم</div>
+          <div class="total" id="qcSubTotal">0 ر.س</div>
+        </div>
+        <label style="margin-top:12px;">خصم من الإجمالي <span class="opt">(ريال)</span></label>
+        <input type="number" id="qcDiscount" placeholder="0" min="0" step="0.01" oninput="calcQcTotal()">
+        <div class="total-box" style="background:#ecfdf5;margin-top:10px;">
+          <div>الإجمالي النهائي</div>
+          <div class="total" id="qcTotal">0 ر.س</div>
+        </div>
+        <div id="qcBanner"></div>
+        <button class="btn btn-success btn-block" style="margin-top:12px;" onclick="completeQuickSale()">✅ إتمام البيع نقداً</button>
+        <button class="btn btn-primary btn-block" style="margin-top:8px;" onclick="completeQuickSalePDF()">📄 إتمام البيع + PDF</button>
+        <button class="btn btn-outline btn-block" style="margin-top:8px;" onclick="clearQuickCash()">مسح</button>
       </div>
     </div>
 
@@ -1338,8 +1404,9 @@
           <textarea id="invNotes" rows="2" placeholder="مثال: التركيب خلال 48 ساعة"></textarea>
         </div>
         <div id="invBanner"></div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px;">
-          <button class="btn btn-success" onclick="downloadInvoicePDF()">📄 فاتورة PDF</button>
+        <button class="btn btn-success btn-block" style="margin-top:12px;" onclick="completeInvoiceSale()">✅ إتمام البيع (خصم من المخزن)</button>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+          <button class="btn btn-primary" onclick="downloadInvoicePDF()">📄 فاتورة PDF</button>
           <button class="btn btn-excel" onclick="downloadInvoiceExcel()">📊 فاتورة Excel</button>
         </div>
         <button class="btn btn-whatsapp btn-block" style="margin-top:8px;" onclick="shareInvoiceWhatsApp()">💬 إرسال الفاتورة واتساب للعميل</button>
@@ -1351,6 +1418,7 @@
     <div id="quote" class="admin-panel">
       <div class="card">
         <h3 style="margin-bottom:12px;">📝 عرض سعر</h3>
+        <p style="color:var(--muted);font-size:.85rem;margin-bottom:10px;">عرض السعر لا يخصم من المخزن — للبيع الفعلي استخدم الفاتورة أو الكاشير السريع.</p>
         <input type="hidden" id="qCustId" value="">
         <label>اختر عميل من القائمة</label>
         <select id="qCustPick" onchange="pickCustomer('q')">
@@ -1848,6 +1916,10 @@
     const navStack = [];
     let histOk = true;
     function showSection(id, isBack) {
+      if (id === 'admin' && !isAdmin) {
+        openLoginModal();
+        return;
+      }
       const curEl = document.querySelector('.section.active');
       const cur = curEl && curEl.id;
       if (!isBack && cur && cur !== id) {
@@ -1878,6 +1950,7 @@
     }
 
     const ADMIN_TITLES = {
+      quickCash: 'كاشير سريع',
       addProduct: 'إضافة منتج', allProducts: 'كل المنتجات', stock: 'المخزن',
       invoice: 'الفاتورة', quote: 'عرض سعر', sales: 'المبيعات',
       installments: 'التقسيط', companies: 'الشركات', multiQuote: 'عرض سعر شركات',
@@ -1900,6 +1973,7 @@
       if (tab === 'stock') { stockTab = getLowStockProducts().length ? 'low' : 'avail'; setStockTab(stockTab); }
       if (tab === 'invoice') { fillInvoiceSelect(); fillCustomerPicks(); fillInvoiceCompanies(); }
       if (tab === 'quote') { fillQuoteSelect(); fillCustomerPicks(); }
+      if (tab === 'quickCash') { fillQcProducts(); renderQcItems(); }
       if (tab === 'addProduct') fillProductCompanies();
       if (tab === 'companies') renderCompanies();
       if (tab === 'multiQuote') { fillMqProducts(); renderMqCompanies(); renderMqTable(); }
@@ -2567,9 +2641,16 @@
     function updateAdminUI() {
       const fab = document.getElementById('adminFab');
       const homeBtn = document.getElementById('homeAdminBtn');
+      const openBox = document.getElementById('homeAdminOpen');
       if (fab) fab.style.display = isAdmin ? 'flex' : 'none';
       if (homeBtn) homeBtn.style.display = isAdmin ? 'block' : 'none';
+      // لوحة التحكم على الرئيسية تظهر فقط بعد تسجيل الدخول وتختفي بعد الخروج
+      if (openBox) openBox.style.display = isAdmin ? 'block' : 'none';
       document.body.classList.toggle('is-admin', isAdmin);
+    }
+    function openAdminFromHome() {
+      if (!isAdmin) { openLoginModal(); return; }
+      showSection('admin');
     }
 
     // ---- Add / Edit Product ----
@@ -2857,6 +2938,135 @@
     }
 
     // ---- Invoice ----
+
+    // ---- Quick Cashier ----
+    let qcItems = [];
+    let lastQuickSale = null;
+    function fillQcProducts() {
+      const sel = document.getElementById('qcProductSelect'); if (!sel) return;
+      sel.innerHTML = '<option value="">-- اختر منتج --</option>' +
+        products.map(p => `<option value="${p.id}">${esc(p.name)} — ${p.priceAfter} ر.س (متوفر: ${p.qty})</option>`).join('');
+    }
+    function addQcItem() {
+      if (lastQuickSale) { alert('تم البيع. اضغط «مسح» لبدء عملية جديدة'); return; }
+      const id = document.getElementById('qcProductSelect').value;
+      if (!id) { alert('اختر منتج'); return; }
+      const p = products.find(x => x.id === id); if (!p) return;
+      const qty = Math.max(1, parseInt(document.getElementById('qcQty').value) || 1);
+      if (p.qty < qty) {
+        if (!confirm('الكمية المطلوبة أكبر من المتوفر (' + p.qty + '). متابعة؟')) return;
+      }
+      const existing = qcItems.find(i => i.id === p.id);
+      if (existing) existing.qty += qty;
+      else qcItems.push({ id: p.id, name: p.name, price: Number(p.priceAfter) || 0, buyPrice: Number(p.buyPrice) || 0, qty, warranty: p.warranty || '' });
+      document.getElementById('qcQty').value = 1;
+      renderQcItems();
+    }
+    function updQc(i, f, v) {
+      if (f === 'qty') qcItems[i].qty = Math.max(1, parseInt(v) || 1);
+      else qcItems[i].price = Math.max(0, parseFloat(v) || 0);
+      renderQcItems();
+    }
+    function removeQc(i) { qcItems.splice(i, 1); renderQcItems(); }
+    function renderQcItems() {
+      const el = document.getElementById('qcItems'); if (!el) return;
+      if (!qcItems.length) {
+        el.innerHTML = '<p style="color:var(--muted)">لم تتم إضافة منتجات بعد</p>';
+        calcQcTotal();
+        return;
+      }
+      el.innerHTML = qcItems.map((it, i) => `
+        <div class="qc-item">
+          <b>${esc(it.name)}</b>
+          <input type="number" min="1" value="${it.qty}" onchange="updQc(${i},'qty',this.value)" title="الكمية">
+          <input type="number" min="0" step="0.01" value="${it.price}" onchange="updQc(${i},'price',this.value)" title="السعر">
+          <span style="font-weight:800;min-width:64px;text-align:left">${(it.qty * it.price).toFixed(2)}</span>
+          <button class="btn btn-danger btn-sm" onclick="removeQc(${i})">×</button>
+        </div>`).join('');
+      calcQcTotal();
+    }
+    function calcQcTotal() {
+      const sub = qcItems.reduce((a, i) => a + i.price * i.qty, 0);
+      const vatPct = parseFloat(document.getElementById('qcVat')?.value) || 0;
+      const vat = sub * (vatPct / 100);
+      const beforeDisc = sub + vat;
+      const disc = parseFloat(document.getElementById('qcDiscount')?.value) || 0;
+      const total = Math.max(0, beforeDisc - disc);
+      const subEl = document.getElementById('qcSubTotal');
+      if (subEl) subEl.textContent = beforeDisc.toFixed(2) + ' ر.س';
+      const subLbl = document.getElementById('qcSubLabel');
+      if (subLbl) subLbl.textContent = vatPct > 0 ? `الإجمالي قبل الخصم (شامل ضريبة ${vatPct}%)` : 'الإجمالي قبل الخصم';
+      const tot = document.getElementById('qcTotal');
+      if (tot) tot.textContent = total.toFixed(2) + ' ر.س';
+      return { sub, vatPct, vat, disc, total, beforeDisc };
+    }
+    function clearQuickCash() {
+      qcItems = [];
+      lastQuickSale = null;
+      const d = document.getElementById('qcDiscount'); if (d) d.value = '';
+      const v = document.getElementById('qcVat'); if (v) v.value = '15';
+      const b = document.getElementById('qcBanner'); if (b) b.innerHTML = '';
+      renderQcItems();
+    }
+    function finalizeQuickSale() {
+      if (lastQuickSale) return lastQuickSale;
+      if (!qcItems.length) { alert('أضف منتجات أولاً'); return null; }
+      const { sub, vatPct, vat, disc, total } = calcQcTotal();
+      const no = (parseInt(localStorage.getItem('ma_invno') || '1000') + 1);
+      localStorage.setItem('ma_invno', String(no));
+      const now = new Date();
+      const iso = now.toISOString();
+      const date = now.toLocaleDateString('en-GB') + '  ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+      const data = {
+        no, customer: 'عميل نقدي', phone: '', custId: '', date, dateIso: iso,
+        items: qcItems.map(i => ({ ...i })),
+        subtotal: sub, discount: disc, vatPct, vat, total,
+        companyId: '', companyName: '',
+        payMethod: 'cash', payLabel: 'نقدي',
+        paidNow: total, dueDate: '', remaining: 0,
+        notes: 'بيع كاشير سريع',
+        quickCash: true
+      };
+      qcItems.forEach(item => {
+        sales.push({
+          productId: item.id, name: item.name, price: item.price, qty: item.qty,
+          customer: 'عميل نقدي', customerId: '', phone: '', invoiceNo: no, date: iso, total: item.price * item.qty
+        });
+        const p = products.find(x => x.id === item.id);
+        if (p) p.qty = Math.max(0, (Number(p.qty) || 0) - item.qty);
+      });
+      try {
+        const invs = JSON.parse(localStorage.getItem('ma_invoices') || '[]');
+        invs.push({ ...data });
+        localStorage.setItem('ma_invoices', JSON.stringify(invs));
+      } catch (e) {}
+      saveSales(); saveProducts(); renderProducts();
+      checkStockAlerts(qcItems.map(i => i.id));
+      lastQuickSale = data;
+      const ban = document.getElementById('qcBanner');
+      if (ban) ban.innerHTML = `<div class="alert alert-success">✓ تم البيع رقم I-${no} — الإجمالي ${total.toFixed(2)} ر.س<br>اضغط «مسح» لعملية جديدة.</div>`;
+      toast('تم البيع نقداً ✓');
+      return data;
+    }
+    function completeQuickSale() {
+      finalizeQuickSale();
+    }
+    async function completeQuickSalePDF() {
+      const data = finalizeQuickSale(); if (!data) return;
+      showLoading('جاري تجهيز فاتورة الكاشير...');
+      try {
+        const blob = await buildPdfBlobFromData(data);
+        showFileReady(blob, invFileName(data, 'pdf'), 'application/pdf', 'فاتورة كاشير', {
+          phone: '',
+          customer: data.customer,
+          caption: '⚡ كاشير سريع — فاتورة I-' + data.no + '\nالإجمالي: ' + Number(data.total).toFixed(2) + ' ر.س'
+        });
+      } catch (e) {
+        hideLoading();
+        alert('تعذر إنشاء PDF: ' + (e.message || e));
+      }
+    }
+
     function fillInvoiceSelect() {
       const sel = document.getElementById('invProductSelect');
       sel.innerHTML = '<option value="">-- اختر منتج --</option>' +
@@ -3415,8 +3625,15 @@
         extra = `<br>طريقة الدفع: ${payLabels[payMethod] || payMethod}`;
       }
       document.getElementById('invBanner').innerHTML =
-        `<div class="alert alert-success">✓ تم تسجيل الفاتورة رقم ${no}${extra}<br>تقدر تنزلها PDF وExcel. لبدء فاتورة جديدة اضغط «مسح الفاتورة».</div>`;
+        `<div class="alert alert-success">✓ تم تسجيل الفاتورة رقم ${no}${extra}<br>✓ تم خصم الكميات من المخزن<br>تقدر تنزلها PDF وExcel. لبدء فاتورة جديدة اضغط «مسح الفاتورة».</div>`;
+      toast('تم إتمام البيع وخصم المخزن ✓');
       return data;
+    }
+
+    function completeInvoiceSale() {
+      const data = finalizeInvoice();
+      if (!data) return;
+      // الخصم من المخزن يتم داخل finalizeInvoice مرة واحدة فقط
     }
 
     function saveInstallments() {
