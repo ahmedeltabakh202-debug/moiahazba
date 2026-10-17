@@ -1675,6 +1675,7 @@
       <button class="btn btn-success btn-block" onclick="savePendingAs()">💾 حفظ واختيار المكان</button>
       <button class="btn btn-primary btn-block" style="margin-top:8px;" onclick="downloadPending()">⬇️ تنزيل مباشر (مجلد التنزيلات)</button>
       <button class="btn btn-outline btn-block" id="fileOpenBtn" style="margin-top:8px;" onclick="openPending()">👁 فتح الملف الآن</button>
+      <button class="btn btn-whatsapp btn-block" id="fileWaBtn" style="margin-top:8px; display:none;" onclick="sharePendingWhatsApp()">💬 إرسال على الواتساب للعميل</button>
       <button class="btn btn-block" style="margin-top:8px; background:#e2e8f0;" onclick="closeFileModal()">إغلاق</button>
       <p style="margin-top:12px; color:var(--muted); font-size:.8rem;">بعد الحفظ تقدر تفتحه من تطبيق «الملفات» في الموبايل.</p>
     </div>
@@ -3496,14 +3497,43 @@
     const XLSX_MIME = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
     let pendingFile = null;
 
-    function showFileReady(blob, name, mime, label) {
+    function showFileReady(blob, name, mime, label, meta) {
       hideLoading();
-      pendingFile = { blob, name, mime };
+      meta = meta || {};
+      pendingFile = {
+        blob, name, mime,
+        phone: meta.phone || '',
+        caption: meta.caption || '',
+        customer: meta.customer || ''
+      };
       const isPdf = mime === 'application/pdf';
       document.getElementById('fileModalTitle').textContent = label ? label + ' جاهز' : (isPdf ? 'فاتورة PDF جاهزة' : 'فاتورة Excel جاهزة');
       document.getElementById('fileModalName').textContent = name;
       document.getElementById('fileOpenBtn').style.display = isPdf ? 'flex' : 'none';
+      const waBtn = document.getElementById('fileWaBtn');
+      if (waBtn) {
+        const hasPhone = !!normalizeWaPhone(pendingFile.phone);
+        waBtn.style.display = (isPdf && hasPhone) ? 'flex' : 'none';
+        waBtn.textContent = hasPhone
+          ? ('💬 إرسال على الواتساب' + (pendingFile.customer ? ' — ' + pendingFile.customer : ''))
+          : '💬 إرسال على الواتساب للعميل';
+      }
       document.getElementById('fileModal').classList.add('show');
+    }
+
+    async function sharePendingWhatsApp() {
+      if (!pendingFile || !pendingFile.blob) return;
+      const phone = normalizeWaPhone(pendingFile.phone);
+      if (!phone) {
+        alert('لا يوجد رقم جوال مسجل للعميل على هذا الملف');
+        return;
+      }
+      if (pendingFile.mime !== 'application/pdf') {
+        alert('الإرسال على واتساب متاح لملفات PDF فقط');
+        return;
+      }
+      const caption = pendingFile.caption || ('مويه عذبه — ' + (pendingFile.name || 'مرفق PDF'));
+      await sharePdfToWhatsApp(pendingFile.blob, pendingFile.name, phone, caption);
     }
 
     function closeFileModal() {
@@ -3567,7 +3597,11 @@
       showLoading('جاري تجهيز الفاتورة PDF...');
       try {
         const blob = await buildPdfBlobFromData(data);
-        showFileReady(blob, invFileName(data, 'pdf'), 'application/pdf');
+        showFileReady(blob, invFileName(data, 'pdf'), 'application/pdf', 'فاتورة PDF', {
+          phone: data.phone || '',
+          customer: data.customer || '',
+          caption: '📄 فاتورة ضريبية — مويه عذبه\nرقم: I-' + data.no + '\nالعميل: ' + data.customer + '\nالإجمالي: ' + Number(data.total).toFixed(2) + ' ر.س'
+        });
       } catch (e) {
         hideLoading();
         alert('تعذر إنشاء الفاتورة: ' + (e.message || e));
@@ -4007,7 +4041,11 @@
       const wMM = 210, hMM = wMM * canvas.height / canvas.width;
       const doc = new jsPDF({ unit: 'mm', format: [wMM, Math.max(297, hMM)], compress: true });
       doc.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, wMM, hMM);
-      showFileReady(doc.output('blob'), invFileName(data, 'pdf'), 'application/pdf', 'عرض السعر');
+      showFileReady(doc.output('blob'), invFileName(data, 'pdf'), 'application/pdf', 'عرض السعر', {
+        phone: data.phone || '',
+        customer: data.customer || '',
+        caption: '📝 عرض سعر — مويه عذبه\nرقم: ' + data.no + '\nالعميل: ' + data.customer + '\nالإجمالي: ' + Number(data.total).toFixed(2) + ' ر.س'
+      });
       lastQuote = data;
     }
 
