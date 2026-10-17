@@ -1176,7 +1176,7 @@
       <div class="admin-tabs grid">
         <button class="admin-tab tile" data-tab="addProduct"><span class="ti">➕</span>إضافة منتج</button>
         <button class="admin-tab tile" data-tab="allProducts"><span class="ti">📋</span>كل المنتجات</button>
-        <button class="admin-tab tile" data-tab="stock"><span class="ti">📦</span>المخزن</button>
+        <button class="admin-tab tile" data-tab="stock"><span class="ti">📦</span>المخزن<span class="tbadge" id="stockBadge" style="display:none">0</span></button>
       </div>
     </div>
     <div class="admin-group g2">
@@ -1188,6 +1188,8 @@
       </div>
       <div class="admin-tabs grid" style="margin-top:10px;">
         <button class="admin-tab tile" data-tab="installments"><span class="ti">📅</span>التقسيط<span class="tbadge" id="instBadge" style="display:none">0</span></button>
+        <button class="admin-tab tile" data-tab="companies"><span class="ti">🏢</span>الشركات</button>
+        <button class="admin-tab tile" data-tab="multiQuote"><span class="ti">📊</span>عرض سعر شركات</button>
       </div>
     </div>
     <div class="admin-group g3">
@@ -1229,7 +1231,9 @@
         <label>سعر الشراء <span class="opt">(تكلفة المنتج — للمكسب فقط)</span></label>
         <input type="number" id="pBuyPrice" placeholder="0" min="0" step="0.01">
         <label>الكمية المتوفرة</label>
-        <input type="number" id="pQty" placeholder="0">
+        <input type="number" id="pQty" placeholder="0" min="0">
+        <label>حد التنبيه <span class="opt">(لو الكمية نزلت عنه تظهر في النواقص)</span></label>
+        <input type="number" id="pMinQty" placeholder="مثلاً 3" min="0" value="3">
         <label>الباركود <span class="opt">(اختياري)</span></label>
         <div style="display:flex; gap:8px;">
           <input type="text" id="pBarcode" placeholder="أدخل الباركود أو امسحه" style="flex:1">
@@ -1246,6 +1250,13 @@
     <div id="stock" class="admin-panel">
       <div class="card">
         <h3 style="margin-bottom:12px;">📦 حالة المخزن</h3>
+        <div class="sub-nav" style="margin-bottom:14px;">
+          <button type="button" id="stockTabAvail" class="active" onclick="setStockTab('avail')">✅ المتوفر <span id="stockAvailCount" class="cv-count">0</span></button>
+          <button type="button" id="stockTabLow" onclick="setStockTab('low')">⚠️ النواقص <span id="stockLowCount" class="cv-count" style="background:#ef4444">0</span></button>
+        </div>
+        <div id="stockLowActions" style="display:none; margin-bottom:12px;">
+          <button class="btn btn-success btn-block" onclick="downloadShortagePDF()">📄 طباعة النواقص PDF</button>
+        </div>
         <div id="stockContent"></div>
       </div>
     </div>
@@ -1261,6 +1272,10 @@
         </select>
         <label>اسم العميل <span class="opt">(يُملأ تلقائيًا أو اكتبه يدويًا)</span></label>
         <input type="text" id="invCustomer" placeholder="اسم العميل (يظهر في الفاتورة)">
+        <label>الشركة <span class="opt">(اختياري)</span></label>
+        <select id="invCompany">
+          <option value="">-- بدون شركة --</option>
+        </select>
         <label>رقم جوال العميل <span class="opt">(اختياري)</span></label>
         <div style="display:flex; gap:8px;">
           <input type="tel" id="invCustPhone" placeholder="05xxxxxxxx" style="flex:1" autocomplete="tel">
@@ -1356,6 +1371,10 @@
         <input type="number" id="qValid" value="7" min="1">
         <label>ملاحظات / شروط <span class="opt">(اختياري)</span></label>
         <textarea id="qNotes" rows="2" placeholder="مثال: السعر شامل التركيب"></textarea>
+        <div style="margin-top:12px;">
+          <label>ضريبة القيمة المضافة % <span class="opt">(اختياري — اترك 0 بدون ضريبة)</span></label>
+          <input type="number" id="qVat" placeholder="0" min="0" max="100" step="0.01" oninput="calcQuote()">
+        </div>
         <div class="total-box">
           <div id="qSubLabel">الإجمالي قبل الخصم</div>
           <div class="total" id="qSubTotal">0 ر.س</div>
@@ -1368,6 +1387,59 @@
         </div>
         <button class="btn btn-success btn-block" style="margin-top:12px;" onclick="downloadQuotePDF()">📄 إنشاء عرض السعر PDF</button>
         <button class="btn btn-outline btn-block" style="margin-top:8px;" onclick="clearQuote()">مسح العرض</button>
+      </div>
+    </div>
+
+    <!-- Companies Panel -->
+    <div id="companies" class="admin-panel">
+      <div class="card">
+        <h3 style="margin-bottom:12px;">🏢 الشركات</h3>
+        <p style="color:var(--muted);font-size:.88rem;margin-bottom:12px;">أضف الشركات اللي تشتري منها أو تقارن أسعارها، وحدد سعر كل منتج عند كل شركة.</p>
+        <input type="hidden" id="editCompanyId">
+        <label>اسم الشركة</label>
+        <input type="text" id="coName" placeholder="مثال: مؤسسة النقاء">
+        <label>الجوال <span class="opt">(اختياري)</span></label>
+        <input type="tel" id="coPhone" placeholder="05xxxxxxxx">
+        <label>ملاحظات <span class="opt">(اختياري)</span></label>
+        <input type="text" id="coNotes" placeholder="مورد / مدينة...">
+        <button class="btn btn-primary btn-block" onclick="saveCompany()">💾 حفظ الشركة</button>
+        <div id="companiesList" style="margin-top:16px;"></div>
+      </div>
+      <div class="card" id="coPricesCard" style="margin-top:14px;display:none">
+        <h3 style="margin-bottom:10px;">💵 أسعار منتجات: <span id="coPricesTitle"></span></h3>
+        <input type="hidden" id="coPricesId">
+        <div id="coPricesList"></div>
+        <button class="btn btn-success btn-block" style="margin-top:12px" onclick="saveCompanyPrices()">💾 حفظ الأسعار</button>
+      </div>
+    </div>
+
+    <!-- Multi-company quote Panel -->
+    <div id="multiQuote" class="admin-panel">
+      <div class="card">
+        <h3 style="margin-bottom:12px;">📊 عرض سعر مجموعة شركات</h3>
+        <p style="color:var(--muted);font-size:.88rem;margin-bottom:12px;">اختر المنتجات والكميات، ثم الشركات للمقارنة. السعر يُجلب من قائمة كل شركة — لو المنتج مش موجود يظهر 0.</p>
+        <label>عنوان المقارنة <span class="opt">(اختياري)</span></label>
+        <input type="text" id="mqTitle" placeholder="مثال: مقارنة توريد فلاتر — مارس">
+        <label>اختر الشركات</label>
+        <div id="mqCompanies" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;"></div>
+        <label>اختر منتج</label>
+        <select id="mqProductSelect"><option value="">-- اختر منتج --</option></select>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" id="mqQty" value="1" min="1" style="width:90px;margin:0" placeholder="الكمية">
+          <button class="btn btn-primary" style="flex:1" onclick="addMqItem()">➕ إضافة</button>
+        </div>
+        <details class="q-custom" style="margin-top:10px">
+          <summary>➕ بند باسم حر (مش من المنتجات)</summary>
+          <div style="display:flex;gap:8px;margin-top:8px;">
+            <input type="text" id="mqCustomName" placeholder="اسم البند" style="margin:0;flex:1">
+            <input type="number" id="mqCustomQty" value="1" min="1" style="margin:0;width:80px">
+          </div>
+          <button class="btn btn-outline btn-sm" style="margin-top:8px" onclick="addMqCustom()">إضافة البند</button>
+        </details>
+        <div id="mqTableWrap" style="margin-top:16px;overflow-x:auto;"></div>
+        <div id="mqTotals" style="margin-top:12px;"></div>
+        <button class="btn btn-success btn-block" style="margin-top:12px" onclick="downloadMultiQuotePDF()">📄 تصدير المقارنة PDF</button>
+        <button class="btn btn-outline btn-block" style="margin-top:8px" onclick="clearMultiQuote()">مسح المقارنة</button>
       </div>
     </div>
 
@@ -1628,6 +1700,7 @@
         localStorage.setItem('ma_sales', JSON.stringify(seed.sales || []));
         if (seed.invoices) localStorage.setItem('ma_invoices', JSON.stringify(seed.invoices));
         if (seed.installments) localStorage.setItem('ma_installments', JSON.stringify(seed.installments));
+        if (seed.companies) localStorage.setItem('ma_companies', JSON.stringify(seed.companies));
         if (seed.quotes) localStorage.setItem('ma_quotes', JSON.stringify(seed.quotes));
         if (seed.promos) localStorage.setItem('ma_promos', JSON.stringify(seed.promos));
         if (seed.expenses) localStorage.setItem('ma_expenses', JSON.stringify(seed.expenses));
@@ -1644,6 +1717,8 @@
     let expenses = JSON.parse(localStorage.getItem('ma_expenses') || '[]');
     let gallery = JSON.parse(localStorage.getItem('ma_gallery') || '[]');
     let installments = JSON.parse(localStorage.getItem('ma_installments') || '[]');
+    let companies = JSON.parse(localStorage.getItem('ma_companies') || '[]');
+    let mqItems = [];
     let dirty = false;
     let calCursor = new Date(); calCursor.setDate(1);
     const DEFAULT_SITE = {
@@ -1725,6 +1800,7 @@
       updateCartBadge();
       renderGalleryPublic();
       updateInstBadge();
+      updateStockBadge();
       // Click on shop name or logo to open admin login
       document.querySelectorAll('[data-admin]').forEach(el => el.addEventListener('click', openLoginModal));
       // Admin tabs — open as own page
@@ -1793,7 +1869,7 @@
     const ADMIN_TITLES = {
       addProduct: 'إضافة منتج', allProducts: 'كل المنتجات', stock: 'المخزن',
       invoice: 'الفاتورة', quote: 'عرض سعر', sales: 'المبيعات',
-      installments: 'التقسيط',
+      installments: 'التقسيط', companies: 'الشركات', multiQuote: 'عرض سعر شركات',
       customers: 'العملاء', calendar: 'تقويم صيانة', expenses: 'المصروفات',
       promos: 'العروض', reports: 'التقارير', galleryAdmin: 'المعرض',
       siteContent: 'محتوى الموقع'
@@ -1810,9 +1886,11 @@
       document.body.classList.add('admin-panel-open');
       const lbl = document.getElementById('adminPanelBackLabel');
       if (lbl) lbl.textContent = 'العودة للقائمة — ' + (ADMIN_TITLES[tab] || tab);
-      if (tab === 'stock') renderStock();
-      if (tab === 'invoice') { fillInvoiceSelect(); fillCustomerPicks(); }
+      if (tab === 'stock') { stockTab = getLowStockProducts().length ? 'low' : 'avail'; setStockTab(stockTab); }
+      if (tab === 'invoice') { fillInvoiceSelect(); fillCustomerPicks(); fillInvoiceCompanies(); }
       if (tab === 'quote') { fillQuoteSelect(); fillCustomerPicks(); }
+      if (tab === 'companies') renderCompanies();
+      if (tab === 'multiQuote') { fillMqProducts(); renderMqCompanies(); renderMqTable(); }
       if (tab === 'customers') custView('list');
       if (tab === 'sales') renderSales('today');
       if (tab === 'installments') renderInstallments();
@@ -2508,6 +2586,7 @@
       const priceAfter = parseFloat(document.getElementById('pPriceAfter').value) || 0;
       const buyPrice = parseFloat(document.getElementById('pBuyPrice').value) || 0;
       const qty = parseInt(document.getElementById('pQty').value) || 0;
+      const minQty = Math.max(0, parseInt(document.getElementById('pMinQty').value) || 0);
       const barcode = document.getElementById('pBarcode').value.trim();
       const editId = document.getElementById('editProductId').value;
       const image = document.getElementById('pImagePreview').dataset.base64 || '';
@@ -2519,14 +2598,14 @@
         if (idx !== -1) {
           products[idx] = {
             ...products[idx],
-            name, priceBefore, priceAfter, buyPrice, qty, barcode,
+            name, priceBefore, priceAfter, buyPrice, qty, minQty, barcode,
             image: image || products[idx].image
           };
         }
       } else {
         products.push({
           id: Date.now().toString(),
-          name, priceBefore, priceAfter, buyPrice, qty, barcode, image
+          name, priceBefore, priceAfter, buyPrice, qty, minQty, barcode, image
         });
       }
       saveProducts();
@@ -2535,7 +2614,9 @@
       document.getElementById('pName').value = '';
       document.getElementById('pPriceBefore').value = '';
       document.getElementById('pPriceAfter').value = '';
+      document.getElementById('pBuyPrice').value = '';
       document.getElementById('pQty').value = '';
+      document.getElementById('pMinQty').value = '3';
       document.getElementById('pBarcode').value = '';
       document.getElementById('editProductId').value = '';
       document.getElementById('pImage').value = '';
@@ -2544,6 +2625,7 @@
       toast('تم حفظ المنتج ✓ — اضغط «احفظ الملف» لتنزيل نسخة محدثة');
       renderAllProducts();
       fillInvoiceSelect();
+      updateStockBadge();
     }
 
     function editProduct(id) {
@@ -2555,6 +2637,7 @@
       document.getElementById('pPriceAfter').value = p.priceAfter;
       document.getElementById('pBuyPrice').value = p.buyPrice || 0;
       document.getElementById('pQty').value = p.qty;
+      document.getElementById('pMinQty').value = (p.minQty != null ? p.minQty : 3);
       document.getElementById('pBarcode').value = p.barcode || '';
       if (p.image) {
         document.getElementById('pImagePreview').innerHTML = `<img src="${p.image}" style="max-width:120px; border-radius:8px;">`;
@@ -2587,7 +2670,7 @@
               <tr>
                 <td>${p.name}</td>
                 <td>${p.priceAfter}</td>
-                <td class="${p.qty <= 0 ? 'out-stock' : p.qty <= 3 ? 'low-stock' : ''}">${p.qty}</td>
+                <td class="${isLowStock(p) ? ((p.qty||0)<=0 ? 'out-stock' : 'low-stock') : ''}">${p.qty} <small style="color:var(--muted)">(حد ${productMinQty(p)})</small></td>
                 <td>
                   <button class="btn btn-outline btn-sm" onclick="editProduct('${p.id}')">تعديل</button>
                   <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p.id}')">حذف</button>
@@ -2600,22 +2683,153 @@
     }
 
     // ---- Stock ----
+    let stockTab = 'avail';
+    function productMinQty(p) {
+      const m = parseInt(p && p.minQty);
+      return isNaN(m) ? 3 : Math.max(0, m);
+    }
+    function isLowStock(p) {
+      return (Number(p.qty) || 0) <= productMinQty(p);
+    }
+    function getLowStockProducts() {
+      return products.filter(isLowStock).slice().sort((a, b) => (a.qty - b.qty) || String(a.name).localeCompare(String(b.name), 'ar'));
+    }
+    function getAvailProducts() {
+      return products.filter(p => !isLowStock(p)).slice().sort((a, b) => String(a.name).localeCompare(String(b.name), 'ar'));
+    }
+    function updateStockBadge() {
+      const n = getLowStockProducts().length;
+      const b = document.getElementById('stockBadge');
+      if (b) {
+        if (n > 0) { b.style.display = 'flex'; b.textContent = n; }
+        else b.style.display = 'none';
+      }
+      const lc = document.getElementById('stockLowCount');
+      const ac = document.getElementById('stockAvailCount');
+      if (lc) lc.textContent = n;
+      if (ac) ac.textContent = getAvailProducts().length;
+    }
+    function setStockTab(tab) {
+      stockTab = tab === 'low' ? 'low' : 'avail';
+      const ta = document.getElementById('stockTabAvail');
+      const tl = document.getElementById('stockTabLow');
+      if (ta) ta.classList.toggle('active', stockTab === 'avail');
+      if (tl) tl.classList.toggle('active', stockTab === 'low');
+      const act = document.getElementById('stockLowActions');
+      if (act) act.style.display = stockTab === 'low' ? 'block' : 'none';
+      renderStock();
+    }
     function renderStock() {
-      const low = products.filter(p => p.qty > 0 && p.qty <= 3);
-      const out = products.filter(p => p.qty <= 0);
-      let html = '';
-      if (out.length) {
-        html += `<div class="alert alert-danger">❌ نفد من المخزن (${out.length})</div>`;
-        html += out.map(p => `<div class="invoice-item"><span>${p.name}</span><span class="out-stock">0</span></div>`).join('');
+      updateStockBadge();
+      const el = document.getElementById('stockContent');
+      if (!el) return;
+      if (stockTab === 'low') {
+        const low = getLowStockProducts();
+        if (!low.length) {
+          el.innerHTML = '<div class="alert alert-success">✓ لا توجد نواقص — كل الكميات فوق حد التنبيه</div>';
+          return;
+        }
+        el.innerHTML = `<div class="alert alert-warning">⚠️ ${low.length} منتج تحت حد التنبيه أو نفد</div>` +
+          low.map(p => {
+            const min = productMinQty(p);
+            const out = (p.qty || 0) <= 0;
+            return `<div class="invoice-item" style="flex-wrap:wrap;gap:6px">
+              <div style="flex:1;min-width:140px">
+                <b>${esc(p.name)}</b><br>
+                <small style="color:var(--muted)">حد التنبيه: ${min}</small>
+              </div>
+              <span class="${out ? 'out-stock' : 'low-stock'}" style="font-weight:800;font-size:1.05rem">
+                ${out ? 'نفد (0)' : 'متبقي ' + p.qty}
+              </span>
+            </div>`;
+          }).join('');
+        return;
       }
-      if (low.length) {
-        html += `<div class="alert alert-warning" style="margin-top:12px;">⚠️ قرب يخلص (${low.length})</div>`;
-        html += low.map(p => `<div class="invoice-item"><span>${p.name}</span><span class="low-stock">${p.qty}</span></div>`).join('');
+      const avail = getAvailProducts();
+      if (!avail.length) {
+        el.innerHTML = '<div class="alert alert-warning">لا توجد منتجات فوق حد التنبيه حالياً</div>';
+        return;
       }
-      if (!out.length && !low.length) {
-        html = `<div class="alert alert-success">✓ كل المنتجات متوفرة بكميات جيدة</div>`;
+      el.innerHTML = `<div class="alert alert-success">✓ ${avail.length} منتج متوفر بكميات جيدة</div>` +
+        avail.map(p => {
+          const min = productMinQty(p);
+          return `<div class="invoice-item">
+            <div style="flex:1"><b>${esc(p.name)}</b><br><small style="color:var(--muted)">حد التنبيه: ${min}</small></div>
+            <span style="font-weight:800;color:var(--success)">${p.qty}</span>
+          </div>`;
+        }).join('');
+    }
+
+    async function downloadShortagePDF() {
+      const low = getLowStockProducts();
+      if (!low.length) { alert('لا توجد نواقص للطباعة'); return; }
+      try {
+        showLoading('جاري تجهيز قائمة النواقص...');
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+        const pageW = doc.internal.pageSize.getWidth();
+        const margin = 14;
+        let y = 18;
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(16);
+        doc.text('Moyah Adhba - Shortage List', pageW / 2, y, { align: 'center' });
+        y += 8;
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'normal');
+        const dateStr = new Date().toLocaleDateString('en-GB') + ' ' + new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+        doc.text('Date: ' + dateStr, pageW / 2, y, { align: 'center' });
+        y += 6;
+        doc.text('Items below alert level: ' + low.length, pageW / 2, y, { align: 'center' });
+        y += 10;
+        doc.setFillColor(10, 77, 140);
+        doc.rect(margin, y, pageW - margin * 2, 9, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10);
+        doc.text('#', margin + 3, y + 6);
+        doc.text('Product', margin + 12, y + 6);
+        doc.text('Qty', pageW - margin - 42, y + 6);
+        doc.text('Alert', pageW - margin - 22, y + 6);
+        y += 12;
+        doc.setTextColor(30, 41, 59);
+        doc.setFont('helvetica', 'normal');
+        low.forEach((p, i) => {
+          if (y > 275) { doc.addPage(); y = 18; }
+          const name = String(p.name || '').substring(0, 48);
+          if (i % 2 === 0) {
+            doc.setFillColor(240, 247, 255);
+            doc.rect(margin, y - 5, pageW - margin * 2, 9, 'F');
+          }
+          doc.text(String(i + 1), margin + 3, y);
+          doc.text(name, margin + 12, y);
+          doc.text(String(p.qty || 0), pageW - margin - 42, y);
+          doc.text(String(productMinQty(p)), pageW - margin - 22, y);
+          y += 9;
+        });
+        y += 8;
+        doc.setFontSize(9);
+        doc.setTextColor(100, 116, 139);
+        doc.text('Moyah Adhba Filters - Jizan | 0510572080', pageW / 2, y, { align: 'center' });
+        showFileReady(doc.output('blob'), `نواقص-المخزن-${todayStr()}.pdf`, 'application/pdf', 'قائمة النواقص');
+      } catch (e) {
+        hideLoading();
+        alert('تعذر إنشاء PDF: ' + (e.message || e));
       }
-      document.getElementById('stockContent').innerHTML = html;
+    }
+
+    function checkStockAlerts(changedIds) {
+      updateStockBadge();
+      if (!changedIds || !changedIds.length) return;
+      const alerts = [];
+      changedIds.forEach(id => {
+        const p = products.find(x => x.id === id);
+        if (p && isLowStock(p)) {
+          const min = productMinQty(p);
+          if ((p.qty || 0) <= 0) alerts.push('نفد: ' + p.name);
+          else alerts.push(p.name + ': متبقي ' + p.qty + ' (حد ' + min + ')');
+        }
+      });
+      if (alerts.length) toast('تنبيه مخزن — ' + alerts.join(' | '));
     }
 
     // ---- Invoice ----
@@ -2749,6 +2963,7 @@
       document.getElementById('invCustPhone').value = '';
       document.getElementById('invCustId').value = '';
       const pick = document.getElementById('invCustPick'); if (pick) pick.value = '';
+      const invCo = document.getElementById('invCompany'); if (invCo) invCo.value = '';
       document.getElementById('invCostRow')?.classList.remove('revealed');
       document.getElementById('invProfitRow')?.classList.remove('revealed');
       const h1 = document.querySelector('#invCostRow .secret-hint'); if (h1) h1.textContent = 'اضغط للإظهار';
@@ -2856,7 +3071,9 @@
       const bx = M, bw = 600;
       const line = (label, val, bold) => { T(label, bx + bw - 20, y + 30, { sz: 30, c: '#64748b' }); T(val, bx + 20, y + 30, { w: bold ? 800 : 600, sz: 32, a: 'left' }); y += 62; };
       line('المجموع', data.subtotal.toFixed(2) + ' ر.س');
+      if (data.vatPct > 0 && data.vat > 0) line('ضريبة ' + data.vatPct + '%', data.vat.toFixed(2) + ' ر.س');
       if (data.discount > 0) line('الخصم', '- ' + data.discount.toFixed(2) + ' ر.س');
+      if (data.companyName) line('الشركة', data.companyName);
       if (data.payLabel) line('طريقة الدفع', data.payLabel);
       if (data.payMethod === 'credit') {
         line('المدفوع', (data.paidNow || 0).toFixed(2) + ' ر.س');
@@ -2909,6 +3126,9 @@
       if (!customer) { alert('اختر أو اكتب اسم العميل عشان يظهر في الفاتورة'); document.getElementById('invCustomer').focus(); return null; }
       const phone = document.getElementById('invCustPhone').value.trim();
       const custId = document.getElementById('invCustId').value || '';
+      const companyId = document.getElementById('invCompany')?.value || '';
+      const company = companies.find(c => c.id === companyId);
+      const companyName = company ? company.name : '';
       const discount = parseFloat(document.getElementById('invDiscount').value) || 0;
       const subtotal = invoiceItems.reduce((a, i) => a + i.price * i.qty, 0);
       const vatPct = parseFloat(document.getElementById('invVat')?.value) || 0;
@@ -2937,6 +3157,7 @@
         no, customer, phone, custId, date,
         items: invoiceItems.map(i => ({ ...i })),
         subtotal, discount, vatPct, vat, total,
+        companyId, companyName,
         payMethod, payLabel: payLabels[payMethod] || payMethod,
         paidNow, dueDate, remaining
       };
@@ -2965,6 +3186,7 @@
         saveInstallments();
       }
       saveSales(); saveProducts(); renderProducts();
+      checkStockAlerts(invoiceItems.map(i => i.id));
       lastInvoice = data;
       let extra = '';
       if (payMethod === 'credit') {
@@ -3426,9 +3648,11 @@
       try { invSeed = JSON.parse(localStorage.getItem('ma_invoices') || '[]'); } catch (e) {}
       try { qSeed = JSON.parse(localStorage.getItem('ma_quotes') || '[]'); } catch (e) {}
       try { instSeed = JSON.parse(localStorage.getItem('ma_installments') || '[]'); } catch (e) {}
+      let coSeed = [];
+      try { coSeed = JSON.parse(localStorage.getItem('ma_companies') || '[]'); } catch (e) {}
       const data = JSON.stringify({
         ts, products, customers, sales, invoices: invSeed, quotes: qSeed,
-        installments: instSeed,
+        installments: instSeed, companies: coSeed,
         promos, expenses, gallery, site: siteContent
       }).replace(/</g, '\u003c');
       clone.querySelector('#seedData').textContent = data;
@@ -3504,16 +3728,21 @@
     }
     function calcQuote() {
       const sub = qItems.reduce((a, i) => a + i.price * i.qty, 0);
+      const vatPct = parseFloat(document.getElementById('qVat')?.value) || 0;
+      const vat = sub * (vatPct / 100);
+      const beforeDisc = sub + vat;
       const disc = parseFloat(document.getElementById('qDiscount').value) || 0;
-      const total = Math.max(0, sub - disc);
+      const total = Math.max(0, beforeDisc - disc);
       const subEl = document.getElementById('qSubTotal');
-      if (subEl) subEl.textContent = sub.toFixed(2) + ' ر.س';
+      if (subEl) subEl.textContent = beforeDisc.toFixed(2) + ' ر.س';
+      const subLbl = document.getElementById('qSubLabel');
+      if (subLbl) subLbl.textContent = vatPct > 0 ? `الإجمالي قبل الخصم (شامل ضريبة ${vatPct}%)` : 'الإجمالي قبل الخصم';
       document.getElementById('qTotal').textContent = total.toFixed(2) + ' ر.س';
-      return { sub, disc, total };
+      return { sub, vatPct, vat, disc, total, beforeDisc };
     }
     function clearQuote() {
       qItems = [];
-      ['qCustomer', 'qPhone', 'qDiscount', 'qNotes', 'qCustId'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+      ['qCustomer', 'qPhone', 'qDiscount', 'qVat', 'qNotes', 'qCustId'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
       const pick = document.getElementById('qCustPick'); if (pick) pick.value = '';
       document.getElementById('qValid').value = 7;
       renderQuoteItems();
@@ -3523,7 +3752,7 @@
       const customer = document.getElementById('qCustomer').value.trim();
       if (!customer) { alert('اختر أو اكتب اسم العميل'); document.getElementById('qCustomer').focus(); return; }
       showLoading('جاري تجهيز عرض السعر...');
-      const { sub, disc, total } = calcQuote();
+      const { sub, vatPct, vat, disc, total } = calcQuote();
       const no = parseInt(localStorage.getItem('ma_qno') || '1000') + 1;
       localStorage.setItem('ma_qno', String(no));
       const now = new Date();
@@ -3535,7 +3764,7 @@
         kind: 'quote', title: 'عرض سعر', no: 'Q-' + no, customer, custId,
         phone,
         date: now.toLocaleDateString('en-GB') + '  ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
-        items: qItems.map(i => ({ ...i })), subtotal: sub, discount: disc, total,
+        items: qItems.map(i => ({ ...i })), subtotal: sub, discount: disc, vatPct, vat, total,
         validUntil: until.toLocaleDateString('en-GB'),
         notes: document.getElementById('qNotes').value.trim()
       };
@@ -3553,6 +3782,296 @@
       const doc = new jsPDF({ unit: 'mm', format: [wMM, Math.max(297, hMM)] });
       doc.addImage(canvas.toDataURL('image/jpeg', 0.93), 'JPEG', 0, 0, wMM, hMM);
       showFileReady(doc.output('blob'), invFileName(data, 'pdf'), 'application/pdf', 'عرض السعر');
+    }
+
+
+    // ==================== COMPANIES ====================
+    function saveCompanies() { localStorage.setItem('ma_companies', JSON.stringify(companies)); markDirty(); }
+    function saveCompany() {
+      const name = document.getElementById('coName').value.trim();
+      if (!name) { alert('أدخل اسم الشركة'); return; }
+      const phone = document.getElementById('coPhone').value.trim();
+      const notes = document.getElementById('coNotes').value.trim();
+      const editId = document.getElementById('editCompanyId').value;
+      if (editId) {
+        const c = companies.find(x => x.id === editId);
+        if (c) { c.name = name; c.phone = phone; c.notes = notes; }
+      } else {
+        companies.push({ id: Date.now().toString(), name, phone, notes, prices: {} });
+      }
+      saveCompanies();
+      document.getElementById('coName').value = '';
+      document.getElementById('coPhone').value = '';
+      document.getElementById('coNotes').value = '';
+      document.getElementById('editCompanyId').value = '';
+      document.getElementById('coPricesCard').style.display = 'none';
+      renderCompanies(); fillInvoiceCompanies(); renderMqCompanies();
+      toast('تم حفظ الشركة ✓');
+    }
+    function editCompany(id) {
+      const c = companies.find(x => x.id === id); if (!c) return;
+      document.getElementById('editCompanyId').value = c.id;
+      document.getElementById('coName').value = c.name || '';
+      document.getElementById('coPhone').value = c.phone || '';
+      document.getElementById('coNotes').value = c.notes || '';
+      openCompanyPrices(id);
+    }
+    function deleteCompany(id) {
+      if (!confirm('حذف الشركة؟')) return;
+      companies = companies.filter(c => c.id !== id);
+      saveCompanies(); renderCompanies(); fillInvoiceCompanies(); renderMqCompanies();
+    }
+    function renderCompanies() {
+      const el = document.getElementById('companiesList'); if (!el) return;
+      if (!companies.length) { el.innerHTML = '<div class="empty-state">لا توجد شركات بعد</div>'; return; }
+      el.innerHTML = companies.slice().reverse().map(c => `
+        <div class="invoice-item" style="flex-wrap:wrap;gap:8px">
+          <div style="flex:1"><b>${esc(c.name)}</b><br>
+            <small style="color:var(--muted)">${esc(c.phone || '')} ${c.notes ? '— ' + esc(c.notes) : ''}</small><br>
+            <small style="color:var(--muted)">منتجات مسعّرة: ${Object.keys(c.prices || {}).length}</small>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="openCompanyPrices('${c.id}')">💵 أسعار</button>
+          <button class="btn btn-outline btn-sm" onclick="editCompany('${c.id}')">تعديل</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteCompany('${c.id}')">حذف</button>
+        </div>`).join('');
+    }
+    function openCompanyPrices(id) {
+      const c = companies.find(x => x.id === id); if (!c) return;
+      document.getElementById('coPricesCard').style.display = 'block';
+      document.getElementById('coPricesId').value = c.id;
+      document.getElementById('coPricesTitle').textContent = c.name;
+      const prices = c.prices || {};
+      const list = document.getElementById('coPricesList');
+      if (!products.length) {
+        list.innerHTML = '<div class="empty-state">أضف منتجات أولاً من «إضافة منتج»</div>';
+        return;
+      }
+      list.innerHTML = products.map(p => `
+        <div class="invoice-item">
+          <span style="flex:1">${esc(p.name)}</span>
+          <input type="number" min="0" step="0.01" data-pid="${p.id}" class="co-price-input"
+            value="${prices[p.id] != null ? prices[p.id] : ''}" placeholder="0" style="width:110px;margin:0">
+        </div>`).join('');
+    }
+    function saveCompanyPrices() {
+      const id = document.getElementById('coPricesId').value;
+      const c = companies.find(x => x.id === id); if (!c) return;
+      const prices = {};
+      document.querySelectorAll('.co-price-input').forEach(inp => {
+        const v = parseFloat(inp.value);
+        if (!isNaN(v) && v >= 0) prices[inp.dataset.pid] = v;
+      });
+      c.prices = prices;
+      saveCompanies(); renderCompanies(); renderMqTable();
+      toast('تم حفظ أسعار الشركة ✓');
+    }
+    function fillInvoiceCompanies() {
+      const sel = document.getElementById('invCompany'); if (!sel) return;
+      const prev = sel.value;
+      sel.innerHTML = '<option value="">-- بدون شركة --</option>' +
+        companies.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
+      if (prev && companies.some(c => c.id === prev)) sel.value = prev;
+    }
+
+    // ==================== MULTI-COMPANY QUOTE ====================
+    function fillMqProducts() {
+      const sel = document.getElementById('mqProductSelect'); if (!sel) return;
+      sel.innerHTML = '<option value="">-- اختر منتج --</option>' +
+        products.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join('');
+    }
+    function renderMqCompanies() {
+      const el = document.getElementById('mqCompanies'); if (!el) return;
+      if (!companies.length) {
+        el.innerHTML = '<div class="alert alert-warning" style="width:100%">أضف شركات من زر «الشركات» أولاً</div>';
+        return;
+      }
+      el.innerHTML = companies.map(c => `
+        <label style="display:flex;align-items:center;gap:6px;background:#f0f7ff;border:1px solid #dbeafe;border-radius:10px;padding:8px 12px;cursor:pointer;font-weight:700;font-size:.85rem">
+          <input type="checkbox" class="mq-co-check" value="${c.id}" onchange="renderMqTable()" style="width:auto;margin:0">
+          ${esc(c.name)}
+        </label>`).join('');
+    }
+    function getMqSelectedCompanies() {
+      return Array.from(document.querySelectorAll('.mq-co-check:checked')).map(ch => companies.find(c => c.id === ch.value)).filter(Boolean);
+    }
+    function addMqItem() {
+      const id = document.getElementById('mqProductSelect').value;
+      if (!id) { alert('اختر منتج'); return; }
+      const p = products.find(x => x.id === id); if (!p) return;
+      const qty = Math.max(1, parseInt(document.getElementById('mqQty').value) || 1);
+      mqItems.push({ productId: p.id, name: p.name, qty });
+      renderMqTable();
+    }
+    function addMqCustom() {
+      const name = document.getElementById('mqCustomName').value.trim();
+      const qty = Math.max(1, parseInt(document.getElementById('mqCustomQty').value) || 1);
+      if (!name) { alert('اكتب اسم البند'); return; }
+      mqItems.push({ productId: null, name, qty });
+      document.getElementById('mqCustomName').value = '';
+      renderMqTable();
+    }
+    function removeMqItem(i) { mqItems.splice(i, 1); renderMqTable(); }
+    function updMqQty(i, v) {
+      mqItems[i].qty = Math.max(1, parseInt(v) || 1);
+      renderMqTable();
+    }
+    function companyPriceFor(co, item) {
+      if (!item.productId) return 0;
+      const prices = co.prices || {};
+      const v = prices[item.productId];
+      return (v == null || isNaN(Number(v))) ? 0 : Number(v);
+    }
+    function renderMqTable() {
+      const wrap = document.getElementById('mqTableWrap');
+      const totalsEl = document.getElementById('mqTotals');
+      if (!wrap) return;
+      const cos = getMqSelectedCompanies();
+      if (!mqItems.length) {
+        wrap.innerHTML = '<p style="color:var(--muted)">أضف منتجات للمقارنة</p>';
+        if (totalsEl) totalsEl.innerHTML = '';
+        return;
+      }
+      if (!cos.length) {
+        wrap.innerHTML = '<div class="alert alert-warning">اختر شركة واحدة على الأقل للمقارنة</div>' +
+          mqItems.map((it, i) => `<div class="invoice-item"><span>${esc(it.name)} × ${it.qty}</span>
+            <button class="btn btn-danger btn-sm" onclick="removeMqItem(${i})">×</button></div>`).join('');
+        if (totalsEl) totalsEl.innerHTML = '';
+        return;
+      }
+      let head = `<table style="width:100%;border-collapse:collapse;font-size:.82rem;min-width:${200 + cos.length * 90}px">
+        <thead><tr style="background:#0a4d8c;color:#fff">
+          <th style="padding:8px;text-align:right">المنتج</th>
+          <th style="padding:8px">الكمية</th>
+          ${cos.map(c => `<th style="padding:8px">${esc(c.name)}</th>`).join('')}
+          <th style="padding:8px"></th>
+        </tr></thead><tbody>`;
+      const totals = cos.map(() => 0);
+      mqItems.forEach((it, i) => {
+        head += `<tr style="border-bottom:1px solid #e2e8f0">
+          <td style="padding:8px;font-weight:700">${esc(it.name)}</td>
+          <td style="padding:8px;text-align:center">
+            <input type="number" min="1" value="${it.qty}" onchange="updMqQty(${i},this.value)" style="width:64px;margin:0;padding:4px 6px">
+          </td>`;
+        cos.forEach((c, ci) => {
+          const unit = companyPriceFor(c, it);
+          const line = unit * it.qty;
+          totals[ci] += line;
+          const clr = unit === 0 ? 'color:#94a3b8' : 'color:var(--text);font-weight:700';
+          head += `<td style="padding:8px;text-align:center;${clr}">${unit === 0 ? '0' : unit.toFixed(2)}<br><small style="font-weight:600;color:var(--muted)">${line.toFixed(2)}</small></td>`;
+        });
+        head += `<td style="padding:8px"><button class="btn btn-danger btn-sm" onclick="removeMqItem(${i})">×</button></td></tr>`;
+      });
+      head += `<tr style="background:#f0f9ff;font-weight:800">
+        <td style="padding:10px" colspan="2">الإجمالي</td>
+        ${totals.map(t => `<td style="padding:10px;text-align:center;color:var(--primary)">${t.toFixed(2)}</td>`).join('')}
+        <td></td>
+      </tr></tbody></table>`;
+      wrap.innerHTML = head;
+      // find cheapest
+      let best = 0;
+      totals.forEach((t, i) => { if (t < totals[best]) best = i; });
+      if (totalsEl) {
+        totalsEl.innerHTML = cos.map((c, i) => {
+          const isBest = totals[i] === totals[best] && totals[i] > 0;
+          return `<div class="alert ${isBest ? 'alert-success' : 'alert-warning'}" style="margin-bottom:6px">
+            <b>${esc(c.name)}</b>: ${totals[i].toFixed(2)} ر.س ${isBest ? '— الأقل سعراً ✓' : ''}
+          </div>`;
+        }).join('');
+      }
+    }
+    function clearMultiQuote() {
+      mqItems = [];
+      document.getElementById('mqTitle').value = '';
+      document.querySelectorAll('.mq-co-check').forEach(ch => { ch.checked = false; });
+      renderMqTable();
+    }
+    async function downloadMultiQuotePDF() {
+      const cos = getMqSelectedCompanies();
+      if (!mqItems.length) { alert('أضف منتجات أولاً'); return; }
+      if (!cos.length) { alert('اختر شركات للمقارنة'); return; }
+      try {
+        showLoading('جاري تجهيز مقارنة الأسعار...');
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: cos.length > 3 ? 'landscape' : 'portrait', unit: 'mm', format: 'a4' });
+        const pageW = doc.internal.pageSize.getWidth();
+        const margin = 10;
+        let y = 14;
+        const title = document.getElementById('mqTitle').value.trim() || 'Company Price Comparison';
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(14);
+        doc.text('Moyah Adhba - ' + title, pageW / 2, y, { align: 'center' });
+        y += 7;
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.text(new Date().toLocaleDateString('en-GB') + '  ' + new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }), pageW / 2, y, { align: 'center' });
+        y += 8;
+        const colProduct = 48;
+        const colQty = 16;
+        const rest = pageW - margin * 2 - colProduct - colQty;
+        const colCo = rest / cos.length;
+        // header
+        doc.setFillColor(10, 77, 140);
+        doc.rect(margin, y, pageW - margin * 2, 10, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        let x = margin + 2;
+        doc.text('Product', x, y + 6.5);
+        x = margin + colProduct;
+        doc.text('Qty', x + 2, y + 6.5);
+        cos.forEach((c, i) => {
+          const name = String(c.name || '').substring(0, 14);
+          doc.text(name, margin + colProduct + colQty + i * colCo + 2, y + 6.5);
+        });
+        y += 12;
+        doc.setTextColor(30, 41, 59);
+        doc.setFont('helvetica', 'normal');
+        const totals = cos.map(() => 0);
+        mqItems.forEach((it, idx) => {
+          if (y > doc.internal.pageSize.getHeight() - 20) {
+            doc.addPage();
+            y = 14;
+          }
+          if (idx % 2 === 0) {
+            doc.setFillColor(240, 247, 255);
+            doc.rect(margin, y - 4, pageW - margin * 2, 9, 'F');
+          }
+          doc.setFontSize(8);
+          doc.text(String(it.name || '').substring(0, 28), margin + 2, y + 2);
+          doc.text(String(it.qty), margin + colProduct + 2, y + 2);
+          cos.forEach((c, ci) => {
+            const unit = companyPriceFor(c, it);
+            const line = unit * it.qty;
+            totals[ci] += line;
+            doc.text(unit === 0 ? '0' : unit.toFixed(2), margin + colProduct + colQty + ci * colCo + 2, y + 2);
+          });
+          y += 9;
+        });
+        y += 4;
+        doc.setFont('helvetica', 'bold');
+        doc.setFillColor(224, 242, 254);
+        doc.rect(margin, y - 4, pageW - margin * 2, 10, 'F');
+        doc.text('TOTAL', margin + 2, y + 3);
+        cos.forEach((c, ci) => {
+          doc.text(totals[ci].toFixed(2), margin + colProduct + colQty + ci * colCo + 2, y + 3);
+        });
+        y += 14;
+        let best = 0;
+        totals.forEach((t, i) => { if (t < totals[best]) best = i; });
+        doc.setFontSize(10);
+        if (totals[best] > 0) {
+          doc.setTextColor(5, 150, 105);
+          doc.text('Lowest: ' + cos[best].name + ' = ' + totals[best].toFixed(2) + ' SAR', margin, y);
+        }
+        y += 8;
+        doc.setTextColor(100, 116, 139);
+        doc.setFontSize(8);
+        doc.text('Moyah Adhba Filters | 0510572080 | Note: 0 = product not priced for that company', margin, y);
+        showFileReady(doc.output('blob'), `مقارنة-شركات-${todayStr()}.pdf`, 'application/pdf', 'مقارنة أسعار الشركات');
+      } catch (e) {
+        hideLoading();
+        alert('تعذر إنشاء PDF: ' + (e.message || e));
+      }
     }
 
     // ==================== CUSTOMER ↔ INVOICE / QUOTE ====================
