@@ -789,7 +789,7 @@
     #splash .splash-water {
       position: absolute; left: 0; right: 0; bottom: 0; height: 0%;
       background: linear-gradient(180deg, rgba(30,144,255,.55) 0%, rgba(14,116,180,.85) 40%, #0369a1 100%);
-      transition: height 2.8s cubic-bezier(.22,.61,.36,1);
+      transition: height 4s cubic-bezier(.22,.61,.36,1);
       z-index: 1;
     }
     #splash.fill .splash-water { height: 100%; }
@@ -857,9 +857,9 @@
       100% { opacity: 1; transform: translateY(0); }
     }
     #splash .splash-bar-wrap {
-      position: absolute; bottom: 48px; left: 50%; transform: translateX(-50%);
-      width: min(280px, 72vw); z-index: 6;
-      animation: splashFadeUp .7s .5s ease both;
+      position: relative; width: min(260px, 70vw); z-index: 6;
+      margin-top: 6px;
+      animation: splashFadeUp .7s .35s ease both;
     }
     #splash .splash-bar-bg {
       height: 8px; border-radius: 99px; background: rgba(255,255,255,.18);
@@ -942,12 +942,12 @@
     </div>
     <div class="splash-content">
       <div class="splash-logo" role="img" aria-label="مويه عذبه فلاتر"></div>
+      <div class="splash-bar-wrap">
+        <div class="splash-bar-bg"><div class="splash-bar-fill" id="splashBar"></div></div>
+        <div class="splash-pct" id="splashPct">0%</div>
+      </div>
       <div class="splash-title">مويه عذبه — فلاتر</div>
       <div class="splash-sub">نقاء الماء … نقاء الحياة</div>
-    </div>
-    <div class="splash-bar-wrap">
-      <div class="splash-bar-bg"><div class="splash-bar-fill" id="splashBar"></div></div>
-      <div class="splash-pct" id="splashPct">0%</div>
     </div>
   </div>
 
@@ -1034,11 +1034,11 @@
       <div class="contact-card">
         <div class="contact-brand">
           <p class="shop-name">مويه عذبه — فلاتر</p>
-          <p class="shop-tag">حي السويس · جيزان</p>
+          <p class="shop-tag">منطقة جيزان</p>
         </div>
         <div class="contact-row">
           <span class="ci loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
-          حي السويس - جيزان
+          منطقة جيزان
         </div>
         <div class="contact-row">
           <span class="ci ph"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
@@ -1234,6 +1234,12 @@
         <input type="number" id="pQty" placeholder="0" min="0">
         <label>حد التنبيه <span class="opt">(لو الكمية نزلت عنه تظهر في النواقص)</span></label>
         <input type="number" id="pMinQty" placeholder="مثلاً 3" min="0" value="3">
+        <label>الضمان <span class="opt">(مثال: سنة / سنتين)</span></label>
+        <input type="text" id="pWarranty" placeholder="مثال: ضمان سنة">
+        <label>الشركة <span class="opt">(من الشركات المضافة — اختياري)</span></label>
+        <select id="pCompany">
+          <option value="">-- بدون شركة --</option>
+        </select>
         <label>الباركود <span class="opt">(اختياري)</span></label>
         <div style="display:flex; gap:8px;">
           <input type="text" id="pBarcode" placeholder="أدخل الباركود أو امسحه" style="flex:1">
@@ -1327,11 +1333,16 @@
           <span>📈 المكسب<br><span class="secret-hint">اضغط للإظهار</span></span>
           <span class="secret-val" id="invProfitVal">•••</span>
         </div>
+        <div style="margin-top:12px;">
+          <label>ملحوظات <span class="opt">(تظهر في الفاتورة)</span></label>
+          <textarea id="invNotes" rows="2" placeholder="مثال: التركيب خلال 48 ساعة"></textarea>
+        </div>
         <div id="invBanner"></div>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px;">
           <button class="btn btn-success" onclick="downloadInvoicePDF()">📄 فاتورة PDF</button>
           <button class="btn btn-excel" onclick="downloadInvoiceExcel()">📊 فاتورة Excel</button>
         </div>
+        <button class="btn btn-whatsapp btn-block" style="margin-top:8px;" onclick="shareInvoiceWhatsApp()">💬 إرسال الفاتورة واتساب للعميل</button>
         <button class="btn btn-outline btn-block" style="margin-top:8px;" onclick="clearInvoice()">مسح الفاتورة</button>
       </div>
     </div>
@@ -1386,6 +1397,7 @@
           <div class="total" id="qTotal">0 ر.س</div>
         </div>
         <button class="btn btn-success btn-block" style="margin-top:12px;" onclick="downloadQuotePDF()">📄 إنشاء عرض السعر PDF</button>
+        <button class="btn btn-whatsapp btn-block" style="margin-top:8px;" onclick="shareQuoteWhatsApp()">💬 إرسال عرض السعر واتساب للعميل</button>
         <button class="btn btn-outline btn-block" style="margin-top:8px;" onclick="clearQuote()">مسح العرض</button>
       </div>
     </div>
@@ -1688,7 +1700,7 @@
   <script>
     // ==================== DATA ====================
     const WHATSAPP_NUMBER = '9660510572080';
-    const ADMIN_PASS = 'As1234';
+    const ADMIN_PASS = 'Aa@123456';
     // ---- بيانات الملف المحفوظ (تتحدث عند الضغط على "احفظ الملف") ----
     let seed = {};
     try { seed = JSON.parse(document.getElementById('seedData').textContent || '{}'); } catch (e) {}
@@ -1738,7 +1750,7 @@
         { q: 'هل الأسعار تشمل التركيب؟', a: 'كثير من العروض تشمل التركيب — اسألنا عبر واتساب وسنوضح لك التفاصيل قبل التنفيذ.' },
         { q: 'هل تقدمون خدمة طوارئ؟', a: 'نعم داخل جيزان — تواصل معنا فورًا من صفحة الصيانة أو واتساب.' },
         { q: 'كيف أتابع موعد صيانتي؟', a: 'من الرئيسية اختر «تتبع موعد الصيانة» وأدخل كود العميل، أو تواصل معنا وسنذكّرك قبل الموعد.' },
-        { q: 'أين موقعكم؟', a: 'حي السويس — جيزان. للزيارة أو التركيب المنزلي تواصل على 0510572080.' }
+        { q: 'أين موقعكم؟', a: 'منطقة جيزان. للزيارة أو التركيب المنزلي تواصل على 0510572080.' }
       ]
     };
     let siteContent = (() => {
@@ -1767,7 +1779,7 @@
           return;
         }
         requestAnimationFrame(() => splash.classList.add('fill'));
-        const duration = 3200;
+        const duration = 4000; // 4 ثواني مع صعود المياه
         const start = performance.now();
         function tick(now) {
           const t = Math.min(1, (now - start) / duration);
@@ -1776,11 +1788,9 @@
           if (pct) pct.textContent = p + '%';
           if (t < 1) requestAnimationFrame(tick);
           else {
-            setTimeout(() => {
-              splash.classList.add('hide');
-              document.body.classList.remove('splash-lock');
-              splash.setAttribute('aria-hidden', 'true');
-            }, 280);
+            splash.classList.add('hide');
+            document.body.classList.remove('splash-lock');
+            splash.setAttribute('aria-hidden', 'true');
           }
         }
         requestAnimationFrame(tick);
@@ -1889,6 +1899,7 @@
       if (tab === 'stock') { stockTab = getLowStockProducts().length ? 'low' : 'avail'; setStockTab(stockTab); }
       if (tab === 'invoice') { fillInvoiceSelect(); fillCustomerPicks(); fillInvoiceCompanies(); }
       if (tab === 'quote') { fillQuoteSelect(); fillCustomerPicks(); }
+      if (tab === 'addProduct') fillProductCompanies();
       if (tab === 'companies') renderCompanies();
       if (tab === 'multiQuote') { fillMqProducts(); renderMqCompanies(); renderMqTable(); }
       if (tab === 'customers') custView('list');
@@ -1962,6 +1973,8 @@
               ${hasDisc ? `<span class="old-price">${p.priceBefore}</span>` : ''}
               <span class="price">${p.priceAfter} ر.س</span>
             </div>
+            ${p.warranty ? `<div class="qty" style="color:var(--success)">🛡 ضمان: ${esc(p.warranty)}</div>` : ''}
+            ${p.companyName ? `<div class="qty" style="color:var(--muted)">🏢 ${esc(p.companyName)}</div>` : ''}
             ${isAdmin ? `<div class="qty">المتوفر: ${p.qty}</div>` : (out ? `<div class="qty out-stock">غير متوفر</div>` : '')}
             ${!isAdmin ? `<button class="card-add" ${out ? 'disabled' : ''} onclick="event.stopPropagation();addToCart('${p.id}')">🛒 أضف للسلة</button>` : ''}
           </div>
@@ -2025,6 +2038,8 @@
           ${p.priceBefore > p.priceAfter ? `<span class="old-price">${p.priceBefore}</span>` : ''}
         </p>
         ${isAdmin ? `<p>الكمية المتوفرة: ${p.qty}</p>` : (p.qty <= 0 ? `<p class="out-stock">غير متوفر حاليًا</p>` : '')}
+        ${p.warranty ? `<p>🛡 الضمان: <strong>${esc(p.warranty)}</strong></p>` : ''}
+        ${p.companyName ? `<p>🏢 الشركة: ${esc(p.companyName)}</p>` : ''}
         ${p.barcode ? `<p>الباركود: ${p.barcode}</p>` : ''}
         <button class="btn btn-primary btn-block" style="margin-top:16px;" onclick="addToCart('${p.id}'); closeProductModal();">
           🛒 أضف إلى السلة
@@ -2037,7 +2052,7 @@
 
     async function shareProduct(id) {
       const p = products.find(x => x.id === id); if (!p) return;
-      const text = `💧 ${p.name}\nالسعر: ${p.priceAfter} ر.س${p.priceBefore > p.priceAfter ? ' (بدل ' + p.priceBefore + ')' : ''}\nمن مويه عذبه - فلاتر\n📍 حي السويس - جيزان\n📞 0510572080`;
+      const text = `💧 ${p.name}\nالسعر: ${p.priceAfter} ر.س${p.priceBefore > p.priceAfter ? ' (بدل ' + p.priceBefore + ')' : ''}${p.warranty ? '\n🛡 الضمان: ' + p.warranty : ''}\nمن مويه عذبه - فلاتر\n📍 منطقة جيزان\n📞 0510572080`;
       try {
         if (navigator.share) { await navigator.share({ title: p.name, text }); return; }
       } catch (e) { if (e && e.name === 'AbortError') return; }
@@ -2587,6 +2602,10 @@
       const buyPrice = parseFloat(document.getElementById('pBuyPrice').value) || 0;
       const qty = parseInt(document.getElementById('pQty').value) || 0;
       const minQty = Math.max(0, parseInt(document.getElementById('pMinQty').value) || 0);
+      const warranty = document.getElementById('pWarranty').value.trim();
+      const companyId = document.getElementById('pCompany').value || '';
+      const co = companies.find(c => c.id === companyId);
+      const companyName = co ? co.name : '';
       const barcode = document.getElementById('pBarcode').value.trim();
       const editId = document.getElementById('editProductId').value;
       const image = document.getElementById('pImagePreview').dataset.base64 || '';
@@ -2598,14 +2617,14 @@
         if (idx !== -1) {
           products[idx] = {
             ...products[idx],
-            name, priceBefore, priceAfter, buyPrice, qty, minQty, barcode,
+            name, priceBefore, priceAfter, buyPrice, qty, minQty, warranty, companyId, companyName, barcode,
             image: image || products[idx].image
           };
         }
       } else {
         products.push({
           id: Date.now().toString(),
-          name, priceBefore, priceAfter, buyPrice, qty, minQty, barcode, image
+          name, priceBefore, priceAfter, buyPrice, qty, minQty, warranty, companyId, companyName, barcode, image
         });
       }
       saveProducts();
@@ -2617,6 +2636,8 @@
       document.getElementById('pBuyPrice').value = '';
       document.getElementById('pQty').value = '';
       document.getElementById('pMinQty').value = '3';
+      document.getElementById('pWarranty').value = '';
+      document.getElementById('pCompany').value = '';
       document.getElementById('pBarcode').value = '';
       document.getElementById('editProductId').value = '';
       document.getElementById('pImage').value = '';
@@ -2638,6 +2659,8 @@
       document.getElementById('pBuyPrice').value = p.buyPrice || 0;
       document.getElementById('pQty').value = p.qty;
       document.getElementById('pMinQty').value = (p.minQty != null ? p.minQty : 3);
+      document.getElementById('pWarranty').value = p.warranty || '';
+      fillProductCompanies(p.companyId || '');
       document.getElementById('pBarcode').value = p.barcode || '';
       if (p.image) {
         document.getElementById('pImagePreview').innerHTML = `<img src="${p.image}" style="max-width:120px; border-radius:8px;">`;
@@ -2845,7 +2868,7 @@
       if (!id) return;
       const p = products.find(x => x.id === id);
       if (!p) return;
-      invoiceItems.push({ id: p.id, name: p.name, price: p.priceAfter, buyPrice: Number(p.buyPrice) || 0, qty: 1 });
+      invoiceItems.push({ id: p.id, name: p.name, price: p.priceAfter, buyPrice: Number(p.buyPrice) || 0, qty: 1, warranty: p.warranty || '', companyName: p.companyName || '' });
       renderInvoiceItems();
     }
 
@@ -2964,6 +2987,7 @@
       document.getElementById('invCustId').value = '';
       const pick = document.getElementById('invCustPick'); if (pick) pick.value = '';
       const invCo = document.getElementById('invCompany'); if (invCo) invCo.value = '';
+      const invNotes = document.getElementById('invNotes'); if (invNotes) invNotes.value = '';
       document.getElementById('invCostRow')?.classList.remove('revealed');
       document.getElementById('invProfitRow')?.classList.remove('revealed');
       const h1 = document.querySelector('#invCostRow .secret-hint'); if (h1) h1.textContent = 'اضغط للإظهار';
@@ -2989,8 +3013,8 @@
       nameEn: 'Moyah Adhba Water Purification Est.',
       vat: '312826280300003',
       cr: '4032283866',
-      addressAr: 'جيزان حي السويس شارع ابي عبيدة بن الجراح',
-      addressEn: 'Jizan, Al-Suez Dist., Abi Ubaidah St.',
+      addressAr: 'منطقة جيزان',
+      addressEn: 'Jizan Region, Saudi Arabia',
       phone: '0510572080',
       bankName: 'Al-Rajhi',
       bankNameAr: 'مصرف الراجحي',
@@ -3044,18 +3068,27 @@
         const taxable = qty * price;
         const vatAmt = taxable * (vatPct / 100);
         const amount = taxable + vatAmt;
-        return { i: i + 1, name: it.name || '', qty, price, taxable, vatPct, vatAmt, amount };
+        let name = it.name || '';
+        if (it.warranty) name += ' | ضمان: ' + it.warranty;
+        return { i: i + 1, name, qty, price, taxable, vatPct, vatAmt, amount };
       });
       const subtotal = rows.reduce((s, r) => s + r.taxable, 0);
       const vatTotal = rows.reduce((s, r) => s + r.vatAmt, 0);
       const discount = Number(data.discount) || 0;
       const grand = Math.max(0, subtotal + vatTotal - discount);
 
-      const W = 1240, M = 48;
+      const BASE_W = 1240, M = 48;
+      const SCALE = 2.5; // ~300 DPI — جودة عالية بدون بكسلة
       const tableRows = Math.max(rows.length, 1);
       const H = Math.max(1754, 920 + tableRows * 52 + 420);
-      const c = document.createElement('canvas'); c.width = W; c.height = H;
+      const c = document.createElement('canvas');
+      c.width = Math.round(BASE_W * SCALE);
+      c.height = Math.round(H * SCALE);
       const x = c.getContext('2d');
+      x.scale(SCALE, SCALE);
+      const W = BASE_W;
+      x.imageSmoothingEnabled = true;
+      x.imageSmoothingQuality = 'high';
       const F = (w, sz) => `${w} ${sz}px Cairo, Tahoma, Arial, sans-serif`;
       const T = (txt, px, py, o = {}) => {
         x.font = F(o.w || 600, o.sz || 20);
@@ -3344,7 +3377,8 @@
         subtotal, discount, vatPct, vat, total,
         companyId, companyName,
         payMethod, payLabel: payLabels[payMethod] || payMethod,
-        paidNow, dueDate, remaining
+        paidNow, dueDate, remaining,
+        notes: (document.getElementById('invNotes')?.value || '').trim()
       };
       invoiceItems.forEach(item => {
         sales.push({ productId: item.id, name: item.name, price: item.price, qty: item.qty,
@@ -3528,8 +3562,8 @@
       catch (e) { hideLoading(); alert('تعذر إنشاء الفاتورة: ' + e.message); return; }
       const { jsPDF } = window.jspdf;
       const wMM = 210, hMM = wMM * canvas.height / canvas.width;
-      const doc = new jsPDF({ unit: 'mm', format: [wMM, Math.max(297, hMM)] });
-      doc.addImage(canvas.toDataURL('image/jpeg', 0.93), 'JPEG', 0, 0, wMM, hMM);
+      const doc = new jsPDF({ unit: 'mm', format: [wMM, Math.max(297, hMM)], compress: true });
+      doc.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, wMM, hMM);
       showFileReady(doc.output('blob'), invFileName(data, 'pdf'), 'application/pdf');
     }
 
@@ -3569,7 +3603,7 @@
       rows.push(['', '', '', 'الخصم', d.discount]);
       rows.push(['', '', '', 'الإجمالي المستحق', d.total]);
       rows.push([]);
-      rows.push(['العنوان: حي السويس - جيزان']);
+      rows.push(['العنوان: منطقة جيزان']);
       rows.push(['الجوال: 0510572080']);
       rows.push(['شكرًا لثقتكم بنا']);
       const ws = XLSX.utils.aoa_to_sheet(rows);
@@ -3876,7 +3910,7 @@
       const p = products.find(x => x.id === id);
       if (!p) { alert('اختر منتج الأول'); return; }
       const qty = Math.max(1, parseInt(document.getElementById('qQty').value) || 1);
-      qItems.push({ id: p.id, name: p.name, price: p.priceAfter, qty });
+      qItems.push({ id: p.id, name: p.name, price: p.priceAfter, qty, warranty: p.warranty || '' });
       document.getElementById('qQty').value = 1;
       renderQuoteItems();
     }
@@ -3964,11 +3998,78 @@
       try { canvas = await buildInvoiceCanvas(data); } catch (e) { hideLoading(); alert('تعذر إنشاء العرض: ' + e.message); return; }
       const { jsPDF } = window.jspdf;
       const wMM = 210, hMM = wMM * canvas.height / canvas.width;
-      const doc = new jsPDF({ unit: 'mm', format: [wMM, Math.max(297, hMM)] });
-      doc.addImage(canvas.toDataURL('image/jpeg', 0.93), 'JPEG', 0, 0, wMM, hMM);
+      const doc = new jsPDF({ unit: 'mm', format: [wMM, Math.max(297, hMM)], compress: true });
+      doc.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, wMM, hMM);
       showFileReady(doc.output('blob'), invFileName(data, 'pdf'), 'application/pdf', 'عرض السعر');
+      lastQuote = data;
     }
 
+
+
+    function fillProductCompanies(selectedId) {
+      const sel = document.getElementById('pCompany'); if (!sel) return;
+      const prev = selectedId != null ? selectedId : sel.value;
+      sel.innerHTML = '<option value="">-- بدون شركة --</option>' +
+        companies.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
+      if (prev && companies.some(c => c.id === prev)) sel.value = prev;
+    }
+    function normalizeWaPhone(phone) {
+      let p = String(phone || '').replace(/[^\d]/g, '');
+      if (!p) return '';
+      if (p.startsWith('00')) p = p.slice(2);
+      if (p.startsWith('0') && p.length === 10) p = '966' + p.slice(1);
+      if (p.length === 9 && p.startsWith('5')) p = '966' + p;
+      return p;
+    }
+    function shareInvoiceWhatsApp() {
+      const data = lastInvoice;
+      if (!data) { alert('أنشئ الفاتورة أولاً (PDF أو Excel) ثم أرسلها واتساب'); return; }
+      const phone = normalizeWaPhone(data.phone);
+      if (!phone) { alert('لا يوجد رقم جوال مسجل للعميل — أضف الرقم في الفاتورة'); return; }
+      const lines = [
+        '📄 *فاتورة ضريبية — مويه عذبه*',
+        'رقم الفاتورة: I-' + data.no,
+        'العميل: ' + data.customer,
+        'التاريخ: ' + data.date,
+        'الإجمالي: ' + Number(data.total).toFixed(2) + ' ر.س',
+        data.payLabel ? 'الدفع: ' + data.payLabel : '',
+        data.notes ? 'ملحوظة: ' + data.notes : '',
+        '',
+        '📍 منطقة جيزان',
+        '📞 0510572080'
+      ].filter(Boolean);
+      window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(lines.join('\\n')), '_blank');
+    }
+    let lastQuote = null;
+    function shareQuoteWhatsApp() {
+      const phoneEl = document.getElementById('qPhone');
+      const phone = normalizeWaPhone(phoneEl ? phoneEl.value : (lastQuote && lastQuote.phone));
+      const data = lastQuote;
+      if (!data) {
+        // حاول من الحقول الحالية
+        const customer = document.getElementById('qCustomer')?.value.trim();
+        const total = document.getElementById('qTotal')?.textContent || '';
+        if (!customer) { alert('أنشئ عرض السعر PDF أولاً أو اكتب بيانات العميل'); return; }
+        if (!phone) { alert('أدخل رقم جوال العميل لإرسال العرض'); return; }
+        const text = '📝 *عرض سعر — مويه عذبه*\\nالعميل: ' + customer + '\\nالإجمالي: ' + total + '\\n📍 منطقة جيزان\\n📞 0510572080';
+        window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(text), '_blank');
+        return;
+      }
+      if (!phone) { alert('لا يوجد رقم جوال — أضفه في عرض السعر'); return; }
+      const lines = [
+        '📝 *عرض سعر — مويه عذبه*',
+        'رقم العرض: ' + data.no,
+        'العميل: ' + data.customer,
+        'التاريخ: ' + data.date,
+        'الإجمالي: ' + Number(data.total).toFixed(2) + ' ر.س',
+        data.validUntil ? 'صالح حتى: ' + data.validUntil : '',
+        data.notes ? 'ملحوظة: ' + data.notes : '',
+        '',
+        '📍 منطقة جيزان',
+        '📞 0510572080'
+      ].filter(Boolean);
+      window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(lines.join('\\n')), '_blank');
+    }
 
     // ==================== COMPANIES ====================
     function saveCompanies() { localStorage.setItem('ma_companies', JSON.stringify(companies)); markDirty(); }
@@ -4511,7 +4612,7 @@
         <table><thead><tr><th>#</th><th>التاريخ</th><th>ما تم</th><th>التكلفة</th></tr></thead><tbody>${histRows}</tbody></table>
         <h2>المشتريات والفواتير (${buys.length})</h2>
         <table><thead><tr><th>رقم الفاتورة</th><th>التاريخ</th><th>الأصناف</th><th>الإجمالي</th></tr></thead><tbody>${buyRows}</tbody></table>
-        <div class="ft">حي السويس - جيزان • 0510572080</div></body></html>`;
+        <div class="ft">منطقة جيزان • 0510572080</div></body></html>`;
       const f = document.createElement('iframe');
       f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0';
       document.body.appendChild(f);
@@ -4757,7 +4858,7 @@
         const { jsPDF } = window.jspdf;
         const wMM = 210, hMM = wMM * canvas.height / canvas.width;
         const doc = new jsPDF({ unit: 'mm', format: [wMM, Math.max(297, hMM)] });
-        doc.addImage(canvas.toDataURL('image/jpeg', 0.93), 'JPEG', 0, 0, wMM, hMM);
+        doc.addImage(canvas.toDataURL('image/png'), 'JPEG', 0, 0, wMM, hMM);
         showFileReady(doc.output('blob'), invFileName(data, 'pdf'), 'application/pdf');
       } catch (e) { alert('خطأ: ' + e.message); }
     }
