@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0a4d8c" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="مويه عذبه" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22%D9%85%D9%88%D9%8A%D9%87%20%D8%B9%D8%B0%D8%A8%D9%87%20%7C%20%D9%81%D9%84%D8%A7%D8%AA%D8%B1%22%2C%22short_name%22%3A%22%D9%85%D9%88%D9%8A%D9%87%20%D8%B9%D8%B0%D8%A8%D9%87%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f0f7ff%22%2C%22theme_color%22%3A%22%230a4d8c%22%2C%22lang%22%3A%22ar%22%2C%22dir%22%3A%22rtl%22%7D" />
   <title>مويه عذبه | فلاتر</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -133,6 +139,13 @@
       font-size: 0.72rem;
       color: var(--muted);
       margin-top: 2px;
+    }
+    .product-card .warranty-badge {
+      display: inline-block; margin-top: 6px; padding: 5px 10px;
+      background: linear-gradient(145deg, #ecfdf5, #d1fae5);
+      border: 1.5px solid #34d399; border-radius: 10px;
+      color: #047857; font-weight: 800; font-size: 0.78rem;
+      line-height: 1.3;
     }
     .product-card .card-add {
       margin-top: 8px; width: 100%; border: none; cursor: pointer; font-family: inherit;
@@ -338,6 +351,68 @@
     .hero-wave { position: absolute; bottom: -1px; left: 0; width: 100%; height: 40px; display: block; }
     body.dark .hero-wave path { fill: #0b1220; }
     .home-body { max-width: 640px; margin: 0 auto; padding: 8px 16px 28px; }
+    .home-promo-banner {
+      margin: 0 0 12px; padding: 16px; border-radius: 20px;
+      background: linear-gradient(135deg, #c2410c 0%, #ea580c 45%, #fbbf24 100%);
+      color: #fff; box-shadow: 0 12px 28px rgba(234,88,12,.4);
+      cursor: pointer; text-align: right; position: relative; overflow: hidden;
+      border: 2px solid rgba(255,255,255,.35);
+      animation: promoPulse 2.4s ease-in-out infinite;
+    }
+    @keyframes promoPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 12px 28px rgba(234,88,12,.4); }
+      50% { transform: scale(1.015); box-shadow: 0 14px 32px rgba(234,88,12,.55); }
+    }
+    .home-promo-banner .promo-ic {
+      position: absolute; left: 12px; top: 12px; font-size: 2.2rem;
+      background: rgba(255,255,255,.2); width: 52px; height: 52px; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .home-promo-banner .promo-tag {
+      display: inline-block; background: rgba(0,0,0,.25); border-radius: 999px;
+      padding: 3px 10px; font-size: .72rem; font-weight: 800; margin-bottom: 6px;
+    }
+    .home-promo-banner .promo-name {
+      display: block; font-size: 1.15rem; font-weight: 800; line-height: 1.35;
+      padding-left: 60px;
+    }
+    .home-promo-banner .promo-prices {
+      margin-top: 8px; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+      padding-left: 60px;
+    }
+    .home-promo-banner .promo-prices .now {
+      font-size: 1.35rem; font-weight: 800; background: rgba(255,255,255,.2);
+      padding: 2px 10px; border-radius: 10px;
+    }
+    .home-promo-banner .promo-prices .old {
+      text-decoration: line-through; opacity: .85; font-size: .95rem;
+    }
+    .home-promo-banner .cd {
+      display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; justify-content: center;
+    }
+    .home-promo-banner .cd span {
+      background: rgba(0,0,0,.28); border-radius: 12px; padding: 8px 10px;
+      min-width: 58px; text-align: center; font-size: .78rem; font-weight: 800;
+      line-height: 1.25;
+    }
+    .home-promo-banner .cd span em {
+      display: block; font-style: normal; font-size: 1.1rem; font-weight: 800;
+    }
+    .pwa-install-bar {
+      display: none; margin: 0 0 12px; padding: 10px 12px; border-radius: 14px;
+      background: #e0f2fe; border: 1px solid #7dd3fc; color: #0c4a6e;
+      font-size: .85rem; font-weight: 700; align-items: center; gap: 10px;
+    }
+    .pwa-install-bar.show { display: flex; }
+    .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    .report-card {
+      background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px;
+      padding: 12px; text-align: center;
+    }
+    .report-card .rv { font-size: 1.15rem; font-weight: 800; color: var(--primary); }
+    .report-card .rl { font-size: .75rem; color: var(--muted); margin-top: 2px; }
+    .track-section-card { margin-top: 12px; padding: 12px; border-radius: 12px; background: #f8fafc; border: 1px solid #e2e8f0; }
+    .track-section-card h4 { color: var(--primary); margin-bottom: 8px; font-size: .95rem; }
     .home-brand {
       text-align: center; margin: 0 0 18px; position: relative; z-index: 4;
       padding: 4px 0 2px;
@@ -912,6 +987,7 @@
     body.admin-panel-open .admin-group,
     body.admin-panel-open .save-bar { display: none !important; }
     body.admin-panel-open #maintAlert { display: none !important; }
+    body.admin-panel-open #instDueAlert { display: none !important; }
     body.admin-panel-open .admin-panel.active {
       display: block; animation: panelIn .28s ease;
     }
@@ -994,6 +1070,12 @@
       <svg class="hero-wave" viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0,30 C200,70 400,0 600,30 C800,60 1000,5 1200,30 L1200,60 L0,60 Z" fill="#f0f7ff"/></svg>
     </div>
     <div class="home-body">
+      <div class="pwa-install-bar" id="pwaInstallBar">
+        <span style="flex:1">📱 ثبّت التطبيق على الشاشة الرئيسية لفتحه زي البرامج</span>
+        <button type="button" class="btn btn-primary btn-sm" onclick="installPwa()">تثبيت</button>
+        <button type="button" class="btn btn-outline btn-sm" onclick="dismissPwaBar()">×</button>
+      </div>
+      <div id="homePromoBanner"></div>
       <div class="home-brand">
         <h2>مويه عذبه — فلاتر</h2>
         <p>نقاء الماء … نقاء الحياة</p>
@@ -1025,7 +1107,7 @@
         </button>
         <button class="big-btn track-btn" onclick="showSection('track')">
           <span class="bi"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
-          <b>تتبع الصيانة</b><small>بكود العميل</small>
+          <b>تتبع حسابي</b><small>كود · جوال · فواتير</small>
         </button>
         <button class="big-btn alt" onclick="showSection('maintenance')">
           <span class="bi"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
@@ -1045,17 +1127,6 @@
         <button class="home-link" onclick="showSection('faq')">
           <span class="hl-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg></span>
           الأسئلة
-        </button>
-        <button class="home-link admin-only" id="homeAdminBtn" style="display:none" onclick="openAdminFromHome()">
-          <span class="hl-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
-          لوحة التحكم
-        </button>
-      </div>
-      <div id="homeAdminOpen" style="display:none;margin:12px 0 4px;">
-        <button type="button" class="qc-banner" onclick="showSection('admin')">
-          <span class="qc-ic">⚙️</span>
-          <span style="flex:1"><b>لوحة التحكم</b><small>مفتوحة — اضغط للدخول · بعد الخروج تختفي من هنا</small></span>
-          <span class="qc-arrow">←</span>
         </button>
       </div>
       <div class="block-label">تواصل معنا</div>
@@ -1094,15 +1165,15 @@
 
   <!-- ========== TRACK MAINTENANCE ========== -->
   <section id="track" class="section">
-    <div class="section-title">🔍 تتبع موعد الصيانة</div>
+    <div class="section-title">🔍 تتبع حسابي</div>
     <div class="card">
-      <p style="color:var(--muted); margin-bottom:12px;">أدخل كود العميل اللي وصلك من المحل عشان تشوف موعد صيانتك القادم.</p>
-      <label>كود العميل</label>
+      <p style="color:var(--muted); margin-bottom:12px;">أدخل <b>كود العميل</b> أو <b>رقم الجوال</b> أو امسح الباركود لعرض فواتيرك والأقساط وموعد الصيانة.</p>
+      <label>كود العميل / الجوال / الباركود</label>
       <div style="display:flex; gap:8px;">
-        <input type="text" id="trackCode" placeholder="مثال: CU0001" style="flex:1">
-        <button class="btn btn-outline btn-sm" onclick="openScanner('trackCust')">📷</button>
+        <input type="text" id="trackCode" placeholder="CU0001 أو 05xxxxxxxx" style="flex:1" autocomplete="tel">
+        <button class="btn btn-outline btn-sm" onclick="openScanner('trackCust')" title="مسح باركود">📷</button>
       </div>
-      <button class="btn btn-primary btn-block" style="margin-top:12px;" onclick="lookupMaintenance()">عرض الموعد</button>
+      <button class="btn btn-primary btn-block" style="margin-top:12px;" onclick="lookupMaintenance()">عرض بياناتي</button>
       <div id="trackResult" class="track-result"></div>
     </div>
   </section>
@@ -1204,6 +1275,7 @@
       <div id="dirtyNote">✓ لا توجد تغييرات جديدة</div>
     </div>
     <div id="maintAlert" style="display:none" onclick="openAdminPanel('customers')"></div>
+    <div id="instDueAlert" style="display:none;margin-bottom:12px;"></div>
     <div class="admin-group g1">
       <div class="ag-title"><i></i>المنتجات والمخزن</div>
       <div class="admin-tabs grid">
@@ -1342,6 +1414,17 @@
         <select id="invCustPick" onchange="pickCustomer('inv')">
           <option value="">-- اختر عميل --</option>
         </select>
+        <button type="button" class="btn btn-outline btn-sm" style="margin-top:6px" onclick="toggleQuickCust('inv')">➕ عميل جديد (مش موجود في القائمة)</button>
+        <div id="invQuickCust" style="display:none;margin-top:10px;padding:12px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px">
+          <label>اسم العميل الجديد</label>
+          <input type="text" id="invNewCustName" placeholder="اسم العميل">
+          <label>رقم الجوال</label>
+          <div style="display:flex;gap:8px">
+            <input type="tel" id="invNewCustPhone" placeholder="05xxxxxxxx" style="flex:1" autocomplete="tel">
+            <button type="button" class="btn btn-outline btn-sm" onclick="pickContactPhone('invNewCustPhone','invNewCustName')" title="من جهات الاتصال">📇 جهات الاتصال</button>
+          </div>
+          <button type="button" class="btn btn-primary btn-block" style="margin-top:8px" onclick="saveQuickCustomer('inv')">💾 حفظ العميل واختياره</button>
+        </div>
         <label>اسم العميل <span class="opt">(يُملأ تلقائيًا أو اكتبه يدويًا)</span></label>
         <input type="text" id="invCustomer" placeholder="اسم العميل (يظهر في الفاتورة)">
         <label>الشركة <span class="opt">(اختياري)</span></label>
@@ -1357,7 +1440,10 @@
         <select id="invProductSelect">
           <option value="">-- اختر منتج --</option>
         </select>
-        <button class="btn btn-primary btn-sm" onclick="addToInvoice()">➕ إضافة للفاتورة</button>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+          <input type="number" id="invAddQty" value="1" min="1" style="width:90px;margin:0" placeholder="الكمية" title="الكمية">
+          <button class="btn btn-primary" style="flex:1" onclick="addToInvoice()">➕ إضافة للفاتورة</button>
+        </div>
         <div id="invoiceItems" style="margin-top:16px;"></div>
         <div style="margin-top:12px;">
           <label>ضريبة القيمة المضافة % <span class="opt">(اختياري — اترك 0 بدون ضريبة)</span></label>
@@ -1385,11 +1471,14 @@
           <input type="hidden" id="invPayMethod" value="cash">
         </div>
         <div id="invCreditFields" style="display:none; margin-top:12px; background:#fff7ed; border:1px solid #fed7aa; border-radius:12px; padding:12px;">
-          <label>تاريخ الاستحقاق</label>
-          <input type="date" id="invDueDate">
           <label>المبلغ المدفوع الآن <span class="opt">(ريال)</span></label>
-          <input type="number" id="invPaidNow" placeholder="0" min="0" step="0.01" oninput="calcInvoiceTotal()">
-          <div style="margin-top:8px; font-weight:700; color:#c2410c;">المتبقي: <span id="invRemaining">0</span> ر.س</div>
+          <input type="number" id="invPaidNow" placeholder="0" min="0" step="0.01" oninput="onCreditPaidChange()">
+          <label style="margin-top:10px;">المبلغ المتبقي <span class="opt">(تلقائي = الإجمالي − المدفوع)</span></label>
+          <input type="number" id="invRemainingInput" readonly style="background:#f8fafc;font-weight:800;color:#c2410c">
+          <div style="margin-top:8px;font-size:.85rem;color:#9a3412;">المتبقي: <span id="invRemaining">0</span> ر.س</div>
+          <label style="margin-top:12px;">التسديد على كام قسط؟</label>
+          <input type="number" id="invInstallCount" placeholder="مثال: 3" min="1" max="24" step="1" oninput="buildInstallPlanFields()">
+          <div id="invInstallPlan" style="margin-top:10px;"></div>
         </div>
         <div class="secret-row" id="invCostRow" onclick="toggleSecret('invCostRow')" title="اضغط للإظهار/الإخفاء">
           <span>💰 سعر الشراء (التكلفة)<br><span class="secret-hint">اضغط للإظهار</span></span>
@@ -1424,6 +1513,17 @@
         <select id="qCustPick" onchange="pickCustomer('q')">
           <option value="">-- اختر عميل --</option>
         </select>
+        <button type="button" class="btn btn-outline btn-sm" style="margin-top:6px" onclick="toggleQuickCust('q')">➕ عميل جديد (مش موجود في القائمة)</button>
+        <div id="qQuickCust" style="display:none;margin-top:10px;padding:12px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px">
+          <label>اسم العميل الجديد</label>
+          <input type="text" id="qNewCustName" placeholder="اسم العميل">
+          <label>رقم الجوال</label>
+          <div style="display:flex;gap:8px">
+            <input type="tel" id="qNewCustPhone" placeholder="05xxxxxxxx" style="flex:1" autocomplete="tel">
+            <button type="button" class="btn btn-outline btn-sm" onclick="pickContactPhone('qNewCustPhone','qNewCustName')" title="من جهات الاتصال">📇 جهات الاتصال</button>
+          </div>
+          <button type="button" class="btn btn-primary btn-block" style="margin-top:8px" onclick="saveQuickCustomer('q')">💾 حفظ العميل واختياره</button>
+        </div>
         <label>اسم العميل <span class="opt">(يُملأ تلقائيًا أو اكتبه يدويًا)</span></label>
         <input type="text" id="qCustomer" placeholder="اسم العميل (يظهر في العرض)">
         <label>رقم جوال العميل <span class="opt">(اختياري)</span></label>
@@ -1604,17 +1704,22 @@
     <div id="promos" class="admin-panel">
       <div class="card">
         <h3 style="margin-bottom:12px;">🔥 عروض محدودة الوقت</h3>
-        <label>عنوان العرض</label>
-        <input type="text" id="prTitle" placeholder="مثال: خصم على فلتر 5 مراحل">
+        <p style="color:var(--muted);font-size:.85rem;margin-bottom:10px;">العرض يظهر تلقائياً في أعلى الصفحة الرئيسية مع العدّاد حتى وقت الانتهاء.</p>
+        <label>المنتج <span class="opt">(اختياري — يعبّي الاسم والسعر)</span></label>
+        <select id="prProduct" onchange="fillPromoFromProduct()">
+          <option value="">-- اختر منتج أو اكتب يدوياً --</option>
+        </select>
+        <label>اسم العرض / المنتج</label>
+        <input type="text" id="prTitle" placeholder="مثال: فلتر 5 مراحل">
         <label>الوصف <span class="opt">(اختياري)</span></label>
         <input type="text" id="prDesc" placeholder="يشمل التركيب">
-        <label>السعر قبل</label>
-        <input type="number" id="prBefore" placeholder="0">
-        <label>السعر بعد</label>
-        <input type="number" id="prAfter" placeholder="0">
-        <label>ينتهي في</label>
+        <label>السعر قبل الخصم</label>
+        <input type="number" id="prBefore" placeholder="0" step="0.01">
+        <label>سعر العرض</label>
+        <input type="number" id="prAfter" placeholder="0" step="0.01">
+        <label>ينتهي في <span class="opt">(وقت في المستقبل)</span></label>
         <input type="datetime-local" id="prEnds">
-        <button class="btn btn-primary btn-block" onclick="savePromo()">💾 حفظ العرض</button>
+        <button class="btn btn-primary btn-block" onclick="savePromo()">💾 حفظ وإظهار على الرئيسية</button>
         <button class="btn btn-success btn-block" style="margin-top:8px;" onclick="exportPromos()">⬇️ تنزيل ملف العروض</button>
         <div id="promosAdminList" style="margin-top:14px;"></div>
       </div>
@@ -1655,6 +1760,7 @@
         <h3 style="margin-bottom:12px;">📈 التقارير</h3>
         <div class="admin-tabs" style="margin-bottom:12px;">
           <button class="admin-tab active" onclick="renderReport('today')">اليوم</button>
+          <button class="admin-tab" onclick="renderReport('week')">هذا الأسبوع</button>
           <button class="admin-tab" onclick="renderReport('month')">هذا الشهر</button>
           <button class="admin-tab" onclick="renderReport('all')">الكل</button>
         </div>
@@ -1879,9 +1985,15 @@
       updateCartBadge();
       renderGalleryPublic();
       updateInstBadge();
+      updateInstDueAlert();
       updateStockBadge();
+      renderHomePromoBanner();
+      setupPwaInstall();
       // Click on shop name or logo to open admin login
-      document.querySelectorAll('[data-admin]').forEach(el => el.addEventListener('click', openLoginModal));
+      document.querySelectorAll('[data-admin]').forEach(el => el.addEventListener('click', () => {
+        if (isAdmin) showSection('admin');
+        else openLoginModal();
+      }));
       // Admin tabs — open as own page
       document.querySelectorAll('.admin-tab[data-tab]').forEach(tab => {
         tab.addEventListener('click', () => openAdminPanel(tab.dataset.tab));
@@ -1933,6 +2045,7 @@
       });
       closeScanner();
       if (id === 'cart') renderCart();
+      if (id === 'home') renderHomePromoBanner();
       if (id === 'offers') renderOffers();
       if (id === 'products') renderProducts();
       if (id === 'gallery') renderGalleryPublic();
@@ -1981,7 +2094,7 @@
       if (tab === 'sales') renderSales('today');
       if (tab === 'installments') renderInstallments();
       if (tab === 'allProducts') renderAllProducts();
-      if (tab === 'promos') renderPromosAdmin();
+      if (tab === 'promos') { fillPromoProducts(); renderPromosAdmin(); }
       if (tab === 'expenses') {
         const ed = document.getElementById('exDate');
         if (ed && !ed.value) ed.value = todayStr();
@@ -2048,7 +2161,7 @@
               ${hasDisc ? `<span class="old-price">${p.priceBefore}</span>` : ''}
               <span class="price">${p.priceAfter} ر.س</span>
             </div>
-            ${p.warranty ? `<div class="qty" style="color:var(--success)">🛡 ضمان: ${esc(p.warranty)}</div>` : ''}
+            ${p.warranty ? `<div class="warranty-badge">🛡 الضمان: ${esc(p.warranty)}</div>` : ''}
             ${p.companyName ? `<div class="qty" style="color:var(--muted)">🏢 ${esc(p.companyName)}</div>` : ''}
             ${isAdmin ? `<div class="qty">المتوفر: ${p.qty}</div>` : (out ? `<div class="qty out-stock">غير متوفر</div>` : '')}
             ${!isAdmin ? `<button class="card-add" ${out ? 'disabled' : ''} onclick="event.stopPropagation();addToCart('${p.id}')">🛒 أضف للسلة</button>` : ''}
@@ -2078,16 +2191,62 @@
       grid.innerHTML = offers.map(p => productCardHtml(p, { offer: true })).join('');
     }
 
+    function promoEndMs(pr) {
+      if (!pr || !pr.endsAt) return 0;
+      let s = String(pr.endsAt).trim();
+      if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(s)) s += ':00';
+      const t = new Date(s).getTime();
+      return isNaN(t) ? 0 : t;
+    }
     function isPromoActive(pr) {
-      return pr.endsAt && new Date(pr.endsAt).getTime() > Date.now();
+      return promoEndMs(pr) > Date.now();
+    }
+    function renderHomePromoBanner() {
+      const box = document.getElementById('homePromoBanner');
+      if (!box) return;
+      const active = promos.filter(isPromoActive).sort((a, b) => promoEndMs(a) - promoEndMs(b));
+      if (!active.length) {
+        box.innerHTML = '';
+        clearTimeout(window._homePromoTimer);
+        return;
+      }
+      box.innerHTML = active.map(pr => {
+        const left = Math.max(0, promoEndMs(pr) - Date.now());
+        const d = Math.floor(left / 86400000);
+        const h = Math.floor((left % 86400000) / 3600000);
+        const m = Math.floor((left % 3600000) / 60000);
+        const s = Math.floor((left % 60000) / 1000);
+        const name = pr.title || pr.productName || 'عرض خاص';
+        const after = Number(pr.priceAfter) || 0;
+        const before = Number(pr.priceBefore) || 0;
+        return `<div class="home-promo-banner" onclick="showSection('offers')">
+          <span class="promo-ic">🔥</span>
+          <span class="promo-tag">عرض لفترة محدودة</span>
+          <span class="promo-name">${esc(name)}</span>
+          <div class="promo-prices">
+            ${after ? `<span class="now">${after.toFixed(2)} ر.س</span>` : ''}
+            ${before > after ? `<span class="old">${before.toFixed(2)} ر.س</span>` : ''}
+          </div>
+          ${pr.desc ? `<div style="margin-top:6px;opacity:.95;font-size:.85rem;padding-left:60px">${esc(pr.desc)}</div>` : ''}
+          <div class="cd">
+            <span><em>${d}</em>يوم</span>
+            <span><em>${h}</em>ساعة</span>
+            <span><em>${m}</em>دقيقة</span>
+            <span><em>${s}</em>ثانية</span>
+          </div>
+        </div>`;
+      }).join('');
+      clearTimeout(window._homePromoTimer);
+      window._homePromoTimer = setTimeout(renderHomePromoBanner, 1000);
     }
     function renderPromoPublic() {
+      renderHomePromoBanner();
       const box = document.getElementById('promoOffersList');
       if (!box) return;
       const active = promos.filter(isPromoActive);
       if (!active.length) { box.innerHTML = ''; return; }
       box.innerHTML = active.map(pr => {
-        const left = Math.max(0, new Date(pr.endsAt) - Date.now());
+        const left = Math.max(0, promoEndMs(pr) - Date.now());
         const d = Math.floor(left / 86400000), h = Math.floor((left % 86400000) / 3600000);
         const m = Math.floor((left % 3600000) / 60000), s = Math.floor((left % 60000) / 1000);
         return `<div class="promo-card">
@@ -2300,21 +2459,123 @@
       }
     }
 
+    // ---- PWA install ----
+    let deferredPwaPrompt = null;
+    function setupPwaInstall() {
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPwaPrompt = e;
+        if (localStorage.getItem('ma_pwa_dismiss') === '1') return;
+        const bar = document.getElementById('pwaInstallBar');
+        if (bar) bar.classList.add('show');
+      });
+      window.addEventListener('appinstalled', () => {
+        deferredPwaPrompt = null;
+        const bar = document.getElementById('pwaInstallBar');
+        if (bar) bar.classList.remove('show');
+        toast('تم تثبيت التطبيق ✓');
+      });
+    }
+    async function installPwa() {
+      if (!deferredPwaPrompt) {
+        alert('من المتصفح: القائمة ⋮ ثم «إضافة إلى الشاشة الرئيسية» أو Install app');
+        return;
+      }
+      deferredPwaPrompt.prompt();
+      try { await deferredPwaPrompt.userChoice; } catch (e) {}
+      deferredPwaPrompt = null;
+      const bar = document.getElementById('pwaInstallBar');
+      if (bar) bar.classList.remove('show');
+    }
+    function dismissPwaBar() {
+      localStorage.setItem('ma_pwa_dismiss', '1');
+      const bar = document.getElementById('pwaInstallBar');
+      if (bar) bar.classList.remove('show');
+    }
+
+    function normalizePhoneDigits(p) {
+      return String(p || '').replace(/\D/g, '').replace(/^966/, '0').replace(/^0+/, '0');
+    }
+    function findCustomerForTrack(q) {
+      const raw = (q || '').trim();
+      if (!raw) return null;
+      let c = customers.find(x => codeEq(x.code, raw));
+      if (c) return c;
+      const dig = normalizePhoneDigits(raw);
+      if (dig.length >= 8) {
+        c = customers.find(x => {
+          const pd = normalizePhoneDigits(x.phone);
+          return pd && (pd === dig || pd.endsWith(dig) || dig.endsWith(pd));
+        });
+        if (c) return c;
+      }
+      return null;
+    }
     function lookupMaintenance() {
       const code = (document.getElementById('trackCode').value || '').trim();
       const el = document.getElementById('trackResult');
-      if (!code) { el.innerHTML = '<div class="alert alert-danger">أدخل كود العميل</div>'; return; }
-      const c = customers.find(x => codeEq(x.code, code));
-      if (!c) { el.innerHTML = '<div class="alert alert-danger">ما لقيناش عميل بهذا الكود. تأكد من الكود أو تواصل معنا.</div>'; return; }
+      if (!code) { el.innerHTML = '<div class="alert alert-danger">أدخل كود العميل أو رقم الجوال</div>'; return; }
+      const c = findCustomerForTrack(code);
+      if (!c) {
+        el.innerHTML = '<div class="alert alert-danger">ما لقيناش حساب مطابق. جرّب الكود أو الجوال المسجّل، أو تواصل: 0510572080</div>';
+        return;
+      }
       const inf = custInfo(c);
+      let invs = [];
+      try { invs = JSON.parse(localStorage.getItem('ma_invoices') || '[]'); } catch (e) {}
+      const myInvs = invs.filter(iv =>
+        (c.id && (iv.custId === c.id)) ||
+        (c.name && iv.customer === c.name) ||
+        (c.phone && normalizePhoneDigits(iv.phone) && normalizePhoneDigits(iv.phone) === normalizePhoneDigits(c.phone))
+      ).slice().sort((a, b) => String(b.dateIso || b.date || '').localeCompare(String(a.dateIso || a.date || ''))).slice(0, 20);
+
+      const myInst = installments.filter(inst =>
+        (c.id && inst.custId === c.id) ||
+        (c.name && inst.customer === c.name) ||
+        (c.phone && normalizePhoneDigits(inst.phone) === normalizePhoneDigits(c.phone))
+      );
+
+      const invHtml = myInvs.length ? myInvs.map(iv => `
+        <div class="invoice-item" style="flex-direction:column;align-items:stretch;gap:4px">
+          <div style="display:flex;justify-content:space-between;gap:8px">
+            <b>فاتورة #${esc(String(iv.no))}</b>
+            <span>${Number(iv.total || 0).toFixed(2)} ر.س</span>
+          </div>
+          <small style="color:var(--muted)">${esc(iv.date || '')} · ${esc(iv.payLabel || '')}</small>
+        </div>`).join('') : '<p style="color:var(--muted);font-size:.9rem">لا توجد فواتير مسجّلة</p>';
+
+      const instHtml = myInst.length ? myInst.map(inst => {
+        const openSched = (inst.schedule || []).filter(s => !s.paid);
+        const rows = openSched.length
+          ? openSched.map(s => `<div style="display:flex;justify-content:space-between;font-size:.88rem;padding:4px 0;border-bottom:1px dashed #e2e8f0">
+              <span>قسط · ${esc(s.dueDate || '')}</span>
+              <b>${Number(s.amount).toFixed(2)} ر.س</b>
+            </div>`).join('')
+          : `<div style="font-size:.88rem">متبقي: <b>${Number(inst.remaining || 0).toFixed(2)} ر.س</b> · استحقاق ${esc(inst.dueDate || '-')}</div>`;
+        return `<div class="track-section-card" style="margin-top:8px">
+          <div style="font-weight:800">فاتورة تقسيط #${esc(String(inst.invoiceNo))} — ${inst.status === 'paid' ? '✅ مسددة' : '⏳ مفتوحة'}</div>
+          ${rows}
+        </div>`;
+      }).join('') : '<p style="color:var(--muted);font-size:.9rem">لا توجد أقساط</p>';
+
       el.innerHTML = `<div class="track-box">
         <div>مرحبًا</div>
         <div class="big">${esc(c.name)}</div>
-        <div>موعد الصيانة القادم</div>
-        <div class="big">${esc(c.date)}</div>
-        <div style="margin-top:8px;opacity:.95">${inf.label}</div>
+        ${c.code ? `<div style="opacity:.9">الكود: <b dir="ltr">${esc(c.code)}</b></div>` : ''}
+        <div style="margin-top:12px">موعد الصيانة القادم</div>
+        <div class="big">${esc(c.date || '—')}</div>
+        <div style="margin-top:6px;opacity:.95">${inf.label}</div>
         ${c.phone ? `<div style="margin-top:10px">📞 <span dir="ltr">${esc(c.phone)}</span></div>` : ''}
-      </div>`;
+      </div>
+      <div class="track-section-card">
+        <h4>🧾 فواتيرك</h4>
+        ${invHtml}
+      </div>
+      <div class="track-section-card">
+        <h4>📅 الأقساط</h4>
+        ${instHtml}
+      </div>
+      <p style="margin-top:12px;color:var(--muted);font-size:.8rem;text-align:center">للاستفسار: 0510572080 · منطقة جيزان</p>`;
     }
 
     function closeProductModal() {
@@ -2640,17 +2901,8 @@
 
     function updateAdminUI() {
       const fab = document.getElementById('adminFab');
-      const homeBtn = document.getElementById('homeAdminBtn');
-      const openBox = document.getElementById('homeAdminOpen');
       if (fab) fab.style.display = isAdmin ? 'flex' : 'none';
-      if (homeBtn) homeBtn.style.display = isAdmin ? 'block' : 'none';
-      // لوحة التحكم على الرئيسية تظهر فقط بعد تسجيل الدخول وتختفي بعد الخروج
-      if (openBox) openBox.style.display = isAdmin ? 'block' : 'none';
       document.body.classList.toggle('is-admin', isAdmin);
-    }
-    function openAdminFromHome() {
-      if (!isAdmin) { openLoginModal(); return; }
-      showSection('admin');
     }
 
     // ---- Add / Edit Product ----
@@ -3076,10 +3328,27 @@
     function addToInvoice() {
       if (lastInvoice) { alert('الفاتورة اتسجلت. اضغط «مسح الفاتورة» لبدء فاتورة جديدة'); return; }
       const id = document.getElementById('invProductSelect').value;
-      if (!id) return;
+      if (!id) { alert('اختر منتج أولاً'); return; }
       const p = products.find(x => x.id === id);
       if (!p) return;
-      invoiceItems.push({ id: p.id, name: p.name, price: p.priceAfter, buyPrice: Number(p.buyPrice) || 0, qty: 1, warranty: p.warranty || '', companyName: p.companyName || '' });
+      const qty = Math.max(1, parseInt(document.getElementById('invAddQty')?.value) || 1);
+      const existing = invoiceItems.find(x => x.id === p.id);
+      if (existing) existing.qty += qty;
+      else invoiceItems.push({ id: p.id, name: p.name, price: p.priceAfter, buyPrice: Number(p.buyPrice) || 0, qty, warranty: p.warranty || '', companyName: p.companyName || '' });
+      document.getElementById('invAddQty').value = 1;
+      renderInvoiceItems();
+    }
+
+    function changeInvoiceQty(i, delta) {
+      if (lastInvoice) { alert('الفاتورة اتسجلت. اضغط «مسح الفاتورة» لبدء فاتورة جديدة'); return; }
+      if (!invoiceItems[i]) return;
+      invoiceItems[i].qty = Math.max(1, (Number(invoiceItems[i].qty) || 1) + delta);
+      renderInvoiceItems();
+    }
+    function setInvoiceQty(i, val) {
+      if (lastInvoice) return;
+      if (!invoiceItems[i]) return;
+      invoiceItems[i].qty = Math.max(1, parseInt(val) || 1);
       renderInvoiceItems();
     }
 
@@ -3091,12 +3360,18 @@
         return;
       }
       el.innerHTML = invoiceItems.map((item, i) => `
-        <div class="invoice-item">
-          <span>${item.name} × ${item.qty}</span>
-          <span>
-            ${(item.price * item.qty).toFixed(2)} ر.س
-            <button class="btn btn-danger btn-sm" onclick="removeInvoiceItem(${i})" style="margin-right:8px;">×</button>
-          </span>
+        <div class="invoice-item" style="flex-wrap:wrap;gap:8px">
+          <div style="flex:1;min-width:120px"><b>${esc(item.name)}</b>
+            ${item.warranty ? `<br><small style="color:var(--success)">🛡 ${esc(item.warranty)}</small>` : ''}
+          </div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <button type="button" class="btn btn-outline btn-sm" onclick="changeInvoiceQty(${i},-1)" style="min-width:36px;padding:6px 10px">−</button>
+            <input type="number" min="1" value="${item.qty}" onchange="setInvoiceQty(${i},this.value)"
+              style="width:64px;margin:0;text-align:center;font-weight:800;padding:6px">
+            <button type="button" class="btn btn-outline btn-sm" onclick="changeInvoiceQty(${i},1)" style="min-width:36px;padding:6px 10px">+</button>
+          </div>
+          <span style="font-weight:800;min-width:80px;text-align:left">${(item.price * item.qty).toFixed(2)} ر.س</span>
+          <button class="btn btn-danger btn-sm" onclick="removeInvoiceItem(${i})">×</button>
         </div>
       `).join('');
       calcInvoiceTotal();
@@ -3134,8 +3409,11 @@
       }
       // المتبقي للآجل
       const paid = parseFloat(document.getElementById('invPaidNow')?.value) || 0;
+      const rem = Math.max(0, grand - paid);
       const remEl = document.getElementById('invRemaining');
-      if (remEl) remEl.textContent = Math.max(0, grand - paid).toFixed(2);
+      if (remEl) remEl.textContent = rem.toFixed(2);
+      const remIn = document.getElementById('invRemainingInput');
+      if (remIn) remIn.value = rem.toFixed(2);
       return grand;
     }
 
@@ -3145,13 +3423,82 @@
       const cf = document.getElementById('invCreditFields');
       if (cf) cf.style.display = method === 'credit' ? 'block' : 'none';
       if (method === 'credit') {
-        const due = document.getElementById('invDueDate');
-        if (due && !due.value) {
-          const d = new Date(); d.setDate(d.getDate() + 30);
-          due.value = d.toISOString().slice(0, 10);
-        }
+        onCreditPaidChange();
+        buildInstallPlanFields();
       }
       calcInvoiceTotal();
+    }
+    function onCreditPaidChange() {
+      calcInvoiceTotal();
+      const grand = parseFloat(String(document.getElementById('invTotal')?.textContent || '0').replace(/[^\d.]/g, '')) || 0;
+      // better: recompute from items
+      const sub = invoiceItems.reduce((a, i) => a + i.price * i.qty, 0);
+      const vatPct = parseFloat(document.getElementById('invVat')?.value) || 0;
+      const vat = sub * (vatPct / 100);
+      const disc = parseFloat(document.getElementById('invDiscount')?.value) || 0;
+      const total = Math.max(0, sub + vat - disc);
+      const paid = parseFloat(document.getElementById('invPaidNow')?.value) || 0;
+      const rem = Math.max(0, total - paid);
+      const remIn = document.getElementById('invRemainingInput');
+      if (remIn) remIn.value = rem.toFixed(2);
+      const remEl = document.getElementById('invRemaining');
+      if (remEl) remEl.textContent = rem.toFixed(2);
+      // redistribute remaining across plan if exists
+      const n = parseInt(document.getElementById('invInstallCount')?.value) || 0;
+      if (n > 0) suggestInstallAmounts(rem, n);
+    }
+    function suggestInstallAmounts(remaining, n) {
+      if (!n || n < 1) return;
+      const base = Math.floor((remaining / n) * 100) / 100;
+      let sum = 0;
+      for (let i = 0; i < n; i++) {
+        const el = document.getElementById('instAmt_' + i);
+        if (!el) continue;
+        if (i === n - 1) el.value = Math.max(0, remaining - sum).toFixed(2);
+        else { el.value = base.toFixed(2); sum += base; }
+      }
+    }
+    function buildInstallPlanFields() {
+      const wrap = document.getElementById('invInstallPlan');
+      if (!wrap) return;
+      const n = Math.min(24, Math.max(0, parseInt(document.getElementById('invInstallCount')?.value) || 0));
+      if (n < 1) { wrap.innerHTML = ''; return; }
+      const sub = invoiceItems.reduce((a, i) => a + i.price * i.qty, 0);
+      const vatPct = parseFloat(document.getElementById('invVat')?.value) || 0;
+      const disc = parseFloat(document.getElementById('invDiscount')?.value) || 0;
+      const total = Math.max(0, sub + sub * (vatPct / 100) - disc);
+      const paid = parseFloat(document.getElementById('invPaidNow')?.value) || 0;
+      const remaining = Math.max(0, total - paid);
+      const base = Math.floor((remaining / n) * 100) / 100;
+      let sum = 0;
+      let html = '<div style="font-weight:800;margin-bottom:8px;color:#9a3412">جدول الأقساط</div>';
+      for (let i = 0; i < n; i++) {
+        const d = new Date();
+        d.setMonth(d.getMonth() + (i + 1));
+        const due = d.toISOString().slice(0, 10);
+        let amt = base;
+        if (i === n - 1) amt = Math.max(0, remaining - sum);
+        else sum += base;
+        html += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;background:#fff;border-radius:10px;padding:8px;border:1px solid #fed7aa">
+          <div><label style="font-size:.75rem">قسط ${i + 1} — المبلغ</label>
+            <input type="number" id="instAmt_${i}" min="0" step="0.01" value="${amt.toFixed(2)}" style="margin:0"></div>
+          <div><label style="font-size:.75rem">تاريخ السداد</label>
+            <input type="date" id="instDate_${i}" value="${due}" style="margin:0"></div>
+        </div>`;
+      }
+      wrap.innerHTML = html;
+    }
+    function collectInstallPlan() {
+      const n = parseInt(document.getElementById('invInstallCount')?.value) || 0;
+      if (n < 1) return [];
+      const plan = [];
+      for (let i = 0; i < n; i++) {
+        const amount = parseFloat(document.getElementById('instAmt_' + i)?.value) || 0;
+        const dueDate = document.getElementById('instDate_' + i)?.value || '';
+        if (!dueDate) continue;
+        plan.push({ id: 's' + Date.now() + '_' + i, amount, dueDate, paid: false, paidAt: null });
+      }
+      return plan;
     }
 
     async function pickContactPhone(phoneInputId, nameInputId) {
@@ -3570,12 +3917,17 @@
       let dueDate = '';
       let remaining = 0;
       if (payMethod === 'credit') {
-        dueDate = document.getElementById('invDueDate')?.value || '';
-        if (!dueDate) { alert('حدد تاريخ الاستحقاق للفاتورة الآجلة'); return null; }
         paidNow = parseFloat(document.getElementById('invPaidNow')?.value) || 0;
         if (paidNow < 0) paidNow = 0;
         if (paidNow > total) paidNow = total;
         remaining = Math.max(0, total - paidNow);
+        const plan = collectInstallPlan();
+        if (remaining > 0 && plan.length === 0) {
+          alert('حدد عدد الأقساط واملأ المبالغ والتواريخ');
+          return null;
+        }
+        // أول تاريخ استحقاق = أقرب قسط
+        dueDate = plan.length ? plan.map(p => p.dueDate).sort()[0] : '';
       }
       const no = (parseInt(localStorage.getItem('ma_invno') || '1000') + 1);
       localStorage.setItem('ma_invno', String(no));
@@ -3604,6 +3956,7 @@
       } catch (e) {}
       // تسجيل في التقسيط لو آجل وفيه متبقي
       if (payMethod === 'credit' && remaining > 0) {
+        const schedule = collectInstallPlan();
         installments.push({
           id: Date.now().toString(),
           invoiceNo: no,
@@ -3611,9 +3964,11 @@
           total, paid: paidNow, remaining,
           dueDate, dateIso: iso,
           status: 'open',
+          schedule,
           payments: paidNow > 0 ? [{ amount: paidNow, date: iso, note: 'دفعة عند الفاتورة' }] : []
         });
         saveInstallments();
+        updateInstDueAlert();
       }
       saveSales(); saveProducts(); renderProducts();
       checkStockAlerts(invoiceItems.map(i => i.id));
@@ -3640,55 +3995,100 @@
       localStorage.setItem('ma_installments', JSON.stringify(installments));
       markDirty();
       updateInstBadge();
-    }
-    function updateInstBadge() {
-      const open = installments.filter(x => x.status !== 'paid' && (x.remaining || 0) > 0).length;
-      const b = document.getElementById('instBadge');
-      if (!b) return;
-      if (open > 0) { b.style.display = 'flex'; b.textContent = open; }
-      else b.style.display = 'none';
+      updateInstDueAlert();
     }
     function renderInstallments() {
       const el = document.getElementById('installmentsList');
       if (!el) return;
       updateInstBadge();
+      updateInstDueAlert();
       const list = installments.slice().sort((a, b) => String(a.dueDate || '').localeCompare(String(b.dueDate || '')));
       if (!list.length) {
-        el.innerHTML = '<div class="empty-state">لا توجد فواتير تقسيط / آجل بعد<br><small>لما تعمل فاتورة بطريقة «آجل» هتظهر هنا</small></div>';
+        el.innerHTML = '<div class="empty-state">لا توجد فواتير تقسيط / آجل بعد<br><small>لما تعمل فاتورة بطريقة «آجل» مع أقساط هتظهر هنا</small></div>';
         return;
       }
       const today = new Date(); today.setHours(0,0,0,0);
       el.innerHTML = list.map(inst => {
-        const due = inst.dueDate ? new Date(inst.dueDate + 'T00:00:00') : null;
-        const overdue = inst.status !== 'paid' && due && due < today && (inst.remaining || 0) > 0;
+        const schedule = inst.schedule || [];
         const paidCls = inst.status === 'paid' || (inst.remaining || 0) <= 0;
-        return `<div class="inst-card ${overdue ? 'overdue' : ''}">
+        const anyOverdue = schedule.some(s => !s.paid && s.dueDate && new Date(s.dueDate + 'T00:00:00') < today);
+        const scheduleHtml = schedule.length ? schedule.map((s, si) => {
+          const overdue = !s.paid && s.dueDate && new Date(s.dueDate + 'T00:00:00') < today;
+          return `<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px;margin-top:6px;border-radius:10px;background:${s.paid ? '#ecfdf5' : (overdue ? '#fef2f2' : '#fff')};border:1px solid ${s.paid ? '#86efac' : (overdue ? '#fecaca' : '#e2e8f0')}">
+            <span style="font-weight:800;min-width:52px">قسط ${si + 1}</span>
+            <input type="number" step="0.01" value="${Number(s.amount).toFixed(2)}" ${s.paid ? 'readonly' : ''}
+              onchange="editInstallSchedule('${inst.id}',${si},'amount',this.value)" style="width:100px;margin:0;padding:6px">
+            <input type="date" value="${esc(s.dueDate || '')}" ${s.paid ? 'readonly' : ''}
+              onchange="editInstallSchedule('${inst.id}',${si},'dueDate',this.value)" style="width:140px;margin:0;padding:6px">
+            ${s.paid
+              ? '<span style="color:#047857;font-weight:800">✓ سُدد</span>'
+              : `<button class="btn btn-success btn-sm" onclick="markSchedulePaid('${inst.id}',${si})">سُدد</button>`}
+          </div>`;
+        }).join('') : '<small style="color:var(--muted)">لا يوجد جدول أقساط تفصيلي</small>';
+        return `<div class="inst-card ${anyOverdue && !paidCls ? 'overdue' : ''}">
           <div class="row"><b>فاتورة #${esc(String(inst.invoiceNo))}</b>
-            <span>${paidCls ? '✅ مسددة' : (overdue ? '⚠️ متأخرة' : '⏳ مفتوحة')}</span></div>
+            <span>${paidCls ? '✅ مسددة' : (anyOverdue ? '⚠️ متأخرة' : '⏳ مفتوحة')}</span></div>
           <div class="row"><span>${esc(inst.customer || '')}</span>
             <span dir="ltr">${esc(inst.phone || '')}</span></div>
           <div class="row"><span>الإجمالي</span><span class="amt">${Number(inst.total).toFixed(2)} ر.س</span></div>
           <div class="row"><span>المدفوع</span><span>${Number(inst.paid || 0).toFixed(2)} ر.س</span></div>
           <div class="row"><span>المتبقي</span><span class="amt" style="color:${(inst.remaining||0)>0?'#c2410c':'var(--success)'}">${Number(inst.remaining || 0).toFixed(2)} ر.س</span></div>
-          <div class="row"><span>الاستحقاق</span><span>${esc(inst.dueDate || '-')}</span></div>
-          ${!paidCls ? `<div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
-            <input type="number" id="payAmt_${inst.id}" placeholder="مبلغ الدفعة" min="0" step="0.01" style="flex:1; margin:0; min-width:100px">
-            <button class="btn btn-success btn-sm" onclick="addInstallmentPayment('${inst.id}')">➕ تسجيل دفعة</button>
-            <button class="btn btn-outline btn-sm" onclick="markInstallmentPaid('${inst.id}')">✓ تسديد كامل</button>
-          </div>` : ''}
-          <button class="btn btn-danger btn-sm" style="margin-top:8px" onclick="deleteInstallment('${inst.id}')">حذف</button>
+          <div style="margin-top:10px;font-weight:800;font-size:.9rem">الأقساط</div>
+          ${scheduleHtml}
+          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+            ${inst.phone ? `<button class="btn btn-whatsapp btn-sm" onclick="remindInstallmentWa('${inst.id}')">💬 تذكير واتساب</button>` : ''}
+            ${!paidCls ? `<button class="btn btn-outline btn-sm" onclick="markInstallmentPaid('${inst.id}')">✓ تسديد كامل</button>` : ''}
+            <button class="btn btn-danger btn-sm" onclick="deleteInstallment('${inst.id}')">حذف</button>
+          </div>
         </div>`;
       }).join('');
     }
+
+    function editInstallSchedule(instId, idx, field, value) {
+      const inst = installments.find(x => x.id === instId);
+      if (!inst || !inst.schedule || !inst.schedule[idx] || inst.schedule[idx].paid) return;
+      if (field === 'amount') inst.schedule[idx].amount = Math.max(0, parseFloat(value) || 0);
+      if (field === 'dueDate') inst.schedule[idx].dueDate = value;
+      // تحديث أقرب استحقاق
+      const openDates = inst.schedule.filter(s => !s.paid && s.dueDate).map(s => s.dueDate).sort();
+      if (openDates.length) inst.dueDate = openDates[0];
+      saveInstallments();
+      updateInstDueAlert();
+      toast('تم تعديل القسط ✓');
+    }
+
+    function markSchedulePaid(instId, idx) {
+      const inst = installments.find(x => x.id === instId);
+      if (!inst || !inst.schedule || !inst.schedule[idx]) return;
+      const s = inst.schedule[idx];
+      if (s.paid) return;
+      if (!confirm('تأكيد سداد هذا القسط (' + Number(s.amount).toFixed(2) + ' ر.س)؟')) return;
+      s.paid = true;
+      s.paidAt = new Date().toISOString();
+      inst.paid = Number(inst.paid || 0) + Number(s.amount || 0);
+      inst.remaining = Math.max(0, Number(inst.total) - Number(inst.paid));
+      (inst.payments = inst.payments || []).push({ amount: s.amount, date: s.paidAt, note: 'قسط ' + (idx + 1) });
+      if (inst.remaining <= 0 || inst.schedule.every(x => x.paid)) {
+        inst.remaining = 0;
+        inst.status = 'paid';
+      } else {
+        const openDates = inst.schedule.filter(x => !x.paid && x.dueDate).map(x => x.dueDate).sort();
+        if (openDates.length) inst.dueDate = openDates[0];
+      }
+      saveInstallments();
+      renderInstallments();
+      toast('تم سداد القسط ✓');
+    }
+
     function addInstallmentPayment(id) {
       const inst = installments.find(x => x.id === id);
       if (!inst) return;
       const inp = document.getElementById('payAmt_' + id);
-      const amt = parseFloat(inp && inp.value) || 0;
-      if (amt <= 0) { alert('أدخل مبلغ الدفعة'); return; }
-      inst.paid = (Number(inst.paid) || 0) + amt;
-      inst.remaining = Math.max(0, Number(inst.total) - inst.paid);
-      (inst.payments = inst.payments || []).push({ amount: amt, date: new Date().toISOString(), note: 'دفعة' });
+      const amount = parseFloat(inp && inp.value) || 0;
+      if (amount <= 0) { alert('أدخل مبلغ الدفعة'); return; }
+      inst.paid = Number(inst.paid || 0) + amount;
+      inst.remaining = Math.max(0, Number(inst.total) - Number(inst.paid));
+      (inst.payments = inst.payments || []).push({ amount, date: new Date().toISOString(), note: 'دفعة' });
       if (inst.remaining <= 0) { inst.remaining = 0; inst.status = 'paid'; }
       saveInstallments(); renderInstallments(); toast('تم تسجيل الدفعة ✓');
     }
@@ -3703,12 +4103,81 @@
       inst.paid = Number(inst.total);
       inst.remaining = 0;
       inst.status = 'paid';
-      saveInstallments(); renderInstallments(); toast('تم التسديد ✓');
+      if (inst.schedule) inst.schedule.forEach(s => { s.paid = true; s.paidAt = s.paidAt || new Date().toISOString(); });
+      saveInstallments(); renderInstallments(); updateInstDueAlert(); toast('تم التسديد ✓');
     }
     function deleteInstallment(id) {
       if (!confirm('حذف سجل التقسيط؟')) return;
       installments = installments.filter(x => x.id !== id);
-      saveInstallments(); renderInstallments();
+      saveInstallments(); renderInstallments(); updateInstDueAlert();
+    }
+
+    function getDueSoonInstallments(days) {
+      const today = new Date(); today.setHours(0,0,0,0);
+      const limit = new Date(today); limit.setDate(limit.getDate() + days);
+      const items = [];
+      installments.forEach(inst => {
+        if (inst.status === 'paid' || (inst.remaining || 0) <= 0) return;
+        (inst.schedule || []).forEach((s, si) => {
+          if (s.paid || !s.dueDate) return;
+          const d = new Date(s.dueDate + 'T00:00:00');
+          if (d >= today && d <= limit) {
+            items.push({ inst, s, si, dueDate: s.dueDate });
+          }
+        });
+        // legacy without schedule
+        if (!(inst.schedule && inst.schedule.length) && inst.dueDate) {
+          const d = new Date(inst.dueDate + 'T00:00:00');
+          if (d >= today && d <= limit) items.push({ inst, s: null, si: -1, dueDate: inst.dueDate });
+        }
+      });
+      return items.sort((a, b) => a.dueDate.localeCompare(b.dueDate));
+    }
+
+    function updateInstDueAlert() {
+      const box = document.getElementById('instDueAlert');
+      if (!box) return;
+      const soon = getDueSoonInstallments(3);
+      if (!soon.length) { box.style.display = 'none'; box.innerHTML = ''; return; }
+      box.style.display = 'block';
+      box.innerHTML = `<div class="alert alert-warning" style="cursor:default">
+        <div style="font-weight:800;margin-bottom:8px">📅 تنبيه أقساط — ${soon.length} قسط خلال 3 أيام</div>
+        ${soon.map(x => `
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;background:#fff;border-radius:10px;padding:8px 10px">
+            <span style="flex:1"><b>${esc(x.inst.customer || '')}</b> — ${Number(x.s ? x.s.amount : x.inst.remaining).toFixed(2)} ر.س<br>
+            <small>الاستحقاق: ${esc(x.dueDate)} · فاتورة #${esc(String(x.inst.invoiceNo))}</small></span>
+            ${x.inst.phone ? `<button class="btn btn-whatsapp btn-sm" onclick="event.stopPropagation();remindInstallmentWa('${x.inst.id}',${x.si})">💬 تذكير</button>` : ''}
+            <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();openAdminPanel('installments')">عرض</button>
+          </div>`).join('')}
+      </div>`;
+    }
+
+    function remindInstallmentWa(instId, scheduleIdx) {
+      const inst = installments.find(x => x.id === instId);
+      if (!inst) return;
+      const phone = normalizeWaPhone(inst.phone);
+      if (!phone) { alert('لا يوجد رقم جوال لهذا العميل'); return; }
+      let amount = Number(inst.remaining || 0);
+      let due = inst.dueDate || '';
+      if (scheduleIdx != null && scheduleIdx >= 0 && inst.schedule && inst.schedule[scheduleIdx]) {
+        amount = Number(inst.schedule[scheduleIdx].amount || 0);
+        due = inst.schedule[scheduleIdx].dueDate || due;
+      } else if (inst.schedule && inst.schedule.length) {
+        const next = inst.schedule.find(s => !s.paid);
+        if (next) { amount = Number(next.amount || 0); due = next.dueDate || due; }
+      }
+      const text = 'مرحباً ' + (inst.customer || '') + ' 👋\nتذكير من مويه عذبه — فلاتر\nموعد سداد القسط' + (due ? ' بتاريخ ' + due : '') + '\nالمبلغ: ' + amount.toFixed(2) + ' ر.س\nرقم الفاتورة: ' + inst.invoiceNo + '\nللتواصل: 0510572080';
+      window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(text), '_blank');
+    }
+
+    function updateInstBadge() {
+      const open = installments.filter(x => x.status !== 'paid' && (x.remaining || 0) > 0).length;
+      const soon = getDueSoonInstallments(3).length;
+      const b = document.getElementById('instBadge');
+      if (!b) return;
+      const n = soon > 0 ? soon : open;
+      if (n > 0) { b.style.display = 'flex'; b.textContent = n; }
+      else b.style.display = 'none';
     }
 
     const XLSX_MIME = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
@@ -4168,7 +4637,9 @@
       const p = products.find(x => x.id === id);
       if (!p) { alert('اختر منتج الأول'); return; }
       const qty = Math.max(1, parseInt(document.getElementById('qQty').value) || 1);
-      qItems.push({ id: p.id, name: p.name, price: p.priceAfter, qty, warranty: p.warranty || '' });
+      const existing = qItems.find(x => x.id === p.id);
+      if (existing) existing.qty += qty;
+      else qItems.push({ id: p.id, name: p.name, price: p.priceAfter, qty, warranty: p.warranty || '' });
       document.getElementById('qQty').value = 1;
       renderQuoteItems();
     }
@@ -4187,14 +4658,21 @@
       renderQuoteItems();
     }
     function removeQ(i) { qItems.splice(i, 1); renderQuoteItems(); }
+    function changeQuoteQty(i, delta) {
+      if (!qItems[i]) return;
+      qItems[i].qty = Math.max(1, (Number(qItems[i].qty) || 1) + delta);
+      renderQuoteItems();
+    }
     function renderQuoteItems() {
       const el = document.getElementById('qItems');
       if (!qItems.length) { el.innerHTML = '<p style="color:var(--muted)">لم تتم إضافة منتجات بعد</p>'; calcQuote(); return; }
       el.innerHTML = qItems.map((it, i) => `
         <div class="q-row">
           <div class="qn">${esc(it.name)}</div>
-          <div class="qline">
-            <input type="number" min="1" value="${it.qty}" onchange="updQ(${i},'qty',this.value)" aria-label="الكمية">
+          <div class="qline" style="flex-wrap:wrap">
+            <button type="button" class="btn btn-outline btn-sm" onclick="changeQuoteQty(${i},-1)" style="min-width:36px">−</button>
+            <input type="number" min="1" value="${it.qty}" onchange="updQ(${i},'qty',this.value)" aria-label="الكمية" style="width:64px">
+            <button type="button" class="btn btn-outline btn-sm" onclick="changeQuoteQty(${i},1)" style="min-width:36px">+</button>
             <span>×</span>
             <input type="number" min="0" value="${it.price}" onchange="updQ(${i},'price',this.value)" aria-label="السعر">
             <span class="qt">${(it.qty * it.price).toFixed(2)}</span>
@@ -4685,6 +5163,55 @@
     }
 
     // ==================== CUSTOMER ↔ INVOICE / QUOTE ====================
+    function toggleQuickCust(prefix) {
+      const id = prefix === 'inv' ? 'invQuickCust' : 'qQuickCust';
+      const box = document.getElementById(id);
+      if (!box) return;
+      const open = box.style.display === 'none' || !box.style.display;
+      box.style.display = open ? 'block' : 'none';
+      if (open) {
+        const nameEl = document.getElementById(prefix === 'inv' ? 'invNewCustName' : 'qNewCustName');
+        if (nameEl) nameEl.focus();
+      }
+    }
+    function saveQuickCustomer(prefix) {
+      const nameEl = document.getElementById(prefix === 'inv' ? 'invNewCustName' : 'qNewCustName');
+      const phoneEl = document.getElementById(prefix === 'inv' ? 'invNewCustPhone' : 'qNewCustPhone');
+      const name = (nameEl?.value || '').trim();
+      const phone = (phoneEl?.value || '').trim();
+      if (!name) { alert('اكتب اسم العميل'); nameEl?.focus(); return; }
+      const c = {
+        id: Date.now().toString(),
+        name,
+        phone,
+        date: plusMonthsStr(6),
+        code: '',
+        notes: 'أُضيف من ' + (prefix === 'inv' ? 'الفاتورة' : 'عرض السعر')
+      };
+      customers.push(c);
+      saveCustomers();
+      renderCustomers();
+      fillCustomerPicks(c.id);
+      if (prefix === 'inv') {
+        document.getElementById('invCustId').value = c.id;
+        document.getElementById('invCustPick').value = c.id;
+        document.getElementById('invCustomer').value = c.name;
+        document.getElementById('invCustPhone').value = c.phone || '';
+        document.getElementById('invQuickCust').style.display = 'none';
+        if (nameEl) nameEl.value = '';
+        if (phoneEl) phoneEl.value = '';
+      } else {
+        document.getElementById('qCustId').value = c.id;
+        document.getElementById('qCustPick').value = c.id;
+        document.getElementById('qCustomer').value = c.name;
+        document.getElementById('qPhone').value = c.phone || '';
+        document.getElementById('qQuickCust').style.display = 'none';
+        if (nameEl) nameEl.value = '';
+        if (phoneEl) phoneEl.value = '';
+      }
+      toast('تم حفظ العميل في قائمة العملاء ✓');
+    }
+
     function fillCustomerPicks(selectedId) {
       const opts = '<option value="">-- اختر عميل --</option>' +
         customers.slice().sort((a, b) => (a.name || '').localeCompare(b.name || '', 'ar'))
@@ -4972,44 +5499,112 @@
 
 
     // ==================== BULK MAINT REMINDER ====================
+    function getMaintDueThisWeek() {
+      return customers.filter(c => {
+        if (!c.date) return false;
+        return custInfo(c).days <= 7;
+      }).sort((a, b) => custInfo(a).days - custInfo(b).days);
+    }
     function bulkMaintRemind() {
-      const due = customers.filter(c => { const d = custInfo(c).days; return d <= 5; })
-        .sort((a, b) => custInfo(a).days - custInfo(b).days);
-      if (!due.length) { alert('مفيش عملاء صيانتهم خلال 5 أيام'); return; }
-      const withPhone = due.filter(c => (c.phone || '').replace(/[^0-9]/g, ''));
-      if (!withPhone.length) { alert('العملاء المستحقين ما عندهمش أرقام جوال'); return; }
-      const list = withPhone.map(c => {
+      openAdminPanel('customers');
+      const due = getMaintDueThisWeek();
+      const box = document.getElementById('maintAlert');
+      if (!due.length) {
+        if (box) {
+          box.style.display = 'block';
+          box.onclick = null;
+          box.innerHTML = '<div class="alert alert-success">✓ لا يوجد عملاء صيانتهم خلال 7 أيام</div>';
+        } else alert('مفيش عملاء صيانتهم خلال 7 أيام');
+        return;
+      }
+      const rows = due.map(c => {
         const inf = custInfo(c);
-        return `• ${c.name} — ${c.date} (${inf.label})`;
-      }).join('\n');
-      if (!confirm(`هيتم فتح واتساب لـ ${withPhone.length} عميل واحدًا تلو الآخر.\n\n${list}\n\nمتابعة؟`)) return;
+        const hasPhone = !!(c.phone || '').replace(/\D/g, '');
+        return `<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px;margin-bottom:8px;background:#fff;border-radius:12px;border:1px solid #fed7aa">
+          <div style="flex:1;min-width:140px"><b>${esc(c.name)}</b><br>
+            <small>الموعد: ${esc(c.date || '—')} · ${esc(inf.label)}</small>
+            ${c.phone ? `<br><span dir="ltr">${esc(c.phone)}</span>` : '<br><span style="color:#b91c1c">بدون جوال</span>'}
+          </div>
+          ${hasPhone ? `<button class="btn btn-whatsapp btn-sm" onclick="event.stopPropagation();sendMaintWaOne('${c.id}')">💬 تذكير</button>` : ''}
+        </div>`;
+      }).join('');
+      if (box) {
+        box.style.display = 'block';
+        box.onclick = null;
+        box.innerHTML = `<div class="alert alert-warning" style="cursor:default">
+          <div style="font-weight:800;margin-bottom:8px">📣 صيانة هذا الأسبوع — ${due.length} عميل</div>
+          ${rows}
+          <button class="btn btn-whatsapp btn-block" style="margin-top:8px" onclick="event.stopPropagation();sendBulkMaintWa()">💬 إرسال تذكير جماعي بالترتيب</button>
+          <button class="btn btn-outline btn-block" style="margin-top:6px" onclick="event.stopPropagation();document.getElementById('maintAlert').style.display='none'">إغلاق</button>
+        </div>`;
+      }
+    }
+    function maintWaMessage(c) {
+      return 'مرحبًا ' + (c.name || '') + ' 👋\nتذكير من *مويه عذبه — فلاتر*\nموعد صيانة الفلتر: *' + (c.date || '') + '*\nنسعد بخدمتك في منطقة جيزان\nللتواصل: 0510572080';
+    }
+    function sendMaintWaOne(id) {
+      const c = customers.find(x => x.id === id);
+      if (!c) return;
+      const phone = normalizeWaPhone(c.phone);
+      if (!phone) { alert('لا يوجد رقم'); return; }
+      window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(maintWaMessage(c)), '_blank');
+    }
+    function sendBulkMaintWa() {
+      const due = getMaintDueThisWeek().filter(c => normalizeWaPhone(c.phone));
+      if (!due.length) { alert('لا أرقام جوال متاحة'); return; }
+      if (!confirm('سيتم فتح واتساب لـ ' + due.length + ' عميل بالترتيب. متابعة؟')) return;
       let i = 0;
-      const sendNext = () => {
-        if (i >= withPhone.length) { toast('تم فتح كل رسائل التذكير ✓'); return; }
-        const c = withPhone[i++];
-        const ph = (c.phone || '').replace(/[^0-9]/g, '');
-        const wa = '966' + ph.replace(/^0/, '');
-        const msg = `مرحبًا ${c.name}، نذكّرك بموعد صيانة الفلتر بتاريخ ${c.date} - مويه عذبه\nللاستفسار: 0510572080`;
-        window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`, '_blank');
-        if (i < withPhone.length) setTimeout(sendNext, 800);
-        else toast('تم فتح كل رسائل التذكير ✓');
+      const next = () => {
+        if (i >= due.length) { toast('تم فتح كل رسائل التذكير ✓'); return; }
+        const c = due[i++];
+        window.open('https://wa.me/' + normalizeWaPhone(c.phone) + '?text=' + encodeURIComponent(maintWaMessage(c)), '_blank');
+        if (i < due.length) setTimeout(next, 900);
       };
-      sendNext();
+      next();
     }
 
     // ==================== PROMOS ====================
     function savePromos() { localStorage.setItem('ma_promos', JSON.stringify(promos)); markDirty(); }
+    function fillPromoProducts() {
+      const sel = document.getElementById('prProduct'); if (!sel) return;
+      const prev = sel.value;
+      sel.innerHTML = '<option value="">-- اختر منتج أو اكتب يدوياً --</option>' +
+        products.map(p => `<option value="${p.id}">${esc(p.name)} — ${p.priceAfter} ر.س</option>`).join('');
+      if (prev) sel.value = prev;
+    }
+    function fillPromoFromProduct() {
+      const id = document.getElementById('prProduct')?.value;
+      const p = products.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('prTitle').value = p.name || '';
+      document.getElementById('prBefore').value = (p.priceBefore > p.priceAfter ? p.priceBefore : (Number(p.priceAfter) || 0));
+      document.getElementById('prAfter').value = p.priceAfter || '';
+    }
     function savePromo() {
       const title = document.getElementById('prTitle').value.trim();
       const desc = document.getElementById('prDesc').value.trim();
       const priceBefore = parseFloat(document.getElementById('prBefore').value) || 0;
       const priceAfter = parseFloat(document.getElementById('prAfter').value) || 0;
-      const endsAt = document.getElementById('prEnds').value;
-      if (!title || !endsAt) { alert('أدخل عنوان العرض وتاريخ الانتهاء'); return; }
-      promos.push({ id: Date.now().toString(), title, desc, priceBefore, priceAfter, endsAt });
+      let endsAt = document.getElementById('prEnds').value;
+      if (!title || !endsAt) { alert('أدخل اسم العرض / المنتج ووقت الانتهاء'); return; }
+      if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(endsAt)) endsAt += ':00';
+      if (new Date(endsAt).getTime() <= Date.now()) {
+        alert('وقت الانتهاء لازم يكون في المستقبل عشان يظهر على الرئيسية');
+        return;
+      }
+      const productId = document.getElementById('prProduct')?.value || '';
+      promos.push({
+        id: Date.now().toString(),
+        title, desc, priceBefore, priceAfter, endsAt,
+        productId, productName: title
+      });
       savePromos();
-      ['prTitle','prDesc','prBefore','prAfter','prEnds'].forEach(id => document.getElementById(id).value = '');
-      renderPromosAdmin(); toast('تم حفظ العرض ✓');
+      ['prTitle','prDesc','prBefore','prAfter','prEnds'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+      const ps = document.getElementById('prProduct'); if (ps) ps.value = '';
+      renderPromosAdmin();
+      renderHomePromoBanner();
+      try { renderPromoPublic(); } catch (e) {}
+      toast('تم حفظ العرض — ظاهر الآن على الرئيسية ✓');
     }
     function deletePromo(id) {
       if (!confirm('حذف العرض؟')) return;
@@ -5109,29 +5704,61 @@
 
     // ==================== REPORTS ====================
     function renderReport(period) {
-      document.querySelectorAll('#reports .admin-tab').forEach(t => t.classList.remove('active'));
-      if (typeof event !== 'undefined' && event && event.target && event.target.classList) event.target.classList.add('active');
+      document.querySelectorAll('#reports .admin-tab').forEach(t => {
+        t.classList.toggle('active', (t.getAttribute('onclick') || '').includes("'" + period + "'"));
+      });
       const now = new Date();
+      const startOfWeek = new Date(now);
+      startOfWeek.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+      startOfWeek.setHours(0,0,0,0);
       let filtered = sales;
       if (period === 'today') filtered = sales.filter(s => new Date(s.date).toDateString() === now.toDateString());
+      else if (period === 'week') filtered = sales.filter(s => new Date(s.date) >= startOfWeek);
       else if (period === 'month') filtered = sales.filter(s => { const d = new Date(s.date); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); });
-      const revenue = filtered.reduce((s, x) => s + x.total, 0);
-      const qty = filtered.reduce((s, x) => s + x.qty, 0);
+      const revenue = filtered.reduce((s, x) => s + Number(x.total || 0), 0);
+      const qty = filtered.reduce((s, x) => s + Number(x.qty || 0), 0);
       const invSet = new Set(filtered.map(s => s.invoiceNo).filter(Boolean));
+      let cost = 0;
+      filtered.forEach(s => {
+        const p = products.find(x => x.id === s.productId || x.name === s.name);
+        const buy = p ? Number(p.buyPrice) || 0 : 0;
+        cost += buy * Number(s.qty || 0);
+      });
+      const grossProfit = revenue - cost;
       let expFiltered = expenses;
       if (period === 'today') expFiltered = expenses.filter(e => e.date === todayStr());
+      else if (period === 'week') expFiltered = expenses.filter(e => {
+        const d = new Date(e.date + 'T00:00:00');
+        return d >= startOfWeek;
+      });
       else if (period === 'month') expFiltered = expenses.filter(e => { const p = e.date.split('-'); return +p[0] === now.getFullYear() && +p[1] === now.getMonth() + 1; });
-      const expTotal = expFiltered.reduce((s, e) => s + e.amount, 0);
-      const top = {};
-      filtered.forEach(s => { top[s.name] = (top[s.name] || 0) + s.qty; });
-      const topList = Object.entries(top).sort((a, b) => b[1] - a[1]).slice(0, 5);
+      const expTotal = expFiltered.reduce((s, e) => s + Number(e.amount || 0), 0);
+      const net = revenue - expTotal;
+      const byName = {};
+      filtered.forEach(s => {
+        const k = s.name || '—';
+        if (!byName[k]) byName[k] = { qty: 0, total: 0 };
+        byName[k].qty += Number(s.qty || 0);
+        byName[k].total += Number(s.total || 0);
+      });
+      const topList = Object.entries(byName).sort((a, b) => b[1].qty - a[1].qty).slice(0, 8);
+      const periodLabel = { today: 'اليوم', week: 'هذا الأسبوع', month: 'هذا الشهر', all: 'كل الفترة' }[period] || period;
       const el = document.getElementById('reportContent');
       el.innerHTML = `
-        <div class="alert alert-success">المبيعات: ${revenue.toFixed(2)} ر.س — قطع: ${qty} — فواتير: ${invSet.size}</div>
-        <div class="alert alert-warning">المصروفات: ${expTotal.toFixed(2)} ر.س</div>
-        <div class="alert ${revenue - expTotal >= 0 ? 'alert-success' : 'alert-danger'}">صافي تقريبي: ${(revenue - expTotal).toFixed(2)} ر.س</div>
-        <h3 style="margin:12px 0 8px;color:var(--primary)">الأكثر مبيعًا</h3>
-        ${topList.length ? topList.map(([n, q], i) => `<div class="invoice-item"><span>${i + 1}. ${esc(n)}</span><span>${q}</span></div>`).join('') : '<div class="empty-state">لا بيانات</div>'}
+        <p style="color:var(--muted);font-size:.85rem;margin-bottom:10px">تقرير: <b>${periodLabel}</b></p>
+        <div class="report-grid">
+          <div class="report-card"><div class="rv">${revenue.toFixed(2)}</div><div class="rl">إيرادات (ر.س)</div></div>
+          <div class="report-card"><div class="rv">${expTotal.toFixed(2)}</div><div class="rl">مصروفات</div></div>
+          <div class="report-card"><div class="rv" style="color:${grossProfit>=0?'#047857':'#b91c1c'}">${grossProfit.toFixed(2)}</div><div class="rl">مكسب تقريبي بعد التكلفة</div></div>
+          <div class="report-card"><div class="rv" style="color:${net>=0?'#047857':'#b91c1c'}">${net.toFixed(2)}</div><div class="rl">صافي (إيراد − مصروف)</div></div>
+        </div>
+        <div class="alert alert-success">قطع مباعة: ${qty} · فواتير: ${invSet.size} · تكلفة تقديرية: ${cost.toFixed(2)} ر.س</div>
+        <h3 style="margin:14px 0 8px;color:var(--primary)">الأكثر مبيعًا</h3>
+        ${topList.length ? topList.map(([n, v], i) => `<div class="invoice-item"><span>${i + 1}. ${esc(n)} <small style="color:var(--muted)">(${v.qty} قطعة)</small></span><span>${v.total.toFixed(2)} ر.س</span></div>`).join('') : '<div class="empty-state">لا بيانات مبيعات</div>'}
+        <h3 style="margin:14px 0 8px;color:var(--primary)">مصروفات الفترة</h3>
+        ${expFiltered.length ? expFiltered.slice().sort((a,b)=>String(b.date).localeCompare(a.date)).slice(0,15).map(e =>
+          `<div class="invoice-item"><span>${esc(e.date)} — ${esc(e.note)}</span><span>${Number(e.amount).toFixed(2)}</span></div>`
+        ).join('') : '<div class="empty-state">لا مصروفات في هذه الفترة</div>'}
       `;
     }
 
