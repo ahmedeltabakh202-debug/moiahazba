@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#0a4d8c" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="مويه عذبه" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22%D9%85%D9%88%D9%8A%D9%87%20%D8%B9%D8%B0%D8%A8%D9%87%20%7C%20%D9%81%D9%84%D8%A7%D8%AA%D8%B1%22%2C%22short_name%22%3A%22%D9%85%D9%88%D9%8A%D9%87%20%D8%B9%D8%B0%D8%A8%D9%87%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f0f7ff%22%2C%22theme_color%22%3A%22%230a4d8c%22%2C%22lang%22%3A%22ar%22%2C%22dir%22%3A%22rtl%22%7D" />
+<html lang="ar" dir="rtl"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0a4d8c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مويه عذبه">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22%D9%85%D9%88%D9%8A%D9%87%20%D8%B9%D8%B0%D8%A8%D9%87%20%7C%20%D9%81%D9%84%D8%A7%D8%AA%D8%B1%22%2C%22short_name%22%3A%22%D9%85%D9%88%D9%8A%D9%87%20%D8%B9%D8%B0%D8%A8%D9%87%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f0f7ff%22%2C%22theme_color%22%3A%22%230a4d8c%22%2C%22lang%22%3A%22ar%22%2C%22dir%22%3A%22rtl%22%7D">
   <title>مويه عذبه | فلاتر</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     :root {
@@ -422,28 +421,35 @@
     }
     .home-brand p { margin: 4px 0 0; font-size: .85rem; color: var(--muted); font-weight: 600; }
     .block-label {
-      font-size: .72rem; font-weight: 800; color: var(--muted); margin: 0 0 10px 4px;
-      letter-spacing: .06em; text-transform: uppercase;
+      font-size: .95rem; font-weight: 800; color: var(--primary); margin: 18px 0 12px;
+      letter-spacing: .02em; text-align: center; width: 100%;
+      position: relative; z-index: 4;
+    }
+    .block-label::after {
+      content: ''; display: block; width: 42px; height: 3px; margin: 6px auto 0;
+      border-radius: 999px; background: linear-gradient(90deg, #0a4d8c, #1e90ff);
     }
 
-    /* Services — icon tiles */
+    /* Services — plain info tiles (not clickable) */
     .services {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
       margin: 0 0 22px; position: relative; z-index: 4;
+      pointer-events: none; user-select: none;
     }
     .service {
-      background: var(--card); border-radius: 18px; padding: 14px 6px 12px; text-align: center;
-      font-size: .7rem; font-weight: 800; color: var(--text);
-      box-shadow: 0 4px 16px rgba(10,77,140,.08); border: 1px solid rgba(10,77,140,.06);
-      transition: transform .15s, box-shadow .2s; min-height: 92px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+      background: transparent; border-radius: 14px; padding: 10px 4px 8px; text-align: center;
+      font-size: .68rem; font-weight: 700; color: var(--muted);
+      box-shadow: none; border: none;
+      min-height: auto;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+      cursor: default;
     }
-    .service:active { transform: scale(.96); }
+    .service:active { transform: none; }
     .service .svc-ic {
-      width: 44px; height: 44px; border-radius: 14px;
+      width: 36px; height: 36px; border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
       background: linear-gradient(145deg, #e0f2fe, #bae6fd);
-      box-shadow: 0 4px 12px rgba(14,165,233,.2);
+      box-shadow: none; opacity: .95;
     }
     .service .svc-ic svg { width: 22px; height: 22px; stroke: #0369a1; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .service:nth-child(2) .svc-ic { background: linear-gradient(145deg, #d1fae5, #a7f3d0); box-shadow: 0 4px 12px rgba(16,185,129,.2); }
@@ -462,12 +468,13 @@
     .main-actions.three .track-btn { grid-column: auto; }
     .big-btn {
       border: none; cursor: pointer; font-family: inherit; color: #fff; text-align: center;
-      padding: 18px 8px 16px; border-radius: 20px;
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
-      background: linear-gradient(160deg, #0a4d8c 0%, #1e90ff 100%);
-      box-shadow: 0 10px 24px rgba(10,77,140,.28);
-      transition: transform .15s, box-shadow .2s; min-height: 128px; height: 100%; justify-content: center;
+      padding: 20px 10px 18px; border-radius: 22px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      background: linear-gradient(160deg, #063a6b 0%, #0a4d8c 40%, #1e90ff 100%);
+      box-shadow: 0 12px 28px rgba(10,77,140,.34), inset 0 1px 0 rgba(255,255,255,.22);
+      transition: transform .15s, box-shadow .2s; min-height: 136px; height: 100%; justify-content: center;
       position: relative; overflow: hidden;
+      border: 1px solid rgba(255,255,255,.18);
     }
     .big-btn::after {
       content: ''; position: absolute; top: -40%; right: -30%; width: 80%; height: 80%;
@@ -490,8 +497,8 @@
       position: relative; z-index: 1;
     }
     .big-btn .bi svg { width: 24px; height: 24px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .big-btn b { font-size: .88rem; font-weight: 800; line-height: 1.25; position: relative; z-index: 1; }
-    .big-btn small { font-size: .65rem; opacity: .88; line-height: 1.25; font-weight: 600; position: relative; z-index: 1; max-width: 90%; }
+    .big-btn b { font-size: .95rem; font-weight: 800; line-height: 1.25; position: relative; z-index: 1; letter-spacing: -.01em; }
+    .big-btn small { font-size: .7rem; opacity: .92; line-height: 1.3; font-weight: 600; position: relative; z-index: 1; max-width: 92%; }
     @media (max-width: 380px) {
       .big-btn { padding: 14px 4px; min-height: 110px; border-radius: 16px; }
       .big-btn b { font-size: .78rem; }
@@ -556,21 +563,21 @@
     .contact-row .ci.loc svg { stroke: #b45309; }
     .contact-row .ci.ph { background: linear-gradient(145deg, #dbeafe, #93c5fd); box-shadow: 0 4px 12px rgba(59,130,246,.18); }
     .contact-row .ci.ph svg { stroke: #1d4ed8; }
-    .contact-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; position: relative; z-index: 1; }
+    .contact-actions { display: flex; justify-content: center; gap: 10px; margin-top: 12px; position: relative; z-index: 1; flex-wrap: wrap; }
     .contact-actions a, .contact-actions button {
       text-decoration: none; border: none; cursor: pointer; font-family: inherit;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      padding: 14px 10px; border-radius: 16px; font-weight: 800; font-size: .92rem;
-      transition: transform .15s, box-shadow .2s;
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 8px 16px; border-radius: 999px; font-weight: 700; font-size: .78rem;
+      transition: transform .15s, box-shadow .2s; min-width: 0; flex: 0 0 auto;
     }
     .contact-actions a:active, .contact-actions button:active { transform: scale(.97); }
     .contact-actions .call-btn {
       background: linear-gradient(145deg, #0a4d8c, #1e90ff); color: #fff;
-      box-shadow: 0 8px 20px rgba(10,77,140,.32);
+      box-shadow: 0 4px 12px rgba(10,77,140,.28);
     }
     .contact-actions .wa-btn {
       background: linear-gradient(145deg, #128c7e, #25d366); color: #fff;
-      box-shadow: 0 8px 20px rgba(37,211,102,.3);
+      box-shadow: 0 4px 12px rgba(37,211,102,.25);
     }
     .contact-actions .ico { display: flex; align-items: center; }
     .contact-actions .ico svg { width: 18px; height: 18px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -601,12 +608,38 @@
       width: 22px; height: 22px; stroke: currentColor; fill: none;
       stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
     }
-    .nav-item.active { color: var(--primary); }
+    .nav-item.active { color: var(--primary); font-weight: 800; }
     .nav-item.active .nav-ic {
       background: linear-gradient(145deg, #e0f2fe, #bae6fd);
       border-radius: 12px; width: 40px; height: 32px;
     }
     body.dark .nav-item.active .nav-ic { background: rgba(30,144,255,.2); }
+    /* Home nav — prominent center tab */
+    .nav-item.nav-home {
+      color: var(--primary);
+      position: relative;
+    }
+    .nav-item.nav-home .nav-ic {
+      width: 54px; height: 54px; border-radius: 50%;
+      background: linear-gradient(145deg, #0a4d8c 0%, #1e90ff 100%);
+      box-shadow: 0 8px 22px rgba(10,77,140,.42), 0 0 0 4px rgba(30,144,255,.15);
+      transform: translateY(-16px);
+      border: 3px solid #fff;
+    }
+    .nav-item.nav-home .nav-ic svg {
+      stroke: #fff !important; width: 24px; height: 24px;
+    }
+    .nav-item.nav-home span, .nav-item.nav-home .nav-label {
+      font-weight: 800; font-size: .8rem; color: var(--primary);
+      margin-top: -10px;
+    }
+    .nav-item.nav-home.active .nav-ic {
+      background: linear-gradient(145deg, #052f57, #0a4d8c);
+      box-shadow: 0 10px 26px rgba(10,77,140,.5), 0 0 0 5px rgba(30,144,255,.2);
+    }
+    body.dark .nav-item.nav-home .nav-ic {
+      border-color: #152033;
+    }
     .nav-item .icon { font-size: 1.25rem; } /* fallback */
 
     /* Loading overlay */
@@ -694,16 +727,46 @@
     .ma-days.today, .ma-days.late { background: #fff; color: #b91c1c; }
     .ma-days.soon { background: rgba(255,255,255,.9); color: #b45309; }
     @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,.55); } 50% { box-shadow: 0 0 0 10px rgba(239,68,68,0); } }
-    .cust-card { border-radius: 14px; padding: 12px 14px; margin-bottom: 10px; background: #f8fafc; border-right: 6px solid #10b981; }
-    .cust-card.near { background: #fffbeb; border-right-color: #f59e0b; }
-    .cust-card.over { background: #fef2f2; border-right-color: #dc2626; box-shadow: 0 0 0 2px #fecaca; }
-    .cust-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 1.05rem; }
-    .cust-badge { padding: 4px 10px; border-radius: 999px; font-size: .8rem; font-weight: 800; color: #fff; white-space: nowrap; background: #10b981; }
+    .cust-card {
+      border-radius: 16px; padding: 14px; margin-bottom: 12px;
+      background: var(--card); border: 1px solid rgba(10,77,140,.08);
+      border-right: 5px solid #10b981;
+      box-shadow: 0 4px 14px rgba(10,77,140,.06);
+      transition: transform .12s, box-shadow .15s;
+    }
+    .cust-card:active { transform: scale(.99); }
+    .cust-card.near { background: #fffbeb; border-right-color: #f59e0b; border-color: #fde68a; }
+    .cust-card.over { background: #fef2f2; border-right-color: #dc2626; border-color: #fecaca; box-shadow: 0 0 0 1px #fecaca; }
+    .cust-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+    .cust-top .cust-name { font-size: 1.05rem; font-weight: 800; color: var(--text); line-height: 1.3; }
+    .cust-badge { padding: 4px 10px; border-radius: 999px; font-size: .72rem; font-weight: 800; color: #fff; white-space: nowrap; background: #10b981; flex-shrink: 0; }
     .cust-badge.near { background: #f59e0b; }
     .cust-badge.over { background: #dc2626; }
+    .cust-meta {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px;
+      margin-bottom: 10px; font-size: .82rem; color: var(--muted); font-weight: 600;
+    }
+    .cust-meta span { display: flex; align-items: center; gap: 4px; min-width: 0; }
+    .cust-meta b { color: var(--text); font-weight: 700; }
     .cust-date { margin: 6px 0 10px; color: var(--muted); font-size: .88rem; }
-    .cust-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .cust-actions {
+      display: flex; gap: 6px; flex-wrap: wrap; padding-top: 10px;
+      border-top: 1px dashed rgba(10,77,140,.12);
+    }
     .cust-actions a { text-decoration: none; }
+    .cust-actions .btn-sm { padding: 7px 10px; font-size: .78rem; border-radius: 10px; }
+    .cust-actions .btn-edit {
+      background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-weight: 800;
+    }
+    body.dark .cust-actions .btn-edit { background: #1e3a5f; color: #93c5fd; border-color: #334155; }
+    .cust-stats {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px;
+    }
+    .cust-stat {
+      font-size: .72rem; font-weight: 700; color: var(--muted);
+      background: #f1f5f9; border-radius: 999px; padding: 3px 9px;
+    }
+    body.dark .cust-stat { background: #1e293b; }
     .scan-photo { padding: 0 16px; max-width: 520px; width: 100%; margin: 0 auto 4px; }
     .scan-photo label { cursor: pointer; }
     .btn-excel { background: #107c41; color: #fff; }
@@ -791,31 +854,150 @@
     body.dark .admin-tab.tile { background: #152033; border-color: #1e3a5f; }
     body.dark .sub-nav { background: #0f1a2b; }
     body.dark .sub-nav button.active { background: #1e3a5f; }
-    .theme-btn, .sound-btn, .admin-fab {
-      position: fixed; z-index: 120; width: 42px; height: 42px;
-      border-radius: 50%; border: none; background: rgba(255,255,255,.92); box-shadow: var(--shadow);
-      font-size: 1.15rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    /* Top utility bar — small, physical left */
+    .top-utils {
+      position: absolute; top: 8px; left: 8px; right: auto; z-index: 90;
+      display: flex; align-items: center; justify-content: flex-start; gap: 5px;
+      padding: 0; pointer-events: none; direction: ltr;
     }
-    .theme-btn { top: 12px; left: 12px; }
-    .sound-btn { top: 12px; left: 60px; }
+    body:not(.on-home) .top-utils { display: none; }
+    .theme-btn, .sound-btn {
+      pointer-events: auto;
+      position: static; width: auto; height: 26px; min-width: 26px;
+      border-radius: 8px; border: 1px solid rgba(10,77,140,.1);
+      background: rgba(255,255,255,.88); box-shadow: 0 1px 4px rgba(10,77,140,.08);
+      font-size: .65rem; font-weight: 700; font-family: inherit; color: var(--muted);
+      cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 3px;
+      padding: 0 7px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .theme-btn .ic, .sound-btn .ic { font-size: .78rem; line-height: 1; }
+    .theme-btn:active, .sound-btn:active { transform: scale(.96); }
+    body.dark .theme-btn, body.dark .sound-btn {
+      background: rgba(21,32,51,.88); border-color: #1e3a5f; color: #94a3b8;
+    }
+    .sound-btn.muted { opacity: .55; }
     .admin-fab {
-      top: 12px; right: 12px; width: auto; padding: 0 14px; border-radius: 999px;
-      background: linear-gradient(135deg, #0a4d8c, #1e90ff); color: #fff; font-weight: 800; font-size: .82rem;
-      display: none; gap: 6px;
+      position: fixed; z-index: 120;
+      top: 12px; right: 12px; width: auto; height: 42px; padding: 0 14px; border-radius: 999px;
+      border: none; background: linear-gradient(135deg, #0a4d8c, #1e90ff); color: #fff;
+      font-weight: 800; font-size: .82rem; cursor: pointer;
+      display: none; align-items: center; justify-content: center; gap: 6px;
+      box-shadow: var(--shadow);
     }
     body.is-admin .admin-fab { display: flex; }
-    body.on-home .theme-btn, body.on-home .sound-btn { top: 16px; }
     body.on-home .admin-fab { top: 16px; }
-    body.dark .theme-btn, body.dark .sound-btn { background: #1e293b; color: #fff; }
-    .sound-btn.muted { opacity: .55; }
 
-    /* Floating WhatsApp */
-    .fab-wa {
-      position: fixed; bottom: 88px; left: 16px; z-index: 110; width: 56px; height: 56px;
-      border-radius: 50%; background: #25D366; color: #fff; border: none; font-size: 1.6rem;
-      box-shadow: 0 6px 20px rgba(37,211,102,.45); cursor: pointer; display: flex; align-items: center; justify-content: center;
+    /* Floating Ask Me chat */
+    .fab-ask {
+      position: fixed; bottom: 92px; right: 14px; z-index: 110;
+      width: 62px; height: 62px; padding: 0;
+      border-radius: 50%; border: none; cursor: pointer;
+      background: linear-gradient(145deg, #1e90ff 0%, #0a4d8c 100%);
+      color: #fff; font-family: inherit; font-weight: 800; font-size: .68rem;
+      box-shadow: 0 10px 28px rgba(10,77,140,.45), 0 0 0 5px rgba(30,144,255,.18);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+      transition: transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .2s;
+      animation: askPopIn .55s cubic-bezier(.34,1.56,.64,1) both, askPulse 2.4s 1s ease-in-out infinite;
     }
-    body.admin-open .fab-wa { display: none; }
+    .fab-ask:active { transform: scale(.9); }
+    .fab-ask .ask-ic { font-size: 1.35rem; line-height: 1; }
+    @keyframes askPopIn {
+      0% { transform: scale(0); opacity: 0; }
+      70% { transform: scale(1.12); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    @keyframes askPulse {
+      0%, 100% { box-shadow: 0 10px 28px rgba(10,77,140,.45), 0 0 0 5px rgba(30,144,255,.18); }
+      50% { box-shadow: 0 12px 32px rgba(10,77,140,.55), 0 0 0 10px rgba(30,144,255,.08); }
+    }
+    /* Compact contact line */
+    .contact-mini {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+      gap: 8px 12px; margin: 18px 0 8px; padding: 10px 12px;
+      background: rgba(255,255,255,.85); border: 1px solid rgba(10,77,140,.1);
+      border-radius: 999px; position: relative; z-index: 4;
+      box-shadow: 0 4px 14px rgba(10,77,140,.06); font-size: .78rem; font-weight: 700;
+    }
+    .contact-mini .cm-label { color: var(--primary); font-weight: 800; }
+    .contact-mini .cm-loc { color: var(--muted); }
+    .contact-mini .cm-phone { color: var(--text); text-decoration: none; font-weight: 800; }
+    .contact-mini .cm-call, .contact-mini .cm-wa {
+      border: none; cursor: pointer; font-family: inherit; font-size: .72rem; font-weight: 800;
+      padding: 5px 12px; border-radius: 999px; text-decoration: none; color: #fff;
+    }
+    .contact-mini .cm-call { background: linear-gradient(145deg, #0a4d8c, #1e90ff); }
+    .contact-mini .cm-wa { background: linear-gradient(145deg, #128c7e, #25d366); }
+    body.dark .contact-mini { background: #152033; border-color: #1e3a5f; }
+    body.admin-open .fab-ask { display: none; }
+    #askChatOverlay {
+      position: fixed; inset: 0; z-index: 2000; background: rgba(5,20,40,.55);
+      display: none; align-items: flex-end; justify-content: center;
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    }
+    #askChatOverlay.show { display: flex; }
+    .ask-chat-panel {
+      width: 100%; max-width: 480px; max-height: 82vh;
+      background: var(--card); border-radius: 22px 22px 0 0;
+      box-shadow: 0 -12px 40px rgba(10,77,140,.25);
+      display: flex; flex-direction: column; overflow: hidden;
+      animation: askSlideUp .28s ease;
+    }
+    @keyframes askSlideUp { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+    .ask-chat-head {
+      background: linear-gradient(135deg, #052f57, #0a4d8c 50%, #1e90ff);
+      color: #fff; padding: 14px 16px; display: flex; align-items: center; gap: 12px;
+    }
+    .ask-chat-head .av {
+      width: 42px; height: 42px; border-radius: 14px; background: rgba(255,255,255,.18);
+      display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+    }
+    .ask-chat-head h3 { margin: 0; font-size: 1rem; font-weight: 800; }
+    .ask-chat-head p { margin: 2px 0 0; font-size: .75rem; opacity: .88; }
+    .ask-chat-head .ask-close {
+      margin-right: auto; background: rgba(255,255,255,.15); border: none; color: #fff;
+      width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem; cursor: pointer;
+    }
+    .ask-chat-msgs {
+      flex: 1; overflow-y: auto; padding: 14px 12px; background: #f0f7ff;
+      display: flex; flex-direction: column; gap: 10px; min-height: 220px; max-height: 48vh;
+    }
+    body.dark .ask-chat-msgs { background: #0b1220; }
+    .ask-msg {
+      max-width: 88%; padding: 10px 14px; border-radius: 16px; font-size: .88rem;
+      line-height: 1.55; font-weight: 600; white-space: pre-wrap; word-break: break-word;
+    }
+    .ask-msg.bot {
+      align-self: flex-start; background: #fff; color: var(--text);
+      border: 1px solid rgba(10,77,140,.1); border-bottom-right-radius: 4px;
+      box-shadow: 0 2px 8px rgba(10,77,140,.06);
+    }
+    body.dark .ask-msg.bot { background: #152033; border-color: #1e3a5f; }
+    .ask-msg.user {
+      align-self: flex-end; background: linear-gradient(135deg, #0a4d8c, #1e90ff);
+      color: #fff; border-bottom-left-radius: 4px;
+    }
+    .ask-suggestions {
+      display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 12px 4px; background: var(--card);
+      border-top: 1px solid #e2e8f0;
+    }
+    .ask-suggestions button {
+      border: 1px solid #bfdbfe; background: #eff6ff; color: var(--primary);
+      border-radius: 999px; padding: 6px 12px; font-family: inherit; font-size: .75rem;
+      font-weight: 700; cursor: pointer;
+    }
+    .ask-chat-input {
+      display: flex; gap: 8px; padding: 10px 12px 14px; background: var(--card);
+      border-top: 1px solid #e2e8f0; align-items: center;
+    }
+    .ask-chat-input input {
+      flex: 1; border: 2px solid #e2e8f0; border-radius: 14px; padding: 12px 14px;
+      font-family: inherit; font-size: .92rem; margin: 0;
+    }
+    .ask-chat-input button {
+      border: none; background: linear-gradient(135deg, #0a4d8c, #1e90ff); color: #fff;
+      border-radius: 14px; padding: 12px 16px; font-family: inherit; font-weight: 800;
+      cursor: pointer; white-space: nowrap;
+    }
 
     /* FAQ */
     .faq-item { background: var(--card); border-radius: 14px; margin-bottom: 10px; box-shadow: var(--shadow); overflow: hidden; }
@@ -872,106 +1054,228 @@
     .track-box .big { font-size: 1.6rem; font-weight: 800; margin: 8px 0; }
 
     /* ===== Splash Screen ===== */
+    /* ===== Splash — Rising Water + Floating Logo ===== */
     #splash {
       position: fixed; inset: 0; z-index: 100000;
-      background: linear-gradient(180deg, #031525 0%, #052f57 40%, #0a4d8c 100%);
+      background: #020b18;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      overflow: hidden; transition: opacity .55s ease, visibility .55s ease;
+      overflow: hidden; transition: opacity .65s ease, visibility .65s ease;
     }
     #splash.hide {
       opacity: 0; visibility: hidden; pointer-events: none;
     }
+    #splash .splash-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 90% 55% at 50% 0%, rgba(30,144,255,.28), transparent 55%),
+        linear-gradient(180deg, #020b18 0%, #031525 45%, #052f57 100%);
+    }
+    #splash .splash-grid {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: .1;
+      background-image:
+        linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 65% 55% at 50% 40%, #000 15%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 65% 55% at 50% 40%, #000 15%, transparent 70%);
+    }
+    #splash .splash-orb {
+      position: absolute; border-radius: 50%; filter: blur(48px); z-index: 1; pointer-events: none;
+      animation: orbFloat 9s ease-in-out infinite;
+    }
+    #splash .splash-orb.o1 {
+      width: 240px; height: 240px; top: 8%; right: -50px;
+      background: rgba(56,189,248,.16);
+    }
+    #splash .splash-orb.o2 {
+      width: 200px; height: 200px; bottom: 15%; left: -40px;
+      background: rgba(14,165,233,.14); animation-delay: -3s;
+    }
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      50% { transform: translate(10px,-14px) scale(1.05); }
+    }
+    /* Rising water from bottom */
     #splash .splash-water {
       position: absolute; left: 0; right: 0; bottom: 0; height: 0%;
-      background: linear-gradient(180deg, rgba(30,144,255,.55) 0%, rgba(14,116,180,.85) 40%, #0369a1 100%);
-      transition: height 4s cubic-bezier(.22,.61,.36,1);
-      z-index: 1;
+      z-index: 3;
+      background: linear-gradient(180deg,
+        rgba(56,189,248,.45) 0%,
+        rgba(14,165,233,.72) 28%,
+        rgba(3,105,161,.92) 70%,
+        #0369a1 100%);
+      transition: height 3.2s cubic-bezier(.22,.61,.36,1);
+      box-shadow: 0 -12px 40px rgba(56,189,248,.25);
     }
     #splash.fill .splash-water { height: 100%; }
     #splash .splash-wave {
-      position: absolute; left: -5%; width: 110%; height: 48px; top: -46px;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'%3E%3Cpath d='M0,30 C150,60 350,0 600,28 C850,55 1050,5 1200,30 L1200,60 L0,60 Z' fill='%230369a1'/%3E%3C/svg%3E") repeat-x;
-      background-size: 600px 48px;
-      animation: splashWave 2.2s linear infinite;
+      position: absolute; left: -8%; width: 116%; height: 56px; top: -52px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'%3E%3Cpath d='M0,32 C180,58 360,8 600,30 C840,52 1020,10 1200,28 L1200,60 L0,60 Z' fill='%230369a1'/%3E%3C/svg%3E") repeat-x;
+      background-size: 600px 56px;
+      animation: splashWave 2.4s linear infinite;
       opacity: .95;
     }
     #splash .splash-wave.w2 {
-      top: -38px; opacity: .55; animation-duration: 3.2s; animation-direction: reverse;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'%3E%3Cpath d='M0,28 C200,55 400,5 600,32 C800,58 1000,8 1200,28 L1200,60 L0,60 Z' fill='%231e90ff'/%3E%3C/svg%3E");
+      top: -42px; opacity: .5; animation-duration: 3.4s; animation-direction: reverse;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'%3E%3Cpath d='M0,28 C220,55 400,6 600,32 C800,56 1000,10 1200,26 L1200,60 L0,60 Z' fill='%2338bdf8'/%3E%3C/svg%3E");
     }
     @keyframes splashWave {
       0% { transform: translateX(0); }
       100% { transform: translateX(-300px); }
     }
-    #splash .splash-bubbles { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+    #splash .splash-bubbles { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
     #splash .sb {
-      position: absolute; bottom: -20px; border-radius: 50%;
-      background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.25);
-      animation: splashRise 4s infinite ease-in;
+      position: absolute; bottom: -24px; border-radius: 50%;
+      background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.28);
+      animation: splashRise 4.2s infinite ease-in;
     }
-    #splash .sb:nth-child(1){ width:18px;height:18px;left:10%;animation-delay:0s }
-    #splash .sb:nth-child(2){ width:12px;height:12px;left:22%;animation-delay:1.1s }
-    #splash .sb:nth-child(3){ width:28px;height:28px;left:40%;animation-delay:0.4s }
-    #splash .sb:nth-child(4){ width:14px;height:14px;left:58%;animation-delay:1.8s }
-    #splash .sb:nth-child(5){ width:22px;height:22px;left:72%;animation-delay:0.7s }
-    #splash .sb:nth-child(6){ width:10px;height:10px;left:88%;animation-delay:1.4s }
-    #splash .sb:nth-child(7){ width:16px;height:16px;left:30%;animation-delay:2.2s }
-    #splash .sb:nth-child(8){ width:20px;height:20px;left:80%;animation-delay:2.6s }
+    #splash .sb:nth-child(1){ width:16px;height:16px;left:12%;animation-delay:0s }
+    #splash .sb:nth-child(2){ width:11px;height:11px;left:28%;animation-delay:1.1s }
+    #splash .sb:nth-child(3){ width:22px;height:22px;left:44%;animation-delay:0.4s }
+    #splash .sb:nth-child(4){ width:13px;height:13px;left:58%;animation-delay:1.8s }
+    #splash .sb:nth-child(5){ width:18px;height:18px;left:72%;animation-delay:0.7s }
+    #splash .sb:nth-child(6){ width:10px;height:10px;left:86%;animation-delay:1.4s }
+    #splash .sb:nth-child(7){ width:15px;height:15px;left:36%;animation-delay:2.2s }
+    #splash .sb:nth-child(8){ width:19px;height:19px;left:80%;animation-delay:2.6s }
     @keyframes splashRise {
       0% { transform: translateY(0) scale(1); opacity: 0; }
-      12% { opacity: .9; }
-      100% { transform: translateY(-110vh) scale(.6); opacity: 0; }
+      12% { opacity: .75; }
+      100% { transform: translateY(-110vh) scale(.55); opacity: 0; }
     }
+    /* Centered floating logo + loading under it */
     #splash .splash-content {
-      position: relative; z-index: 5; text-align: center;
-      display: flex; flex-direction: column; align-items: center; gap: 14px;
-      padding: 0 24px;
+      position: relative; z-index: 8; text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 0 24px; width: min(340px, 90vw);
+    }
+    #splash .splash-logo-wrap {
+      position: relative; width: 118px; height: 118px; margin: 0 auto 18px;
+      animation: logoFloat 3.6s ease-in-out infinite;
+    }
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
     #splash .splash-logo {
-      width: 150px; height: 150px; border-radius: 50%;
-      background: #fff var(--logo) center/cover no-repeat;
-      border: 5px solid rgba(255,255,255,.95);
-      box-shadow: 0 12px 40px rgba(0,0,0,.35), 0 0 0 12px rgba(255,255,255,.12);
-      animation: splashLogoIn .9s ease-out both;
+      width: 118px; height: 118px; margin: 0;
+      border-radius: 32px;
+      background-image: var(--logo); background-size: cover; background-position: center;
+      box-shadow:
+        0 20px 50px rgba(0,0,0,.4),
+        0 0 0 1px rgba(255,255,255,.28),
+        0 0 0 10px rgba(255,255,255,.07);
+      animation: splashLogoIn .9s cubic-bezier(.22,1,.36,1) both;
+      position: relative; z-index: 2;
+    }
+    #splash.fill .splash-logo {
+      box-shadow:
+        0 16px 40px rgba(0,0,0,.3),
+        0 0 0 1px rgba(255,255,255,.35),
+        0 0 32px rgba(56,189,248,.45),
+        0 0 0 10px rgba(125,211,252,.12);
     }
     @keyframes splashLogoIn {
-      0% { transform: scale(.6); opacity: 0; }
+      0% { transform: scale(.55); opacity: 0; }
       100% { transform: scale(1); opacity: 1; }
     }
     #splash .splash-title {
-      color: #fff; font-weight: 800; font-size: 1.45rem; letter-spacing: -.02em;
-      text-shadow: 0 2px 12px rgba(0,0,0,.35);
-      animation: splashFadeUp .8s .25s ease both;
+      color: #fff; font-weight: 800; font-size: 1.55rem; letter-spacing: -.02em;
+      margin: 0 0 6px; line-height: 1.25;
+      text-shadow: 0 2px 18px rgba(0,0,0,.4);
+      animation: splashFadeUp .75s .2s ease both;
+      position: relative; z-index: 8;
     }
     #splash .splash-sub {
-      color: rgba(224,242,254,.9); font-size: .95rem; font-weight: 600;
-      animation: splashFadeUp .8s .4s ease both;
-    }
-    @keyframes splashFadeUp {
-      0% { opacity: 0; transform: translateY(14px); }
-      100% { opacity: 1; transform: translateY(0); }
+      color: rgba(186,230,253,.95); font-size: .95rem; font-weight: 600;
+      margin: 0 0 20px; letter-spacing: .03em;
+      text-shadow: 0 1px 10px rgba(0,0,0,.25);
+      animation: splashFadeUp .75s .32s ease both;
+      position: relative; z-index: 8;
     }
     #splash .splash-bar-wrap {
-      position: relative; width: min(260px, 70vw); z-index: 6;
-      margin-top: 6px;
-      animation: splashFadeUp .7s .35s ease both;
+      position: relative; width: 100%; z-index: 8;
+      animation: splashFadeUp .7s .42s ease both;
+    }
+    #splash .splash-bar-label {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 8px; color: rgba(224,242,254,.85); font-size: .72rem; font-weight: 700;
+      text-shadow: 0 1px 6px rgba(0,0,0,.3);
     }
     #splash .splash-bar-bg {
-      height: 8px; border-radius: 99px; background: rgba(255,255,255,.18);
-      overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,.2);
+      height: 4px; border-radius: 99px; background: rgba(255,255,255,.16);
+      overflow: hidden; backdrop-filter: blur(4px);
     }
     #splash .splash-bar-fill {
       height: 100%; width: 0%; border-radius: 99px;
-      background: linear-gradient(90deg, #7dd3fc, #38bdf8, #fff);
-      box-shadow: 0 0 12px rgba(56,189,248,.7);
+      background: linear-gradient(90deg, #0ea5e9, #38bdf8, #e0f2fe);
+      box-shadow: 0 0 14px rgba(56,189,248,.55);
       transition: width .05s linear;
     }
     #splash .splash-pct {
-      color: rgba(255,255,255,.85); font-size: .8rem; font-weight: 700;
-      text-align: center; margin-top: 8px; font-variant-numeric: tabular-nums;
+      color: rgba(255,255,255,.95); font-size: .78rem; font-weight: 800;
+      font-variant-numeric: tabular-nums;
     }
+    @keyframes splashFadeUp {
+      0% { opacity: 0; transform: translateY(12px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    /* hide unused filter remnants if any */
+    #splash .filter-scene, #splash .splash-badge, #splash .splash-card,
+    #splash .splash-brand-line, #splash .splash-foot, #splash .splash-shine { display: none !important; }
     body.splash-lock { overflow: hidden; }
     body.splash-lock > *:not(#splash) { visibility: hidden; }
+
+
+
+    /* Loyalty points win card */
+    .points-win {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #052f57 0%, #0a4d8c 40%, #1e90ff 100%);
+      border-radius: 20px; padding: 18px 16px 16px; margin-bottom: 14px;
+      color: #fff; text-align: center;
+      box-shadow: 0 12px 32px rgba(10,77,140,.35), 0 0 0 1px rgba(255,255,255,.12);
+    }
+    .points-win::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.18), transparent 40%),
+        radial-gradient(circle at 80% 0%, rgba(125,211,252,.25), transparent 35%);
+    }
+    .points-win .pw-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,215,0,.2); border: 1px solid rgba(255,215,0,.45);
+      color: #fef3c7; font-size: .72rem; font-weight: 800; padding: 4px 12px;
+      border-radius: 999px; margin-bottom: 8px; letter-spacing: .04em;
+    }
+    .points-win .pw-num {
+      font-size: 2.4rem; font-weight: 800; line-height: 1.1;
+      text-shadow: 0 4px 20px rgba(0,0,0,.3);
+      background: linear-gradient(180deg, #fff 0%, #fde68a 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .points-win .pw-label { font-size: .9rem; font-weight: 700; opacity: .95; margin-top: 2px; }
+    .points-win .pw-hint { font-size: .72rem; opacity: .85; margin-top: 8px; font-weight: 600; }
+    .points-win .pw-spark { position: absolute; font-size: 1rem; opacity: .7; animation: pwSpark 2.5s ease-in-out infinite; }
+    .points-win .pw-spark.s1 { top: 12px; right: 16px; }
+    .points-win .pw-spark.s2 { bottom: 14px; left: 18px; animation-delay: .8s; }
+    .points-win .pw-spark.s3 { top: 18px; left: 22px; animation-delay: 1.4s; }
+    @keyframes pwSpark {
+      0%, 100% { transform: scale(1) rotate(0); opacity: .5; }
+      50% { transform: scale(1.25) rotate(12deg); opacity: 1; }
+    }
+    .cust-points-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      color: #92400e; font-size: .72rem; font-weight: 800;
+      padding: 2px 8px; border-radius: 999px; margin-right: 6px;
+    }
+    .loyalty-settings {
+      background: linear-gradient(135deg, #eff6ff, #f0f9ff);
+      border: 1px solid #bfdbfe; border-radius: 14px; padding: 12px;
+      margin-bottom: 14px;
+    }
+    body.dark .loyalty-settings { background: #0f1a2b; border-color: #1e3a5f; }
 
     /* Admin panel as own page */
     #adminPanelBack {
@@ -1025,10 +1329,14 @@
     .inst-card .amt { font-weight: 800; color: var(--primary); }
   </style>
 </head>
-<body class="splash-lock">
+<body class="on-home splash-lock">
 
-  <!-- Splash Screen -->
-  <div id="splash" aria-hidden="false">
+  <!-- Splash Screen — Rising Water -->
+  <div id="splash" aria-hidden="false" class="">
+    <div class="splash-bg"></div>
+    <div class="splash-grid"></div>
+    <span class="splash-orb o1"></span>
+    <span class="splash-orb o2"></span>
     <div class="splash-water">
       <div class="splash-wave"></div>
       <div class="splash-wave w2"></div>
@@ -1038,36 +1346,41 @@
       <span class="sb"></span><span class="sb"></span><span class="sb"></span><span class="sb"></span>
     </div>
     <div class="splash-content">
-      <div class="splash-logo" role="img" aria-label="مويه عذبه فلاتر"></div>
-      <div class="splash-bar-wrap">
-        <div class="splash-bar-bg"><div class="splash-bar-fill" id="splashBar"></div></div>
-        <div class="splash-pct" id="splashPct">0%</div>
+      <div class="splash-logo-wrap">
+        <div class="splash-logo" role="img" aria-label="مويه عذبه فلاتر"></div>
       </div>
       <div class="splash-title">مويه عذبه — فلاتر</div>
       <div class="splash-sub">نقاء الماء … نقاء الحياة</div>
+      <div class="splash-bar-wrap">
+        <div class="splash-bar-label">
+          <span>جاري التحميل</span>
+          <span class="splash-pct" id="splashPct">0%</span>
+        </div>
+        <div class="splash-bar-bg"><div class="splash-bar-fill" id="splashBar" style="width: 0%;"></div></div>
+      </div>
     </div>
   </div>
 
   <!-- Header (inner pages) -->
   <header class="header">
     <button class="back-btn" onclick="goBackBtn()" aria-label="رجوع">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"></path></svg>
       <span>رجوع</span>
     </button>
-    <div class="logo-img" data-admin></div>
-    <h1 data-admin>مويه عذبه</h1>
+    <div class="logo-img" data-admin=""></div>
+    <h1 data-admin="">مويه عذبه</h1>
   </header>
 
   <!-- ========== HOME SECTION ========== -->
   <section id="home" class="section active">
     <div class="hero">
       <span class="bubble"></span><span class="bubble"></span><span class="bubble"></span><span class="bubble"></span><span class="bubble"></span>
-      <div class="logo-wrap" data-admin><div class="logo-img" role="img" aria-label="مويه عذبه فلاتر"></div></div>
+      <div class="logo-wrap" data-admin=""><div class="logo-img" role="img" aria-label="مويه عذبه فلاتر"></div></div>
       <button class="scan-chip" onclick="openScanner('lookup')">
-        <svg viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"></path><rect x="7" y="7" width="10" height="10" rx="1"></rect></svg>
         مسح الباركود
       </button>
-      <svg class="hero-wave" viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0,30 C200,70 400,0 600,30 C800,60 1000,5 1200,30 L1200,60 L0,60 Z" fill="#f0f7ff"/></svg>
+      <svg class="hero-wave" viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0,30 C200,70 400,0 600,30 C800,60 1000,5 1200,30 L1200,60 L0,60 Z" fill="#f0f7ff"></path></svg>
     </div>
     <div class="home-body">
       <div class="pwa-install-bar" id="pwaInstallBar">
@@ -1080,79 +1393,62 @@
         <h2>مويه عذبه — فلاتر</h2>
         <p>نقاء الماء … نقاء الحياة</p>
       </div>
-      <div class="block-label">خدماتنا</div>
-      <div class="services">
-        <div class="service">
-          <span class="svc-ic"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></span>
-          فلاتر مياه
-        </div>
-        <div class="service">
-          <span class="svc-ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
-          تركيب وصيانة
-        </div>
-        <div class="service">
-          <span class="svc-ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></span>
-          قطع غيار
-        </div>
-        <div class="service">
-          <span class="svc-ic"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
-          خدمة طوارئ
-        </div>
-      </div>
       <div class="block-label">ابدأ من هنا</div>
       <div class="main-actions three">
         <button class="big-btn" onclick="showSection('products')">
-          <span class="bi"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></span>
+          <span class="bi"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg></span>
           <b>المنتجات</b><small>فلاتر وقطع غيار</small>
         </button>
         <button class="big-btn track-btn" onclick="showSection('track')">
-          <span class="bi"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
+          <span class="bi"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg></span>
           <b>تتبع حسابي</b><small>كود · جوال · فواتير</small>
         </button>
         <button class="big-btn alt" onclick="showSection('maintenance')">
-          <span class="bi"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
+          <span class="bi"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></span>
           <b>الصيانة</b><small>نصلك بأسرع وقت</small>
         </button>
       </div>
-      <div class="block-label">المزيد</div>
+      <div class="block-label">خدماتنا</div>
+      <p style="text-align:center;color:var(--muted);font-size:.78rem;font-weight:600;margin:-4px 0 10px;position:relative;z-index:4">ما نقدّمه لعملائنا في جيزان</p>
+      <div class="services">
+        <div class="service">
+          <span class="svc-ic"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg></span>
+          فلاتر مياه
+        </div>
+        <div class="service">
+          <span class="svc-ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></span>
+          تركيب وصيانة
+        </div>
+        <div class="service">
+          <span class="svc-ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg></span>
+          قطع غيار
+        </div>
+        <div class="service">
+          <span class="svc-ic"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg></span>
+          خدمة طوارئ
+        </div>
+      </div>
+<div class="block-label">المزيد</div>
       <div class="home-links">
         <button class="home-link" onclick="showSection('about')">
-          <span class="hl-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span>
+          <span class="hl-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg></span>
           من نحن
         </button>
         <button class="home-link" onclick="showSection('gallery')">
-          <span class="hl-ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span>
+          <span class="hl-ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg></span>
           المعرض
         </button>
         <button class="home-link" onclick="showSection('faq')">
-          <span class="hl-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg></span>
+          <span class="hl-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"></path></svg></span>
           الأسئلة
         </button>
       </div>
-      <div class="block-label">تواصل معنا</div>
-      <div class="contact-card">
-        <div class="contact-brand">
-          <p class="shop-name">مويه عذبه — فلاتر</p>
-          <p class="shop-tag">منطقة جيزان</p>
-        </div>
-        <div class="contact-row">
-          <span class="ci loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
-          منطقة جيزان
-        </div>
-        <div class="contact-row">
-          <span class="ci ph"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
-          <span dir="ltr">0510572080</span>
-        </div>
-        <div class="contact-actions">
-          <a class="call-btn" href="tel:0510572080">
-            <span class="ico"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
-            اتصال
-          </a>
-          <button class="wa-btn" onclick="openWhatsAppGeneral()">
-            <span class="ico"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg></span>
-            واتساب
-          </button>
-        </div>
+            <div class="contact-mini">
+        <span class="cm-label">تواصل معنا</span>
+        <span class="cm-loc">📍 جيزان</span>
+        <a class="cm-phone" href="tel:0510572080" dir="ltr">0510572080</a>
+        <a class="cm-call" href="tel:0510572080">اتصال</a>
+        <button type="button" class="cm-wa" onclick="openWhatsAppGeneral()">واتساب</button>
       </div>
     </div>
   </section>
@@ -1160,7 +1456,10 @@
   <!-- ========== ABOUT ========== -->
   <section id="about" class="section">
     <div class="section-title">ℹ️ من نحن</div>
-    <div id="aboutContent"></div>
+    <div id="aboutContent">
+        <div class="about-card"><h3>مويه عذبه — فلاتر</h3><p>نقدم حلول تنقية المياه للمنازل والمحلات في جيزان: بيع فلاتر عالية الجودة، تركيب احترافي، وصيانة دورية تضمن لك مياه نقية يومًا بعد يوم.</p></div>
+        <div class="about-card"><h3>خدماتنا</h3><div class="svc-list"><div>🚰 فلاتر مياه منزلية وتجارية (مراحل متعددة)</div><div>🛠️ تركيب وصيانة دورية للشمعات والخزانات</div><div>🧩 قطع غيار أصلية ومتوافقة</div><div>⚡ خدمة طوارئ سريعة داخل جيزان</div><div>📅 تذكير بمواعيد الصيانة ومتابعة العملاء</div></div></div>
+        <div class="about-card"><h3>لماذا تختارنا؟</h3><p>خبرة محلية، أسعار واضحة، ضمان على التركيب، ومتابعة بعد البيع. هدفنا: نقاء الماء … نقاء الحياة.</p></div></div>
   </section>
 
   <!-- ========== TRACK MAINTENANCE ========== -->
@@ -1182,13 +1481,13 @@
   <section id="gallery" class="section">
     <div class="section-title">📸 معرض التركيب</div>
     <p style="color:var(--muted); margin-bottom:12px;">صور من أعمال التركيب والصيانة لعملائنا في جيزان.</p>
-    <div id="galleryGrid" class="gallery-grid"></div>
+    <div id="galleryGrid" class="gallery-grid"><div class="empty-state" style="grid-column:1/-1"><div class="icon">📸</div>صور المعرض هتظهر هنا بعد ما الأدمن يضيفها</div></div>
   </section>
 
   <!-- ========== FAQ ========== -->
   <section id="faq" class="section">
     <div class="section-title">❓ أسئلة شائعة</div>
-    <div id="faqContent"></div>
+    <div id="faqContent"><details class="faq-item"><summary>كم يستغرق تركيب الفلتر؟</summary><p>غالبًا من 30 إلى 90 دقيقة حسب نوع الفلتر ومكان التركيب.</p></details><details class="faq-item"><summary>كل متى أغيّر الشمعات؟</summary><p>يُنصح بصيانة دورية كل 4–6 أشهر، وقد تختلف حسب جودة المياه والاستهلاك.</p></details><details class="faq-item"><summary>هل الأسعار تشمل التركيب؟</summary><p>كثير من العروض تشمل التركيب — اسألنا عبر واتساب وسنوضح لك التفاصيل قبل التنفيذ.</p></details><details class="faq-item"><summary>هل تقدمون خدمة طوارئ؟</summary><p>نعم داخل جيزان — تواصل معنا فورًا من صفحة الصيانة أو واتساب.</p></details><details class="faq-item"><summary>كيف أتابع موعد صيانتي؟</summary><p>من الرئيسية اختر «تتبع موعد الصيانة» وأدخل كود العميل، أو تواصل معنا وسنذكّرك قبل الموعد.</p></details><details class="faq-item"><summary>أين موقعكم؟</summary><p>منطقة جيزان. للزيارة أو التركيب المنزلي تواصل على 0510572080.</p></details></div>
   </section>
 
   <!-- ========== PRODUCTS SECTION ========== -->
@@ -1220,7 +1519,7 @@
 
       <label>الموقع (اختياري)</label>
       <div style="display:flex; gap:8px; margin-bottom:12px;">
-        <input type="text" id="maintLocation" placeholder="الموقع هيظهر هنا بعد الإذن" readonly style="flex:1">
+        <input type="text" id="maintLocation" placeholder="الموقع هيظهر هنا بعد الإذن" readonly="" style="flex:1">
         <button class="btn btn-outline btn-sm" onclick="getLocation()">📍 موقعك</button>
       </div>
 
@@ -1248,7 +1547,7 @@
     </div>
     <div class="scan-photo">
       <label class="btn btn-success btn-block">📸 التقاط صورة للباركود بكاميرا الجوال
-        <input type="file" id="scanPhoto" accept="image/*" capture="environment" hidden>
+        <input type="file" id="scanPhoto" accept="image/*" capture="environment" hidden="">
       </label>
       <div id="fileReader" style="display:none"></div>
     </div>
@@ -1272,14 +1571,14 @@
     </button>
     <div class="save-bar">
       <button class="btn btn-save" onclick="saveFileDownload()">💾 احفظ الملف</button>
-      <div id="dirtyNote">✓ لا توجد تغييرات جديدة</div>
+      <div id="dirtyNote" class="">✓ لا توجد تغييرات جديدة</div>
     </div>
     <div id="maintAlert" style="display:none" onclick="openAdminPanel('customers')"></div>
     <div id="instDueAlert" style="display:none;margin-bottom:12px;"></div>
     <div class="admin-group g1">
       <div class="ag-title"><i></i>المنتجات والمخزن</div>
       <div class="admin-tabs grid">
-        <button class="admin-tab tile" data-tab="addProduct"><span class="ti">➕</span>إضافة منتج</button>
+        <button class="admin-tab tile active" data-tab="addProduct"><span class="ti">➕</span>إضافة منتج</button>
         <button class="admin-tab tile" data-tab="allProducts"><span class="ti">📋</span>كل المنتجات</button>
         <button class="admin-tab tile" data-tab="stock"><span class="ti">📦</span>المخزن<span class="tbadge" id="stockBadge" style="display:none">0</span></button>
       </div>
@@ -1356,7 +1655,7 @@
     </div>
 
     <!-- Add Product Panel -->
-    <div id="addProduct" class="admin-panel">
+    <div id="addProduct" class="admin-panel active">
       <div class="card">
         <h3 style="margin-bottom:12px;">إضافة / تعديل منتج</h3>
         <input type="hidden" id="editProductId">
@@ -1474,7 +1773,7 @@
           <label>المبلغ المدفوع الآن <span class="opt">(ريال)</span></label>
           <input type="number" id="invPaidNow" placeholder="0" min="0" step="0.01" oninput="onCreditPaidChange()">
           <label style="margin-top:10px;">المبلغ المتبقي <span class="opt">(تلقائي = الإجمالي − المدفوع)</span></label>
-          <input type="number" id="invRemainingInput" readonly style="background:#f8fafc;font-weight:800;color:#c2410c">
+          <input type="number" id="invRemainingInput" readonly="" style="background:#f8fafc;font-weight:800;color:#c2410c">
           <div style="margin-top:8px;font-size:.85rem;color:#9a3412;">المتبقي: <span id="invRemaining">0</span> ر.س</div>
           <label style="margin-top:12px;">التسديد على كام قسط؟</label>
           <input type="number" id="invInstallCount" placeholder="مثال: 3" min="1" max="24" step="1" oninput="buildInstallPlanFields()">
@@ -1631,6 +1930,21 @@
       </div>
 
       <div id="custAddView" style="display:none">
+        <div class="loyalty-settings">
+          <div style="font-weight:800;color:var(--primary);margin-bottom:8px">⭐ نظام النقاط (لكل العملاء)</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+            <div style="flex:1;min-width:120px">
+              <label style="font-size:.8rem">كل مبلغ (ر.س)</label>
+              <input type="number" id="loyAmount" min="1" step="1" value="100" style="margin:0">
+            </div>
+            <div style="flex:1;min-width:120px">
+              <label style="font-size:.8rem">يكسب كام نقطة</label>
+              <input type="number" id="loyPoints" min="0" step="1" value="1" style="margin:0">
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="saveLoyaltySettings()">💾 حفظ القاعدة</button>
+          </div>
+          <small style="color:var(--muted);display:block;margin-top:6px">مثال: كل 100 ر.س = 1 نقطة · تُضاف تلقائيًا عند إصدار فاتورة</small>
+        </div>
         <div class="card">
           <h3 style="margin-bottom:12px;">🧑‍💼 إضافة عميل جديد</h3>
           <label>اسم العميل</label>
@@ -1650,11 +1964,28 @@
           </div>
           <label>ملاحظات <span class="opt">(اختياري)</span></label>
           <input type="text" id="cNotes" placeholder="مثال: فلتر 5 مراحل - المطبخ">
+          <label>نقاط الولاء الحالية <span class="opt">(اختياري)</span></label>
+          <input type="number" id="cPoints" min="0" step="1" value="0" placeholder="0">
           <button class="btn btn-primary btn-block" onclick="saveCustomer()">💾 حفظ العميل</button>
         </div>
       </div>
 
-      <div id="custListView">
+      <div id="custListView" style="display: block;">
+        <div class="loyalty-settings">
+          <div style="font-weight:800;color:var(--primary);margin-bottom:8px">⭐ نظام النقاط (لكل العملاء)</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+            <div style="flex:1;min-width:120px">
+              <label style="font-size:.8rem">كل مبلغ (ر.س)</label>
+              <input type="number" id="loyAmountList" min="1" step="1" value="100" style="margin:0">
+            </div>
+            <div style="flex:1;min-width:120px">
+              <label style="font-size:.8rem">يكسب كام نقطة</label>
+              <input type="number" id="loyPointsList" min="0" step="1" value="1" style="margin:0">
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="saveLoyaltySettings(true)">💾 حفظ القاعدة</button>
+          </div>
+          <small style="color:var(--muted);display:block;margin-top:6px">مثال: كل 100 ر.س شراء = 1 نقطة · تُحتسب تلقائيًا من الفواتير</small>
+        </div>
         <div class="card">
           <div style="display:flex; gap:8px; margin-bottom:10px;">
             <input type="search" id="cSearch" placeholder="🔍 بحث بالاسم أو الجوال أو الكود" oninput="renderCustomers()" style="margin:0; flex:1">
@@ -1810,29 +2141,84 @@
     </div>
   </section>
 
-  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="الوضع الليلي">🌙</button>
-  <button class="sound-btn" id="soundBtn" onclick="toggleWaterSound()" title="كتم صوت المياه">🔊</button>
-  <button class="admin-fab" id="adminFab" onclick="showSection('admin')" title="العودة للوحة التحكم">⚙️ الأدمن</button>
-  <button class="fab-wa" onclick="openWhatsAppGeneral()" title="واتساب">💬</button>
+  <div class="top-utils" id="topUtils">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="الوضع الليلي" type="button">
+      <span class="ic" id="themeIcon">🌙</span><span id="themeLabel">ليلي</span>
+    </button>
+    <button class="sound-btn" id="soundBtn" onclick="toggleWaterSound()" title="كتم صوت المياه" type="button">
+      <span class="ic" id="soundIcon">🔊</span><span id="soundLabel">صوت</span>
+    </button>
+  </div>
+  <button class="admin-fab" id="adminFab" onclick="showSection('admin')" title="العودة للوحة التحكم" style="display: none;">⚙️ الأدمن</button>
+  <button class="fab-ask" id="fabAsk" onclick="openAskChat()" title="اسألني">
+    <span class="ask-ic">💬</span>
+    <span>اسألني</span>
+  </button>
+
+  <!-- Ask Me Chat Overlay -->
+  <div id="askChatOverlay" onclick="if(event.target===this)closeAskChat()">
+    <div class="ask-chat-panel" role="dialog" aria-label="مساعد مويه عذبه">
+      <div class="ask-chat-head">
+        <div class="av">💧</div>
+        <div>
+          <h3>مساعد مويه عذبه</h3>
+          <p>اسأل عن الأسعار · المقارنة · الشراء · الصيانة</p>
+        </div>
+        <button type="button" class="ask-close" onclick="closeAskChat()" aria-label="إغلاق">×</button>
+      </div>
+      <div class="ask-chat-msgs" id="askChatMsgs"></div>
+      <div class="ask-suggestions" id="askSuggestions"></div>
+      <div class="ask-chat-input">
+        <input type="text" id="askChatInput" placeholder="اكتب سؤالك هنا..." onkeydown="if(event.key==='Enter')sendAskChat()">
+        <button type="button" onclick="sendAskChat()">إرسال</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Bottom Navigation -->
   <nav class="bottom-nav">
     <button class="nav-item" type="button" onclick="goBackBtn()" title="رجوع">
-      <span class="nav-ic"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span>
+      <span class="nav-ic"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg></span>
       رجوع
     </button>
-    <button class="nav-item active" data-section="home" type="button" onclick="showSection('home')" title="الرئيسية">
-      <span class="nav-ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+    <button class="nav-item nav-home active" data-section="home" type="button" onclick="showSection('home')" title="الرئيسية">
+      <span class="nav-ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></span>
       الرئيسية
     </button>
     <button class="nav-item" data-section="cart" type="button" onclick="showSection('cart')" title="السلة">
-      <span class="nav-ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></span>
+      <span class="nav-ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></span>
       <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
       السلة
     </button>
   </nav>
 
-  <div id="toast"></div>
+  
+  <!-- App Confirm Modal (works on mobile where window.confirm is blocked) -->
+  <div class="modal-overlay" id="appConfirmOverlay">
+    <div class="modal" style="max-width:340px;text-align:center">
+      <div id="appConfirmMsg" style="font-weight:800;font-size:1.05rem;margin-bottom:16px;line-height:1.5"></div>
+      <div style="display:flex;gap:10px;justify-content:center">
+        <button type="button" class="btn btn-outline" id="appConfirmCancel" style="flex:1">إلغاء</button>
+        <button type="button" class="btn btn-danger" id="appConfirmOk" style="flex:1">نعم، احذف</button>
+      </div>
+    </div>
+  </div>
+  <!-- Save file dialog: rename + choose location -->
+  <div class="modal-overlay" id="saveFileOverlay">
+    <div class="modal" style="max-width:400px">
+      <h3 style="margin:0 0 6px;font-size:1.15rem">💾 حفظ الملف</h3>
+      <p style="margin:0 0 12px;color:var(--muted);font-size:.85rem;font-weight:600">عدّل اسم الملف ثم اختر مكان الحفظ على جهازك</p>
+      <label style="font-size:.85rem">اسم الملف</label>
+      <input type="text" id="saveFileNameInput" dir="ltr" style="text-align:left;font-weight:700;margin-bottom:8px" placeholder="moiah-azba-filters.html">
+      <small style="display:block;color:var(--muted);margin-bottom:14px;font-size:.75rem">سيتم إضافة .html تلقائيًا إن لم تكتبها</small>
+      <div style="display:flex;gap:10px">
+        <button type="button" class="btn btn-outline" id="saveFileCancelBtn" style="flex:1">إلغاء</button>
+        <button type="button" class="btn btn-primary" id="saveFileOkBtn" style="flex:1.2">📂 اختر المكان واحفظ</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class=""></div>
   <div id="loadingOverlay"><div class="loading-box"><div class="spinner"></div><div id="loadingText">جاري التحضير...</div></div></div>
 
   <!-- Customer Modal -->
@@ -1871,7 +2257,7 @@
     <div class="modal" id="productModalContent"></div>
   </div>
 
-  <script id="seedData" type="application/json">{}</script>
+  <script id="seedData" type="application/json">{"ts":1793197110691,"products":[],"customers":[{"id":"1792437159028","name":"احمد","phone":"0552774641","date":"2027-04-19","code":"","notes":"أُضيف من الفاتورة"}],"sales":[],"invoices":[],"quotes":[],"installments":[],"companies":[],"promos":[],"expenses":[],"gallery":[],"site":{"aboutTitle":"مويه عذبه — فلاتر","aboutIntro":"نقدم حلول تنقية المياه للمنازل والمحلات في جيزان: بيع فلاتر عالية الجودة، تركيب احترافي، وصيانة دورية تضمن لك مياه نقية يومًا بعد يوم.","services":["🚰 فلاتر مياه منزلية وتجارية (مراحل متعددة)","🛠️ تركيب وصيانة دورية للشمعات والخزانات","🧩 قطع غيار أصلية ومتوافقة","⚡ خدمة طوارئ سريعة داخل جيزان","📅 تذكير بمواعيد الصيانة ومتابعة العملاء"],"why":"خبرة محلية، أسعار واضحة، ضمان على التركيب، ومتابعة بعد البيع. هدفنا: نقاء الماء … نقاء الحياة.","faq":[{"q":"كم يستغرق تركيب الفلتر؟","a":"غالبًا من 30 إلى 90 دقيقة حسب نوع الفلتر ومكان التركيب."},{"q":"كل متى أغيّر الشمعات؟","a":"يُنصح بصيانة دورية كل 4–6 أشهر، وقد تختلف حسب جودة المياه والاستهلاك."},{"q":"هل الأسعار تشمل التركيب؟","a":"كثير من العروض تشمل التركيب — اسألنا عبر واتساب وسنوضح لك التفاصيل قبل التنفيذ."},{"q":"هل تقدمون خدمة طوارئ؟","a":"نعم داخل جيزان — تواصل معنا فورًا من صفحة الصيانة أو واتساب."},{"q":"كيف أتابع موعد صيانتي؟","a":"من الرئيسية اختر «تتبع موعد الصيانة» وأدخل كود العميل، أو تواصل معنا وسنذكّرك قبل الموعد."},{"q":"أين موقعكم؟","a":"منطقة جيزان. للزيارة أو التركيب المنزلي تواصل على 0510572080."}]}}</script>
   <script>
     // ==================== DATA ====================
     const WHATSAPP_NUMBER = '9660510572080';
@@ -1888,6 +2274,7 @@
         if (seed.invoices) localStorage.setItem('ma_invoices', JSON.stringify(seed.invoices));
         if (seed.installments) localStorage.setItem('ma_installments', JSON.stringify(seed.installments));
         if (seed.companies) localStorage.setItem('ma_companies', JSON.stringify(seed.companies));
+        if (seed.loyalty) localStorage.setItem('ma_loyalty', JSON.stringify(seed.loyalty));
         if (seed.quotes) localStorage.setItem('ma_quotes', JSON.stringify(seed.quotes));
         if (seed.promos) localStorage.setItem('ma_promos', JSON.stringify(seed.promos));
         if (seed.expenses) localStorage.setItem('ma_expenses', JSON.stringify(seed.expenses));
@@ -1936,7 +2323,7 @@
       return JSON.parse(JSON.stringify(DEFAULT_SITE));
     })();
     // restore admin session within same browser tab session
-    let isAdmin = localStorage.getItem('ma_admin') === '1';
+    let isAdmin = false; try { localStorage.removeItem('ma_admin'); } catch (e) {}
     const PH = "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect fill=%22%23e0f2fe%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%230a4d8c%22 font-size=%2214%22%3Eفلتر%3C/text%3E%3C/svg%3E";
     let invoiceItems = [];
     let lastInvoice = null;
@@ -1944,6 +2331,7 @@
 
     // ==================== INIT ====================
     document.addEventListener('DOMContentLoaded', () => {
+      try { document.getElementById('loadingOverlay')?.classList.remove('show'); } catch (e) {}
       // Splash: water rise + progress bar then enter app
       (function runSplash() {
         const splash = document.getElementById('splash');
@@ -1954,7 +2342,7 @@
           return;
         }
         requestAnimationFrame(() => splash.classList.add('fill'));
-        const duration = 4000; // 4 ثواني مع صعود المياه
+        const duration = 3200; // شاشة افتتاحية فاخرة
         const start = performance.now();
         function tick(now) {
           const t = Math.min(1, (now - start) / duration);
@@ -1975,8 +2363,10 @@
       updateAdminUI();
       if (localStorage.getItem('ma_theme') === 'dark') {
         document.body.classList.add('dark');
-        const tb = document.getElementById('themeBtn'); if (tb) tb.textContent = '☀️';
       }
+      try { updateThemeBtn(); } catch (e) {}
+      try { updateSoundBtn(); } catch (e) {}
+      try { fillLoyaltyInputs(); } catch (e) {}
       renderAboutPublic();
       renderFaqPublic();
       startWaterSound();
@@ -2053,6 +2443,14 @@
       if (id === 'faq') renderFaqPublic();
       document.body.classList.toggle('on-home', id === 'home');
       document.body.classList.toggle('admin-open', id === 'admin');
+      // عند العودة للرئيسية: إغلاق جلسة الأدمن وطلب الباسورد مرة أخرى
+      if (id === 'home' && isAdmin) {
+        isAdmin = false;
+        try { localStorage.removeItem('ma_admin'); } catch (e) {}
+        document.body.classList.remove('is-admin', 'admin-panel-open', 'admin-open');
+        document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+        updateAdminUI();
+      }
       document.body.classList.toggle('is-admin', isAdmin);
       if (id !== 'admin') document.body.classList.remove('admin-panel-open');
       if (id === 'admin' && !document.body.classList.contains('admin-panel-open')) {
@@ -2090,7 +2488,7 @@
       if (tab === 'addProduct') fillProductCompanies();
       if (tab === 'companies') renderCompanies();
       if (tab === 'multiQuote') { fillMqProducts(); renderMqCompanies(); renderMqTable(); }
-      if (tab === 'customers') custView('list');
+      if (tab === 'customers') { fillLoyaltyInputs(); custView('list'); }
       if (tab === 'sales') renderSales('today');
       if (tab === 'installments') renderInstallments();
       if (tab === 'allProducts') renderAllProducts();
@@ -2143,6 +2541,73 @@
       markDirty();
     }
     function saveCustomers() { localStorage.setItem('ma_customers', JSON.stringify(customers)); markDirty(); }
+
+    // ==================== LOYALTY POINTS ====================
+    let loyaltyRule = { amount: 100, points: 1 };
+    try {
+      const lr = JSON.parse(localStorage.getItem('ma_loyalty') || 'null');
+      if (lr && lr.amount > 0) loyaltyRule = { amount: Number(lr.amount) || 100, points: Number(lr.points) || 0 };
+    } catch (e) {}
+    function saveLoyaltySettings(fromList) {
+      const aEl = document.getElementById(fromList ? 'loyAmountList' : 'loyAmount');
+      const pEl = document.getElementById(fromList ? 'loyPointsList' : 'loyPoints');
+      const amount = Math.max(1, parseFloat(aEl && aEl.value) || 100);
+      const points = Math.max(0, parseFloat(pEl && pEl.value) || 0);
+      loyaltyRule = { amount, points };
+      try { localStorage.setItem('ma_loyalty', JSON.stringify(loyaltyRule)); } catch (e) {}
+      markDirty();
+      fillLoyaltyInputs();
+      toast('تم حفظ قاعدة النقاط: كل ' + amount + ' ر.س = ' + points + ' نقطة ✓');
+    }
+    function fillLoyaltyInputs() {
+      ['loyAmount', 'loyAmountList'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.value = loyaltyRule.amount;
+      });
+      ['loyPoints', 'loyPointsList'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.value = loyaltyRule.points;
+      });
+    }
+    function calcPointsForAmount(sar) {
+      const a = Number(loyaltyRule.amount) || 100;
+      const p = Number(loyaltyRule.points) || 0;
+      if (a <= 0 || p <= 0) return 0;
+      return Math.floor((Number(sar) || 0) / a) * p;
+    }
+    function getCustomerPoints(c) {
+      return Math.max(0, Math.floor(Number(c && c.points) || 0));
+    }
+    function addPointsToCustomer(custId, customerName, phone, invoiceTotal) {
+      const earned = calcPointsForAmount(invoiceTotal);
+      if (earned <= 0) return 0;
+      let c = null;
+      if (custId) c = customers.find(x => x.id === custId);
+      if (!c && customerName) {
+        const nm = String(customerName).trim();
+        c = customers.find(x => (x.name || '').trim() === nm);
+      }
+      if (!c && phone) {
+        const ph = normalizePhoneDigits(phone);
+        if (ph) c = customers.find(x => normalizePhoneDigits(x.phone) === ph);
+      }
+      if (!c) return 0;
+      c.points = getCustomerPoints(c) + earned;
+      saveCustomers();
+      return earned;
+    }
+    function pointsWinHtml(pts, extraHint) {
+      const n = Math.max(0, Math.floor(Number(pts) || 0));
+      const rule = 'كل ' + loyaltyRule.amount + ' ر.س = ' + loyaltyRule.points + ' نقطة';
+      return `<div class="points-win">
+        <span class="pw-spark s1">✨</span>
+        <span class="pw-spark s2">⭐</span>
+        <span class="pw-spark s3">💫</span>
+        <div class="pw-badge">🏆 نقاطك · مويه عذبه</div>
+        <div class="pw-num">${n}</div>
+        <div class="pw-label">نقطة ولاء</div>
+        <div class="pw-hint">${extraHint || ('اجمع النقاط واستبدلها بمنتج أو صيانة مجانية · ' + rule)}</div>
+      </div>`;
+    }
+
     function saveSales() { localStorage.setItem('ma_sales', JSON.stringify(sales)); markDirty(); }
 
     function productCardHtml(p, { offer = false } = {}) {
@@ -2293,11 +2758,18 @@
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
 
+    function updateThemeBtn() {
+      const dark = document.body.classList.contains('dark');
+      const ic = document.getElementById('themeIcon');
+      const lb = document.getElementById('themeLabel');
+      if (ic) ic.textContent = dark ? '☀️' : '🌙';
+      if (lb) lb.textContent = dark ? 'نهاري' : 'ليلي';
+    }
     function toggleTheme() {
       document.body.classList.toggle('dark');
       const dark = document.body.classList.contains('dark');
       localStorage.setItem('ma_theme', dark ? 'dark' : 'light');
-      const tb = document.getElementById('themeBtn'); if (tb) tb.textContent = dark ? '☀️' : '🌙';
+      updateThemeBtn();
     }
 
 
@@ -2387,8 +2859,7 @@
     }
     function startWaterSound() {
       if (waterAudio.muted) {
-        const btn = document.getElementById('soundBtn');
-        if (btn) { btn.textContent = '🔇'; btn.classList.add('muted'); }
+        updateSoundBtn();
         return;
       }
       const unlock = () => {
@@ -2433,8 +2904,7 @@
         waterAudio.ctx = ctx;
         waterAudio.nodes = [noise, filter, filter2, gain, lfo, lfoGain];
         waterAudio.started = true;
-        const btn = document.getElementById('soundBtn');
-        if (btn) { btn.textContent = '🔊'; btn.classList.remove('muted'); }
+        updateSoundBtn();
       } catch (e) { console.warn('water sound', e); }
     }
     function stopWaterSound() {
@@ -2444,16 +2914,24 @@
       } catch (e) {}
       waterAudio.nodes = []; waterAudio.ctx = null; waterAudio.started = false;
     }
+    function updateSoundBtn() {
+      const btn = document.getElementById('soundBtn');
+      const ic = document.getElementById('soundIcon');
+      const lb = document.getElementById('soundLabel');
+      const muted = !!(window.waterAudio && waterAudio.muted) || localStorage.getItem('ma_sound') === 'off';
+      if (btn) btn.classList.toggle('muted', muted);
+      if (ic) ic.textContent = muted ? '🔇' : '🔊';
+      if (lb) lb.textContent = muted ? 'مكتوم' : 'صوت';
+    }
     function toggleWaterSound() {
       waterAudio.muted = !waterAudio.muted;
       localStorage.setItem('ma_sound', waterAudio.muted ? 'off' : 'on');
-      const btn = document.getElementById('soundBtn');
       if (waterAudio.muted) {
         stopWaterSound();
-        if (btn) { btn.textContent = '🔇'; btn.classList.add('muted'); }
+        updateSoundBtn();
         toast('تم كتم صوت المياه');
       } else {
-        if (btn) { btn.textContent = '🔊'; btn.classList.remove('muted'); }
+        updateSoundBtn();
         initWaterAudio();
         toast('تم تشغيل صوت المياه');
       }
@@ -2558,7 +3036,8 @@
         </div>`;
       }).join('') : '<p style="color:var(--muted);font-size:.9rem">لا توجد أقساط</p>';
 
-      el.innerHTML = `<div class="track-box">
+      el.innerHTML = `${pointsWinHtml(getCustomerPoints(c))}
+      <div class="track-box">
         <div>مرحبًا</div>
         <div class="big">${esc(c.name)}</div>
         ${c.code ? `<div style="opacity:.9">الكود: <b dir="ltr">${esc(c.code)}</b></div>` : ''}
@@ -3004,39 +3483,55 @@
       document.querySelector('.admin-tab[data-tab="addProduct"]').click();
     }
 
-    function deleteProduct(id) {
-      if (!confirm('حذف المنتج؟')) return;
-      products = products.filter(p => p.id !== id);
-      saveProducts();
-      renderProducts();
-      renderAllProducts();
-      fillInvoiceSelect();
+    async function deleteProduct(id) {
+      try {
+        id = String(id == null ? '' : id);
+        if (!id) { alert('تعذر تحديد المنتج'); return false; }
+        const p = products.find(x => String(x.id) === id);
+        if (!p) { alert('المنتج غير موجود (id: ' + id + ')'); return false; }
+        const ok = await appConfirm('هل تريد حذف المنتج؟\n' + (p.name || id));
+        if (!ok) return false;
+        products = products.filter(x => String(x.id) !== id);
+        saveProducts();
+        renderAllProducts();
+        try { renderProducts(); } catch (e) {}
+        try { fillInvoiceSelect(); } catch (e) {}
+        try { if (typeof fillQuoteSelect === 'function') fillQuoteSelect(); } catch (e) {}
+        try { if (typeof fillPromoProducts === 'function') fillPromoProducts(); } catch (e) {}
+        try { if (typeof fillProductCompanies === 'function') fillProductCompanies(); } catch (e) {}
+        try { if (typeof renderStock === 'function') renderStock(); } catch (e) {}
+        try { toast('تم حذف المنتج ✓'); } catch (e) { alert('تم حذف المنتج'); }
+        return true;
+      } catch (err) {
+        console.error(err);
+        alert('خطأ في الحذف: ' + (err && err.message ? err.message : err));
+        return false;
+      }
     }
+    window.deleteProduct = deleteProduct;
 
     function renderAllProducts() {
       const el = document.getElementById('allProductsList');
-      if (products.length === 0) {
+      if (!el) return;
+      if (!products.length) {
         el.innerHTML = '<div class="empty-state">لا توجد منتجات</div>';
         return;
       }
-      el.innerHTML = `
-        <table>
-          <thead><tr><th>الاسم</th><th>السعر</th><th>الكمية</th><th>إجراء</th></tr></thead>
-          <tbody>
-            ${products.map(p => `
-              <tr>
-                <td>${p.name}</td>
-                <td>${p.priceAfter}</td>
-                <td class="${isLowStock(p) ? ((p.qty||0)<=0 ? 'out-stock' : 'low-stock') : ''}">${p.qty} <small style="color:var(--muted)">(حد ${productMinQty(p)})</small></td>
-                <td>
-                  <button class="btn btn-outline btn-sm" onclick="editProduct('${p.id}')">تعديل</button>
-                  <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p.id}')">حذف</button>
-                </td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      `;
+      el.innerHTML = '<table><thead><tr><th>الاسم</th><th>السعر</th><th>الكمية</th><th>إجراء</th></tr></thead><tbody>' +
+        products.map(p => {
+          const id = String(p.id);
+          const low = (typeof isLowStock === 'function') ? isLowStock(p) : false;
+          const qtyCls = low ? ((Number(p.qty)||0) <= 0 ? 'out-stock' : 'low-stock') : '';
+          const minq = (typeof productMinQty === 'function') ? productMinQty(p) : 3;
+          return '<tr data-pid="' + id.replace(/"/g, '&quot;') + '">' +
+            '<td>' + esc(p.name) + '</td>' +
+            '<td>' + p.priceAfter + '</td>' +
+            '<td class="' + qtyCls + '">' + p.qty + ' <small style="color:var(--muted)">(حد ' + minq + ')</small></td>' +
+            '<td style="white-space:nowrap">' +
+              '<button type="button" class="btn btn-outline btn-sm js-edit-product" data-id="' + id.replace(/"/g, '&quot;') + '">تعديل</button> ' +
+              '<button type="button" class="btn btn-danger btn-sm js-del-product" data-id="' + id.replace(/"/g, '&quot;') + '">حذف</button>' +
+            '</td></tr>';
+        }).join('') + '</tbody></table>';
     }
 
     // ---- Stock ----
@@ -3972,6 +4467,11 @@
       }
       saveSales(); saveProducts(); renderProducts();
       checkStockAlerts(invoiceItems.map(i => i.id));
+      const earnedPts = addPointsToCustomer(custId, customer, phone, total);
+      if (earnedPts > 0) {
+        data.pointsEarned = earnedPts;
+        try { toast('⭐ +' + earnedPts + ' نقطة ولاء للعميل'); } catch (e) {}
+      }
       lastInvoice = data;
       let extra = '';
       if (payMethod === 'credit') {
@@ -4379,13 +4879,15 @@
       const phone = document.getElementById('cPhone').value.trim();
       const code = document.getElementById('cCode').value.trim();
       const notes = document.getElementById('cNotes').value.trim();
+      const points = Math.max(0, Math.floor(parseFloat(document.getElementById('cPoints')?.value) || 0));
       if (!name || !date) { alert('أدخل الاسم وتاريخ الصيانة'); return; }
       if (code && customers.some(c => codeEq(c.code, code))) { alert('الكود ده مستخدم لعميل تاني'); return; }
       const id = Date.now().toString();
-      customers.push({ id, name, date, phone, code, notes, history: [] });
+      customers.push({ id, name, date, phone, code, notes, history: [], points });
       saveCustomers();
       fillCustomerPicks();
       ['cName', 'cDate', 'cPhone', 'cCode', 'cNotes'].forEach(x => document.getElementById(x).value = '');
+      const cp = document.getElementById('cPoints'); if (cp) cp.value = '0';
       custSort = 'new'; lastAddedId = id;
       document.getElementById('cSearch').value = '';
       custView('list');
@@ -4455,33 +4957,90 @@
         const inf = custInfo(c);
         const ph = (c.phone || '').replace(/[^0-9]/g, '');
         const wa = ph ? '966' + ph.replace(/^0/, '') : '';
+        const pts = getCustomerPoints(c);
+        const histN = (c.history || []).length;
         return `
           <div class="cust-card ${inf.cls} ${c.id === lastAddedId ? 'flash' : ''}" onclick="openCustomer('${c.id}')" style="cursor:pointer">
             <div class="cust-top">
-              <b>${esc(c.name)}</b>
+              <div class="cust-name">${esc(c.name)}</div>
               <span class="cust-badge ${inf.cls}">${inf.label}</span>
             </div>
-            <div class="cust-date">📅 ${esc(c.date)}${c.phone ? ` &nbsp; 📞 <span dir="ltr">${esc(c.phone)}</span>` : ''}${c.code ? ` &nbsp; <span class="cust-code">${esc(c.code)}</span>` : ''}</div>
-            <div class="cust-hint">🔧 ${(c.history || []).length} صيانة سابقة • اضغط لعرض التفاصيل ‹</div>
+            <div class="cust-meta">
+              <span>📅 <b>${esc(c.date || '—')}</b></span>
+              <span>📞 ${c.phone ? `<b dir="ltr">${esc(c.phone)}</b>` : '<b style="color:var(--muted)">بدون جوال</b>'}</span>
+              <span>🏷️ ${c.code ? `<b dir="ltr">${esc(c.code)}</b>` : '<b style="color:var(--muted)">بدون كود</b>'}</span>
+              <span>⭐ <b>${pts}</b> نقطة</span>
+            </div>
+            <div class="cust-stats">
+              <span class="cust-stat">🔧 ${histN} صيانة</span>
+              ${c.notes ? `<span class="cust-stat">📝 ${esc(String(c.notes).slice(0, 28))}${String(c.notes).length > 28 ? '…' : ''}</span>` : ''}
+            </div>
             <div class="cust-actions" onclick="event.stopPropagation()">
-              <button class="btn btn-success btn-sm" onclick="startInvoiceForCustomer('${c.id}')">🧾 فاتورة</button>
-              <button class="btn btn-primary btn-sm" onclick="startQuoteForCustomer('${c.id}')">📝 عرض سعر</button>
-              ${ph ? `<a class="btn btn-outline btn-sm" href="tel:${ph}">📞 اتصال</a>
-              <a class="btn btn-whatsapp btn-sm" target="_blank" href="https://wa.me/${wa}?text=${encodeURIComponent('مرحبًا ' + c.name + '، نذكّرك بموعد صيانة الفلتر بتاريخ ' + c.date + ' - مويه عذبه')}">💬 تذكير</a>` : ''}
-              <button class="btn btn-danger btn-sm" onclick="deleteCustomer('${c.id}')">حذف</button>
+              <button type="button" class="btn btn-sm btn-edit" onclick="editCustomerFromList('${c.id}')">✏️ تعديل</button>
+              <button type="button" class="btn btn-success btn-sm" onclick="startInvoiceForCustomer('${c.id}')">🧾 فاتورة</button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="startQuoteForCustomer('${c.id}')">📝 عرض</button>
+              ${ph ? `<a class="btn btn-outline btn-sm" href="tel:${ph}">📞</a>
+              <a class="btn btn-whatsapp btn-sm" target="_blank" href="https://wa.me/${wa}?text=${encodeURIComponent('مرحبًا ' + c.name + '، نذكّرك بموعد صيانة الفلتر بتاريخ ' + c.date + ' - مويه عذبه')}">💬</a>` : ''}
+              <button type="button" class="btn btn-danger btn-sm js-del-customer" data-id="${c.id}">🗑️</button>
             </div>
           </div>`;
       }).join('');
       lastAddedId = null;
     }
 
-    function deleteCustomer(id) {
-      if (!confirm('حذف العميل؟')) return;
-      customers = customers.filter(c => c.id !== id);
-      closeCustModal();
-      saveCustomers();
-      renderCustomers();
+    async function deleteCustomer(id) {
+      try {
+        id = String(id == null ? '' : id);
+        if (!id) { alert('تعذر تحديد العميل'); return false; }
+        const c = customers.find(x => String(x.id) === id);
+        if (!c) { alert('العميل غير موجود'); return false; }
+        const ok = await appConfirm('هل تريد حذف العميل؟\n' + (c.name || id));
+        if (!ok) return false;
+        customers = customers.filter(x => String(x.id) !== id);
+        try { closeCustModal(); } catch (e) {}
+        saveCustomers();
+        renderCustomers();
+        try { fillCustomerPicks(); } catch (e) {}
+        try { toast('تم حذف العميل ✓'); } catch (e) { alert('تم حذف العميل'); }
+        return true;
+      } catch (err) {
+        console.error(err);
+        alert('خطأ في حذف العميل: ' + (err && err.message ? err.message : err));
+        return false;
+      }
     }
+    window.deleteCustomer = deleteCustomer;
+
+    // تفويض عام لأزرار الحذف/التعديل
+    if (!window.__delDelegateBound) {
+      window.__delDelegateBound = true;
+      document.addEventListener('click', function (e) {
+        const t = e.target;
+        if (!t || !t.closest) return;
+        const delP = t.closest('.js-del-product');
+        if (delP) {
+          e.preventDefault(); e.stopPropagation();
+          const id = delP.getAttribute('data-id');
+          if (id) deleteProduct(id);
+          return;
+        }
+        const editP = t.closest('.js-edit-product');
+        if (editP) {
+          e.preventDefault(); e.stopPropagation();
+          const id = editP.getAttribute('data-id');
+          if (id) { try { editProduct(id); } catch (err) { alert(err.message || err); } }
+          return;
+        }
+        const delC = t.closest('.js-del-customer');
+        if (delC) {
+          e.preventDefault(); e.stopPropagation();
+          const id = delC.getAttribute('data-id');
+          if (id) deleteCustomer(id);
+          return;
+        }
+      }, true);
+    }
+
 
     // ---- Sales ----
     function renderSales(period) {
@@ -4532,6 +5091,33 @@
     }
 
     // ==================== SAVE FILE ====================
+
+    // تأكيد مخصص يعمل على الموبايل (بديل confirm)
+    function appConfirm(message) {
+      return new Promise(function (resolve) {
+        const ov = document.getElementById('appConfirmOverlay');
+        const msg = document.getElementById('appConfirmMsg');
+        const ok = document.getElementById('appConfirmOk');
+        const cancel = document.getElementById('appConfirmCancel');
+        if (!ov || !msg || !ok || !cancel) {
+          resolve(window.confirm(message));
+          return;
+        }
+        msg.textContent = message;
+        ov.classList.add('show');
+        function cleanup(result) {
+          ov.classList.remove('show');
+          ok.onclick = null;
+          cancel.onclick = null;
+          ov.onclick = null;
+          resolve(result);
+        }
+        ok.onclick = function (e) { e.preventDefault(); e.stopPropagation(); cleanup(true); };
+        cancel.onclick = function (e) { e.preventDefault(); e.stopPropagation(); cleanup(false); };
+        ov.onclick = function (e) { if (e.target === ov) cleanup(false); };
+      });
+    }
+
     function showLoading(msg) {
       const el = document.getElementById('loadingOverlay');
       const t = document.getElementById('loadingText');
@@ -4561,61 +5147,370 @@
       n.textContent = dirty ? '● فيه تغييرات لسه ما اتحفظتش في ملف جديد' : '✓ لا توجد تغييرات جديدة';
     }
 
-    function saveFileDownload() {
-      showLoading('جاري حفظ الملف...');
-      const ts = Date.now();
-      try { localStorage.setItem('ma_ts', String(ts)); } catch (e) {}
-      const clone = document.documentElement.cloneNode(true);
-      // reset dynamic parts so the saved file opens clean on the home page
-      ['productsGrid','offersGrid','cartContent','scanResult','reader','stockContent','invoiceItems',
-       'customersList','salesContent','allProductsList','pImagePreview','productModalContent'].forEach(id => {
-        const el = clone.querySelector('#' + id); if (el) el.innerHTML = '';
-      });
-      clone.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s.id === 'home'));
-      clone.querySelectorAll('.admin-panel').forEach(p => p.classList.toggle('active', p.id === 'addProduct'));
-      clone.querySelectorAll('.admin-tab[data-tab]').forEach(t => t.classList.toggle('active', t.dataset.tab === 'addProduct'));
-      clone.querySelectorAll('.nav-item[data-section]').forEach(n => n.classList.toggle('active', n.dataset.section === 'home'));
-      clone.querySelectorAll('.modal-overlay, #scannerOverlay').forEach(m => m.classList.remove('show'));
-      const cav = clone.querySelector('#custAddView'); if (cav) cav.style.display = 'none';
-      const clv = clone.querySelector('#custListView'); if (clv) clv.style.display = 'block';
-      const ma = clone.querySelector('#maintAlert'); if (ma) { ma.innerHTML = ''; ma.style.display = 'none'; }
-      clone.querySelector('body').className = 'on-home splash-lock';
-      const sp = clone.querySelector('#splash');
-      if (sp) {
-        sp.classList.remove('hide', 'fill');
-        sp.setAttribute('aria-hidden', 'false');
-        const bf = clone.querySelector('#splashBar'); if (bf) bf.style.width = '0%';
-        const pc = clone.querySelector('#splashPct'); if (pc) pc.textContent = '0%';
-      }
-      const badge = clone.querySelector('#cartBadge'); if (badge) badge.style.display = 'none';
-      const toastEl = clone.querySelector('#toast'); if (toastEl) { toastEl.className = ''; toastEl.textContent = ''; }
-      const dn = clone.querySelector('#dirtyNote'); if (dn) { dn.className = ''; dn.textContent = '✓ لا توجد تغييرات جديدة'; }
-      let invSeed = [], qSeed = [], instSeed = [];
-      try { invSeed = JSON.parse(localStorage.getItem('ma_invoices') || '[]'); } catch (e) {}
-      try { qSeed = JSON.parse(localStorage.getItem('ma_quotes') || '[]'); } catch (e) {}
-      try { instSeed = JSON.parse(localStorage.getItem('ma_installments') || '[]'); } catch (e) {}
-      let coSeed = [];
-      try { coSeed = JSON.parse(localStorage.getItem('ma_companies') || '[]'); } catch (e) {}
-      const data = JSON.stringify({
-        ts, products, customers, sales, invoices: invSeed, quotes: qSeed,
-        installments: instSeed, companies: coSeed,
-        promos, expenses, gallery, site: siteContent
-      }).replace(/</g, '\u003c');
-      clone.querySelector('#seedData').textContent = data;
-
-      const html = '<!DOCTYPE html>\n' + clone.outerHTML;
-      const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    function defaultSaveFileName() {
       const d = new Date();
       const pad = n => String(n).padStart(2, '0');
-      const name = `moiah-azba-filters-${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.html`;
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob); a.download = name;
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
-      dirty = false; updateDirtyNote();
-      hideLoading();
-      toast('تم تنزيل الملف الجديد ✓ ' + name);
+      return `moiah-azba-filters-${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.html`;
     }
+    function askSaveFileName(defaultName) {
+      return new Promise(function (resolve) {
+        const ov = document.getElementById('saveFileOverlay');
+        const input = document.getElementById('saveFileNameInput');
+        const ok = document.getElementById('saveFileOkBtn');
+        const cancel = document.getElementById('saveFileCancelBtn');
+        if (!ov || !input || !ok || !cancel) {
+          const n = prompt('اسم الملف:', defaultName);
+          resolve(n && n.trim() ? n.trim() : null);
+          return;
+        }
+        input.value = defaultName.replace(/\.html$/i, '');
+        ov.classList.add('show');
+        setTimeout(function () { try { input.focus(); input.select(); } catch (e) {} }, 50);
+        function cleanup(val) {
+          ov.classList.remove('show');
+          ok.onclick = null;
+          cancel.onclick = null;
+          ov.onclick = null;
+          input.onkeydown = null;
+          resolve(val);
+        }
+        function accept() {
+          let name = (input.value || '').trim() || defaultName;
+          name = name.replace(/[\\\/:*?"<>|]/g, '-');
+          if (!/\.html$/i.test(name)) name += '.html';
+          cleanup(name);
+        }
+        ok.onclick = function (e) { e.preventDefault(); e.stopPropagation(); accept(); };
+        cancel.onclick = function (e) { e.preventDefault(); e.stopPropagation(); cleanup(null); };
+        ov.onclick = function (e) { if (e.target === ov) cleanup(null); };
+        input.onkeydown = function (e) {
+          if (e.key === 'Enter') { e.preventDefault(); accept(); }
+          if (e.key === 'Escape') { e.preventDefault(); cleanup(null); }
+        };
+      });
+    }
+    async function saveBlobWithPicker(blob, name) {
+      // 1) File System Access API — اختيار المجلد/المكان + الاسم
+      if (window.showSaveFilePicker) {
+        try {
+          const handle = await window.showSaveFilePicker({
+            suggestedName: name,
+            types: [{ description: 'HTML File', accept: { 'text/html': ['.html'] } }]
+          });
+          const writable = await handle.createWritable();
+          await writable.write(blob);
+          await writable.close();
+          return { ok: true, method: 'picker', name: handle.name || name };
+        } catch (err) {
+          if (err && err.name === 'AbortError') return { ok: false, cancelled: true };
+          // fall through to download
+          console.warn('showSaveFilePicker failed', err);
+        }
+      }
+      // 2) تنزيل عادي بالاسم المختار (موبايل / متصفحات بدون picker)
+      try {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = name;
+        a.rel = 'noopener';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(function () { try { URL.revokeObjectURL(a.href); } catch (e) {} }, 8000);
+        return { ok: true, method: 'download', name: name };
+      } catch (err) {
+        return { ok: false, error: err };
+      }
+    }
+    async function saveFileDownload() {
+      try {
+        const suggested = defaultSaveFileName();
+        const chosenName = await askSaveFileName(suggested);
+        if (!chosenName) { toast('تم إلغاء الحفظ'); return; }
+
+        showLoading('جاري تجهيز الملف...');
+        const ts = Date.now();
+        try { localStorage.setItem('ma_ts', String(ts)); } catch (e) {}
+
+        const clone = document.documentElement.cloneNode(true);
+        const loadOv = clone.querySelector('#loadingOverlay');
+        if (loadOv) { loadOv.classList.remove('show'); const lt = loadOv.querySelector('#loadingText'); if (lt) lt.textContent = 'جاري التحضير...'; }
+        const askOv = clone.querySelector('#askChatOverlay'); if (askOv) askOv.classList.remove('show');
+        const saveOv = clone.querySelector('#saveFileOverlay'); if (saveOv) saveOv.classList.remove('show');
+        const confOv = clone.querySelector('#appConfirmOverlay'); if (confOv) confOv.classList.remove('show');
+        ['productsGrid','offersGrid','cartContent','scanResult','reader','stockContent','invoiceItems',
+         'customersList','salesContent','allProductsList','pImagePreview','productModalContent'].forEach(id => {
+          const el = clone.querySelector('#' + id); if (el) el.innerHTML = '';
+        });
+        clone.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s.id === 'home'));
+        clone.querySelectorAll('.admin-panel').forEach(p => p.classList.toggle('active', p.id === 'addProduct'));
+        clone.querySelectorAll('.admin-tab[data-tab]').forEach(t => t.classList.toggle('active', t.dataset.tab === 'addProduct'));
+        clone.querySelectorAll('.nav-item[data-section]').forEach(n => n.classList.toggle('active', n.dataset.section === 'home'));
+        const hdr = clone.querySelector('#mainHeader'); if (hdr) hdr.style.display = 'none';
+        clone.querySelector('body').className = 'on-home splash-lock';
+        const sp = clone.querySelector('#splash');
+        if (sp) {
+          sp.classList.remove('hide', 'fill');
+          sp.setAttribute('aria-hidden', 'false');
+          const bf = clone.querySelector('#splashBar'); if (bf) bf.style.width = '0%';
+          const pc = clone.querySelector('#splashPct'); if (pc) pc.textContent = '0%';
+        }
+        const badge = clone.querySelector('#cartBadge'); if (badge) badge.style.display = 'none';
+        const toastEl = clone.querySelector('#toast'); if (toastEl) { toastEl.className = ''; toastEl.textContent = ''; }
+        const dn = clone.querySelector('#dirtyNote'); if (dn) { dn.className = ''; dn.textContent = '✓ لا توجد تغييرات جديدة'; }
+
+        let invSeed = [], qSeed = [], instSeed = [], coSeed = [];
+        try { invSeed = JSON.parse(localStorage.getItem('ma_invoices') || '[]'); } catch (e) {}
+        try { qSeed = JSON.parse(localStorage.getItem('ma_quotes') || '[]'); } catch (e) {}
+        try { instSeed = JSON.parse(localStorage.getItem('ma_installments') || '[]'); } catch (e) {}
+        try { coSeed = JSON.parse(localStorage.getItem('ma_companies') || '[]'); } catch (e) {}
+        const data = JSON.stringify({
+          ts, products, customers, sales, invoices: invSeed, quotes: qSeed,
+          installments: instSeed, companies: coSeed,
+          promos, expenses, gallery, site: siteContent, loyalty: loyaltyRule
+        }).replace(/</g, '\u003c');
+        const seedEl = clone.querySelector('#seedData');
+        if (seedEl) seedEl.textContent = data;
+
+        const outHtml = '<!DOCTYPE html>\n' + clone.outerHTML;
+        const blob = new Blob([outHtml], { type: 'text/html;charset=utf-8' });
+
+        hideLoading();
+        // مهم: showSaveFilePicker يحتاج تفاعل مستخدم مباشر قدر الإمكان
+        const result = await saveBlobWithPicker(blob, chosenName);
+        if (result.cancelled) {
+          toast('تم إلغاء اختيار المكان');
+          return;
+        }
+        if (!result.ok) {
+          alert('تعذر حفظ الملف' + (result.error && result.error.message ? (': ' + result.error.message) : ''));
+          return;
+        }
+        dirty = false;
+        updateDirtyNote();
+        if (result.method === 'picker') {
+          toast('تم الحفظ بنجاح ✓ ' + (result.name || chosenName));
+        } else {
+          toast('تم تنزيل الملف بالاسم: ' + (result.name || chosenName) + ' — من التنزيلات يمكنك نقله لأي مجلد');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('تعذر حفظ الملف: ' + (err && err.message ? err.message : err));
+      } finally {
+        hideLoading();
+      }
+    }
+
+    window.saveFileDownload = saveFileDownload;
+
+
+    // ==================== ASK ME — SMART CHAT ====================
+    function openAskChat() {
+      const ov = document.getElementById('askChatOverlay');
+      if (!ov) return;
+      ov.classList.add('show');
+      const msgs = document.getElementById('askChatMsgs');
+      if (msgs && !msgs.dataset.booted) {
+        msgs.dataset.booted = '1';
+        msgs.innerHTML = '';
+        appendAskMsg('bot', 'مرحبًا 👋 أنا مساعدك الذكي من *مويه عذبه — فلاتر*.\nاسألني عن أسعار المنتجات، أرخص أو أغلى منتج، مقارنة أسعار، طريقة الشراء، أو الصيانة.');
+        renderAskSuggestions();
+      }
+      setTimeout(() => document.getElementById('askChatInput')?.focus(), 200);
+    }
+    function closeAskChat() {
+      document.getElementById('askChatOverlay')?.classList.remove('show');
+    }
+    function renderAskSuggestions() {
+      const el = document.getElementById('askSuggestions');
+      if (!el) return;
+      const tips = [
+        'أرخص منتج',
+        'أغلى منتج',
+        'قائمة الأسعار',
+        'كيف أشتري؟',
+        'مواعيد الصيانة',
+        'رقم التواصل'
+      ];
+      el.innerHTML = tips.map(t => `<button type="button" onclick="askSuggest('${t.replace(/'/g, "\\'")}')">${t}</button>`).join('');
+    }
+    function askSuggest(t) {
+      const inp = document.getElementById('askChatInput');
+      if (inp) inp.value = t;
+      sendAskChat();
+    }
+    function appendAskMsg(role, text) {
+      const msgs = document.getElementById('askChatMsgs');
+      if (!msgs) return;
+      const div = document.createElement('div');
+      div.className = 'ask-msg ' + role;
+      div.textContent = text;
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+    function getPublicProducts() {
+      try {
+        return (products || []).filter(p => p && p.name).map(p => ({
+          id: p.id,
+          name: String(p.name || ''),
+          price: Number(p.priceAfter != null ? p.priceAfter : p.price) || 0,
+          priceBefore: Number(p.priceBefore) || 0,
+          stock: p.stock != null ? Number(p.stock) : null,
+          category: p.category || p.group || '',
+          warranty: p.warranty || ''
+        }));
+      } catch (e) { return []; }
+    }
+    function normalizeAr(s) {
+      return String(s || '').toLowerCase()
+        .replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي')
+        .replace(/[\u064B-\u065F]/g, '').trim();
+    }
+    function findProductsByQuery(q) {
+      const nq = normalizeAr(q);
+      const list = getPublicProducts();
+      if (!nq) return list;
+      const tokens = nq.split(/\s+/).filter(Boolean);
+      return list.filter(p => {
+        const nn = normalizeAr(p.name + ' ' + (p.category || ''));
+        return tokens.every(t => nn.includes(t)) || nn.includes(nq);
+      });
+    }
+    function formatPriceList(list, limit) {
+      const arr = (list || []).slice().sort((a, b) => a.price - b.price);
+      const take = arr.slice(0, limit || 12);
+      if (!take.length) return 'لا توجد منتجات مسجّلة حاليًا.';
+      return take.map((p, i) => (i + 1) + ') ' + p.name + ' — ' + p.price.toFixed(2) + ' ر.س'
+        + (p.warranty ? ' (ضمان: ' + p.warranty + ')' : '')).join('\n');
+    }
+    function answerAskChat(raw) {
+      const q = String(raw || '').trim();
+      const nq = normalizeAr(q);
+      const list = getPublicProducts();
+      const adminOnlyHints = ['ربح', 'تكلفه', 'تكلفة', 'شراء جمله', 'مخزن', 'مخزون', 'مبيعات', 'مصروف', 'مصروفات', 'فاتوره ادمن', 'لوحة', 'ادمن', 'admin', 'هامش', 'buyprice', 'سعر شراء'];
+      if (adminOnlyHints.some(h => nq.includes(normalizeAr(h)))) {
+        if (!isAdmin) {
+          return 'هذا السؤال يخص أدوات الإدارة والأرباح والمخزون.\nافتح لوحة الأدمن بكلمة المرور لأقدر أجاوبك بالتفاصيل الداخلية 🔐';
+        }
+        // admin: give helpful but still high-level guidance
+        if (nq.includes('ربح') || nq.includes('هامش')) {
+          return 'لزيادة الربح من لوحة الأدمن:\n• راجع تقارير المبيعات والمصروفات\n• حدّث أسعار الشركات في «عرض سعر شركات»\n• تابع المنتجات منخفضة المخزون\n• فعّل العروض الموقوتة على المنتجات الراكدة\n• سجّل تكلفة الشراء لكل منتج لحساب المكسب بدقة';
+        }
+        if (nq.includes('مخزن') || nq.includes('مخزون')) {
+          return 'من الأدمن → المخزن: شوف المنتجات المنخفضة والمتاحة، وعدّل الكميات من «كل المنتجات».';
+        }
+      }
+
+      // Greetings
+      if (/^(السلام|مرحبا|مرحباً|اهلا|أهلا|hi|hello|سلام)/.test(nq) || nq === 'هلا') {
+        return 'وعليكم السلام ورحمة الله 🌟\nكيف أقدر أساعدك؟ أسعار، مقارنة، أرخص/أغلى منتج، أو طريقة الشراء.';
+      }
+
+      // Contact
+      if (nq.includes('رقم') || nq.includes('جوال') || nq.includes('تواصل') || nq.includes('واتس') || nq.includes('اتصال') || nq.includes('هاتف')) {
+        return 'للتواصل مع مويه عذبه — فلاتر:\n📞 0510572080\n📍 منطقة جيزان\nيمكنك الاتصال أو واتساب من قسم «تواصل معنا» في الرئيسية.';
+      }
+
+      // How to buy
+      if (nq.includes('اشتري') || nq.includes('شراء') || nq.includes('اطلب') || nq.includes('كيف اشتري') || nq.includes('طريقة الشراء') || nq.includes('ازاي اشتري') || nq.includes('كيف أشتري')) {
+        return 'طريقة الشراء بسيطة:\n1) من الرئيسية اضغط «المنتجات»\n2) اختر الفلتر أو قطعة الغيار وأضف للسلة\n3) راجع السلة وأكمل الطلب\nأو تواصل مباشرة على 0510572080 وسنجهّز لك العرض والتركيب.';
+      }
+
+      // Maintenance
+      if (nq.includes('صيان') || nq.includes('شمع') || nq.includes('موعد')) {
+        return 'للصيانة:\n• من الرئيسية: «تتبع حسابي» بالكود أو رقم الجوال\n• أو اطلب صيانة من قسم الصيانة\n• يُفضّل تغيير الشمعات كل 4–6 أشهر حسب جودة المياه.\nللتذكير أو الطوارئ: 0510572080';
+      }
+
+      // Cheapest
+      if (nq.includes('ارخص') || nq.includes('أقل سعر') || nq.includes('اقل سعر') || nq.includes('الأرخص') || nq.includes('ارخص منتج')) {
+        if (!list.length) return 'لا توجد منتجات معروضة الآن.';
+        const sorted = list.slice().sort((a, b) => a.price - b.price);
+        const p = sorted[0];
+        const top = sorted.slice(0, 3);
+        return 'الأقل سعرًا حاليًا:\n⭐ ' + p.name + ' — ' + p.price.toFixed(2) + ' ر.س\n\nأقرب الخيارات:\n' + top.map((x, i) => (i + 1) + ') ' + x.name + ' — ' + x.price.toFixed(2) + ' ر.س').join('\n');
+      }
+
+      // Most expensive
+      if (nq.includes('اغلى') || nq.includes('أغلى') || nq.includes('اعلى سعر') || nq.includes('أعلى سعر') || nq.includes('الاعلى')) {
+        if (!list.length) return 'لا توجد منتجات معروضة الآن.';
+        const sorted = list.slice().sort((a, b) => b.price - a.price);
+        const p = sorted[0];
+        return 'الأعلى سعرًا حاليًا:\n💎 ' + p.name + ' — ' + p.price.toFixed(2) + ' ر.س\n\nيمكنك طلب عرض سعر أو استشارة التركيب عبر واتساب 0510572080';
+      }
+
+      // Price list
+      if (nq.includes('اسعار') || nq.includes('أسعار') || nq.includes('قائمه') || nq.includes('قائمة') || nq.includes('كم سعر') || nq.includes('الاسعار')) {
+        return 'قائمة الأسعار (من الأقل للأعلى):\n' + formatPriceList(list, 15) + '\n\nللطلب أو التركيب: 0510572080';
+      }
+
+      // Compare
+      if (nq.includes('مقارن') || nq.includes('فرق') || nq.includes('بين')) {
+        const matched = findProductsByQuery(q.replace(/مقارن\w*|فرق|بين/g, ' '));
+        if (matched.length >= 2) {
+          const sorted = matched.slice().sort((a, b) => a.price - b.price);
+          let out = 'مقارنة الأسعار:\n';
+          sorted.forEach((p, i) => {
+            out += (i + 1) + ') ' + p.name + ' — ' + p.price.toFixed(2) + ' ر.س\n';
+          });
+          const diff = sorted[sorted.length - 1].price - sorted[0].price;
+          out += '\nالفرق بين الأعلى والأقل في النتائج: ' + diff.toFixed(2) + ' ر.س\nالأوفر: ' + sorted[0].name;
+          return out;
+        }
+        if (list.length >= 2) {
+          const sorted = list.slice().sort((a, b) => a.price - b.price);
+          return 'لم أجد منتجين مطابقين للاسم.\nإليك مقارنة سريعة لأرخص 5 منتجات:\n' + formatPriceList(sorted, 5);
+        }
+      }
+
+      // Specific product price
+      const matched = findProductsByQuery(q);
+      if (matched.length === 1) {
+        const p = matched[0];
+        let s = '📦 ' + p.name + '\nالسعر: ' + p.price.toFixed(2) + ' ر.س';
+        if (p.priceBefore > p.price) s += '\nقبل الخصم: ' + p.priceBefore.toFixed(2) + ' ر.س';
+        if (p.warranty) s += '\nالضمان: ' + p.warranty;
+        s += '\n\nأضفه من صفحة المنتجات أو تواصل للتركيب على 0510572080';
+        return s;
+      }
+      if (matched.length > 1 && (nq.includes('سعر') || nq.includes('كام') || nq.includes('بكم') || nq.includes('بكام'))) {
+        return 'وجدت عدة منتجات:\n' + formatPriceList(matched, 10);
+      }
+      if (matched.length > 1) {
+        return 'نتائج البحث:\n' + formatPriceList(matched, 10) + '\n\nاكتب اسم المنتج بشكل أوضح لعرض سعر واحد.';
+      }
+
+      // Offers
+      if (nq.includes('عرض') || nq.includes('عروض') || nq.includes('خصم')) {
+        try {
+          const active = (promos || []).filter(isPromoActive);
+          if (active.length) {
+            return 'العروض السارية الآن:\n' + active.map(p => '• ' + p.title + ' — ' + p.priceAfter + ' ر.س' + (p.priceBefore ? ' (بدل ' + p.priceBefore + ')' : '')).join('\n');
+          }
+        } catch (e) {}
+        return 'لا توجد عروض موقوتة سارية الآن. تصفّح المنتجات أو تواصل معنا للعروض الخاصة.';
+      }
+
+      // Location / about
+      if (nq.includes('فين') || nq.includes('موقع') || nq.includes('جيزان') || nq.includes('عنوان')) {
+        return 'نخدم منطقة جيزان 📍\nتركيب وصيانة منزلية وتجارية.\nللتواصل: 0510572080';
+      }
+
+      // Fallback smart help
+      if (list.length) {
+        return 'ممكن أساعدك في:\n• سعر منتج معيّن (اكتب اسمه)\n• أرخص / أغلى منتج\n• قائمة الأسعار أو مقارنة\n• طريقة الشراء أو الصيانة\n• رقم التواصل\n\nجرّب مثلًا: «سعر فلتر» أو «أرخص منتج»';
+      }
+      return 'مرحبًا! أقدر أجاوب عن الأسعار والمنتجات والصيانة.\nإن لم تظهر منتجات بعد، تواصل مباشرة: 0510572080';
+    }
+    function sendAskChat() {
+      const inp = document.getElementById('askChatInput');
+      const q = (inp && inp.value || '').trim();
+      if (!q) return;
+      appendAskMsg('user', q);
+      if (inp) inp.value = '';
+      const reply = answerAskChat(q);
+      setTimeout(() => appendAskMsg('bot', reply), 220);
+    }
+
 
     // ==================== HELPERS ====================
     const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
@@ -5316,10 +6211,12 @@
       const wa = ph ? '966' + ph.replace(/^0/, '') : '';
       document.getElementById('custModalContent').innerHTML = `
         <div class="cd-head"><h2>👤 ${esc(c.name)}</h2><span class="cust-badge ${inf.cls}">${inf.label}</span></div>
+        ${pointsWinHtml(getCustomerPoints(c), 'كل ' + loyaltyRule.amount + ' ر.س = ' + loyaltyRule.points + ' نقطة · يمكن استبدالها بمنتج أو صيانة مجانية')}
         <div class="cd-info">
           📞 ${c.phone ? `<span dir="ltr">${esc(c.phone)}</span>` : '-'}<br>
           📅 موعد الصيانة القادم: <b>${esc(c.date)}</b><br>
           🏷️ الكود: ${c.code ? `<b dir="ltr">${esc(c.code)}</b>` : '<span style="color:var(--muted)">بدون كود</span>'}<br>
+          ⭐ النقاط: <b>${getCustomerPoints(c)}</b><br>
           📝 ${c.notes ? esc(c.notes) : '<span style="color:var(--muted)">لا توجد ملاحظات</span>'}<br>
           🔧 صيانات: <b>${hist.length}</b> &nbsp; 🧾 فواتير: <b>${buys.length}</b> &nbsp; 📝 عروض: <b>${quotes.length}</b>
         </div>
@@ -5328,7 +6225,7 @@
           <button class="btn btn-primary" onclick="startQuoteForCustomer('${c.id}')">📝 عرض سعر</button>
           <button class="btn btn-outline" onclick="editCustomerForm('${c.id}')">✏️ تعديل</button>
           <button class="btn btn-outline" onclick="printCustomer('${c.id}')">🖨️ طباعة</button>
-          <button class="btn btn-danger" onclick="deleteCustomer('${c.id}')">🗑️ حذف</button>
+          <button type="button" class="btn btn-danger js-del-customer" data-id="${c.id}">🗑️ حذف</button>
           ${c.code ? `<button class="btn btn-outline" onclick="printCustLabel('${c.id}')">🏷️ ملصق باركود</button>` : ''}
           ${ph ? `<a class="btn btn-outline" href="tel:${ph}" style="text-decoration:none">📞 اتصال</a>
           <a class="btn btn-whatsapp" target="_blank" style="text-decoration:none" href="https://wa.me/${wa}?text=${encodeURIComponent('مرحبًا ' + c.name + '، نذكّرك بموعد صيانة الفلتر بتاريخ ' + c.date + ' - مويه عذبه')}">💬 تذكير</a>` : ''}
@@ -5393,6 +6290,10 @@
       saveCustomers(); renderCustomers(); openCustomer(cid);
     }
 
+    function editCustomerFromList(id) {
+      editCustomerForm(id);
+      document.getElementById('custModal')?.classList.add('show');
+    }
     function editCustomerForm(id) {
       const c = customers.find(x => x.id === id); if (!c) return;
       document.getElementById('custModalContent').innerHTML = `
@@ -5405,6 +6306,7 @@
         </div>
         <label>موعد الصيانة القادم</label><input type="date" id="ecDate" value="${esc(c.date)}">
         <label>ملاحظات</label><input type="text" id="ecNotes" value="${esc(c.notes || '')}">
+        <label>نقاط الولاء</label><input type="number" id="ecPoints" min="0" step="1" value="${getCustomerPoints(c)}">
         <label>كود / باركود العميل <span class="opt">(اختياري)</span></label>
         <div style="display:flex; gap:8px;">
           <input type="text" id="ecCode" value="${esc(c.code || '')}" style="flex:1">
@@ -5426,6 +6328,7 @@
       c.name = name; c.date = date;
       c.phone = document.getElementById('ecPhone').value.trim();
       c.notes = document.getElementById('ecNotes').value.trim();
+      c.points = Math.max(0, Math.floor(parseFloat(document.getElementById('ecPoints')?.value) || 0));
       saveCustomers(); renderCustomers(); openCustomer(id);
       toast('تم حفظ التعديل ✓');
     }
@@ -5815,5 +6718,6 @@
     }
 
   </script>
-</body>
-</html>
+
+
+</body></html>
