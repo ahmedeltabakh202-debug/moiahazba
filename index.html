@@ -5,10 +5,15 @@
   <meta name="theme-color" content="#0a4d8c">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="مويه عذبه">
+    <meta name="apple-mobile-web-app-title" content="موية عذبة">
   <meta name="mobile-web-app-capable" content="yes">
-  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22%D9%85%D9%88%D9%8A%D9%87%20%D8%B9%D8%B0%D8%A8%D9%87%20%7C%20%D9%81%D9%84%D8%A7%D8%AA%D8%B1%22%2C%22short_name%22%3A%22%D9%85%D9%88%D9%8A%D9%87%20%D8%B9%D8%B0%D8%A8%D9%87%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f0f7ff%22%2C%22theme_color%22%3A%22%230a4d8c%22%2C%22lang%22%3A%22ar%22%2C%22dir%22%3A%22rtl%22%7D">
-  <title>مويه عذبه | فلاتر</title>
+  <meta name="application-name" content="موية عذبة">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+  <link rel="manifest" href="manifest.json">
+  <title>موية عذبة</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -861,7 +866,7 @@
       padding: 0; pointer-events: none; direction: ltr;
     }
     body:not(.on-home) .top-utils { display: none; }
-    .theme-btn, .sound-btn {
+    .theme-btn, .sound-btn, .install-btn {
       pointer-events: auto;
       position: static; width: auto; height: 26px; min-width: 26px;
       border-radius: 8px; border: 1px solid rgba(10,77,140,.1);
@@ -870,12 +875,16 @@
       cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 3px;
       padding: 0 7px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     }
-    .theme-btn .ic, .sound-btn .ic { font-size: .78rem; line-height: 1; }
-    .theme-btn:active, .sound-btn:active { transform: scale(.96); }
-    body.dark .theme-btn, body.dark .sound-btn {
+    .theme-btn .ic, .sound-btn .ic, .install-btn .ic { font-size: .78rem; line-height: 1; }
+    .theme-btn:active, .sound-btn:active, .install-btn:active { transform: scale(.96); }
+    body.dark .theme-btn, body.dark .sound-btn, body.dark .install-btn {
       background: rgba(21,32,51,.88); border-color: #1e3a5f; color: #94a3b8;
     }
     .sound-btn.muted { opacity: .55; }
+    .install-btn { padding: 0 8px; gap: 3px; max-width: 110px; }
+    .install-btn .ic { font-size: .72rem; }
+    .install-btn.hidden, .install-btn[hidden] { display: none !important; }
+
     .admin-fab {
       position: fixed; z-index: 120;
       top: 12px; right: 12px; width: auto; height: 42px; padding: 0 14px; border-radius: 999px;
@@ -1709,23 +1718,13 @@
       <div class="card">
         <h3 style="margin-bottom:12px;">🧾 إنشاء فاتورة</h3>
         <input type="hidden" id="invCustId" value="">
-        <label>اختر عميل من القائمة</label>
+        <label>اختر عميل من قائمة العملاء</label>
         <select id="invCustPick" onchange="pickCustomer('inv')">
           <option value="">-- اختر عميل --</option>
         </select>
-        <button type="button" class="btn btn-outline btn-sm" style="margin-top:6px" onclick="toggleQuickCust('inv')">➕ عميل جديد (مش موجود في القائمة)</button>
-        <div id="invQuickCust" style="display:none;margin-top:10px;padding:12px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px">
-          <label>اسم العميل الجديد</label>
-          <input type="text" id="invNewCustName" placeholder="اسم العميل">
-          <label>رقم الجوال</label>
-          <div style="display:flex;gap:8px">
-            <input type="tel" id="invNewCustPhone" placeholder="05xxxxxxxx" style="flex:1" autocomplete="tel">
-            <button type="button" class="btn btn-outline btn-sm" onclick="pickContactPhone('invNewCustPhone','invNewCustName')" title="من جهات الاتصال">📇 جهات الاتصال</button>
-          </div>
-          <button type="button" class="btn btn-primary btn-block" style="margin-top:8px" onclick="saveQuickCustomer('inv')">💾 حفظ العميل واختياره</button>
-        </div>
-        <label>اسم العميل <span class="opt">(يُملأ تلقائيًا أو اكتبه يدويًا)</span></label>
-        <input type="text" id="invCustomer" placeholder="اسم العميل (يظهر في الفاتورة)">
+        <p style="color:var(--muted);font-size:.8rem;margin:6px 0 10px">لإضافة عميل جديد: من شاشة <b>العملاء</b> ثم ارجع هنا واختره.</p>
+        <label>اسم العميل</label>
+        <input type="text" id="invCustomer" placeholder="يُختار من القائمة أعلاه" readonly style="background:#f1f5f9;cursor:not-allowed">
         <label>الشركة <span class="opt">(اختياري)</span></label>
         <select id="invCompany">
           <option value="">-- بدون شركة --</option>
@@ -1735,6 +1734,10 @@
           <input type="tel" id="invCustPhone" placeholder="05xxxxxxxx" style="flex:1" autocomplete="tel">
           <button type="button" class="btn btn-outline btn-sm" onclick="pickContactPhone('invCustPhone','invCustomer')" title="من جهات الاتصال">📇</button>
         </div>
+        <label>الرقم الضريبي للعميل <span class="opt">(اختياري — يظهر في الفاتورة إن وُجد)</span></label>
+        <input type="text" id="invTaxNo" placeholder="الرقم الضريبي إن وُجد" dir="ltr">
+        <label>عنوان العميل <span class="opt">(اختياري — يظهر في الفاتورة إن وُجد)</span></label>
+        <input type="text" id="invAddress" placeholder="عنوان العميل إن وُجد">
         <label>اختر منتج</label>
         <select id="invProductSelect">
           <option value="">-- اختر منتج --</option>
@@ -1808,28 +1811,22 @@
         <h3 style="margin-bottom:12px;">📝 عرض سعر</h3>
         <p style="color:var(--muted);font-size:.85rem;margin-bottom:10px;">عرض السعر لا يخصم من المخزن — للبيع الفعلي استخدم الفاتورة أو الكاشير السريع.</p>
         <input type="hidden" id="qCustId" value="">
-        <label>اختر عميل من القائمة</label>
+        <label>اختر عميل من قائمة العملاء</label>
         <select id="qCustPick" onchange="pickCustomer('q')">
           <option value="">-- اختر عميل --</option>
         </select>
-        <button type="button" class="btn btn-outline btn-sm" style="margin-top:6px" onclick="toggleQuickCust('q')">➕ عميل جديد (مش موجود في القائمة)</button>
-        <div id="qQuickCust" style="display:none;margin-top:10px;padding:12px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px">
-          <label>اسم العميل الجديد</label>
-          <input type="text" id="qNewCustName" placeholder="اسم العميل">
-          <label>رقم الجوال</label>
-          <div style="display:flex;gap:8px">
-            <input type="tel" id="qNewCustPhone" placeholder="05xxxxxxxx" style="flex:1" autocomplete="tel">
-            <button type="button" class="btn btn-outline btn-sm" onclick="pickContactPhone('qNewCustPhone','qNewCustName')" title="من جهات الاتصال">📇 جهات الاتصال</button>
-          </div>
-          <button type="button" class="btn btn-primary btn-block" style="margin-top:8px" onclick="saveQuickCustomer('q')">💾 حفظ العميل واختياره</button>
-        </div>
-        <label>اسم العميل <span class="opt">(يُملأ تلقائيًا أو اكتبه يدويًا)</span></label>
-        <input type="text" id="qCustomer" placeholder="اسم العميل (يظهر في العرض)">
+        <p style="color:var(--muted);font-size:.8rem;margin:6px 0 10px">لإضافة عميل جديد: من شاشة <b>العملاء</b> ثم ارجع هنا واختره.</p>
+        <label>اسم العميل</label>
+        <input type="text" id="qCustomer" placeholder="يُختار من القائمة أعلاه" readonly style="background:#f1f5f9;cursor:not-allowed">
         <label>رقم جوال العميل <span class="opt">(اختياري)</span></label>
         <div style="display:flex; gap:8px;">
           <input type="tel" id="qPhone" placeholder="05xxxxxxxx" style="flex:1" autocomplete="tel">
           <button type="button" class="btn btn-outline btn-sm" onclick="pickContactPhone('qPhone','qCustomer')" title="من جهات الاتصال">📇</button>
         </div>
+        <label>الرقم الضريبي للعميل <span class="opt">(اختياري — يظهر في العرض إن وُجد)</span></label>
+        <input type="text" id="qTaxNo" placeholder="الرقم الضريبي إن وُجد" dir="ltr">
+        <label>عنوان العميل <span class="opt">(اختياري — يظهر في العرض إن وُجد)</span></label>
+        <input type="text" id="qAddress" placeholder="عنوان العميل إن وُجد">
         <label>اختر منتج</label>
         <select id="qProductSelect"><option value="">-- اختر منتج --</option></select>
         <div style="display:flex; gap:8px; align-items:center;">
@@ -1845,10 +1842,13 @@
           <button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="addQuoteCustom()">إضافة البند</button>
         </details>
         <div id="qItems" style="margin-top:14px;"></div>
-        <label>مدة صلاحية العرض (أيام)</label>
-        <input type="number" id="qValid" value="7" min="1">
         <label>ملاحظات / شروط <span class="opt">(اختياري)</span></label>
         <textarea id="qNotes" rows="2" placeholder="مثال: السعر شامل التركيب"></textarea>
+        <label style="margin-top:10px">مدة صلاحية العرض (أيام)</label>
+        <input type="number" id="qValid" value="7" min="1" oninput="updateQuoteValidHint()">
+        <div id="qValidHint" style="margin-top:6px;padding:10px 12px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;font-size:.88rem;font-weight:700;color:var(--primary)">
+          مدة العرض: <span id="qValidDaysTxt">7</span> يوم — حتى تاريخ <span id="qValidUntilTxt">—</span>
+        </div>
         <div style="margin-top:12px;">
           <label>ضريبة القيمة المضافة % <span class="opt">(اختياري — اترك 0 بدون ضريبة)</span></label>
           <input type="number" id="qVat" placeholder="0" min="0" max="100" step="0.01" oninput="calcQuote()">
@@ -1962,6 +1962,10 @@
             <button class="btn btn-outline btn-sm" onclick="openScanner('fillCust')" title="مسح">📷</button>
             <button class="btn btn-outline btn-sm" onclick="genCustCode('cCode')" title="توليد كود">🎲</button>
           </div>
+          <label>الرقم الضريبي <span class="opt">(اختياري — إن وُجد)</span></label>
+          <input type="text" id="cTaxNo" placeholder="مثال: 3xxxxxxxxxxxxx" dir="ltr">
+          <label>عنوان العميل <span class="opt">(اختياري)</span></label>
+          <input type="text" id="cAddress" placeholder="المدينة / الحي / الشارع">
           <label>ملاحظات <span class="opt">(اختياري)</span></label>
           <input type="text" id="cNotes" placeholder="مثال: فلتر 5 مراحل - المطبخ">
           <label>نقاط الولاء الحالية <span class="opt">(اختياري)</span></label>
@@ -2147,6 +2151,9 @@
     </button>
     <button class="sound-btn" id="soundBtn" onclick="toggleWaterSound()" title="كتم صوت المياه" type="button">
       <span class="ic" id="soundIcon">🔊</span><span id="soundLabel">صوت</span>
+    </button>
+    <button class="install-btn" id="installAppBtn" onclick="installPwa()" title="تثبيت التطبيق" type="button" hidden>
+      <span class="ic">📲</span><span>تثبيت التطبيق</span>
     </button>
   </div>
   <button class="admin-fab" id="adminFab" onclick="showSection('admin')" title="العودة للوحة التحكم" style="display: none;">⚙️ الأدمن</button>
@@ -2483,7 +2490,7 @@
       if (lbl) lbl.textContent = 'العودة للقائمة — ' + (ADMIN_TITLES[tab] || tab);
       if (tab === 'stock') { stockTab = getLowStockProducts().length ? 'low' : 'avail'; setStockTab(stockTab); }
       if (tab === 'invoice') { fillInvoiceSelect(); fillCustomerPicks(); fillInvoiceCompanies(); }
-      if (tab === 'quote') { fillQuoteSelect(); fillCustomerPicks(); }
+      if (tab === 'quote') { fillQuoteSelect(); fillCustomerPicks(); updateQuoteValidHint(); }
       if (tab === 'quickCash') { fillQcProducts(); renderQcItems(); }
       if (tab === 'addProduct') fillProductCompanies();
       if (tab === 'companies') renderCompanies();
@@ -2939,31 +2946,86 @@
 
     // ---- PWA install ----
     let deferredPwaPrompt = null;
+    function isAppInstalled() {
+      try {
+        if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) return true;
+        if (window.navigator.standalone === true) return true; // iOS
+        if (document.referrer && document.referrer.startsWith('android-app://')) return true;
+      } catch (e) {}
+      return localStorage.getItem('ma_pwa_installed') === '1';
+    }
+    function setInstallBtnVisible(show) {
+      const btn = document.getElementById('installAppBtn');
+      const bar = document.getElementById('pwaInstallBar');
+      if (btn) {
+        if (show) btn.removeAttribute('hidden');
+        else btn.setAttribute('hidden', '');
+      }
+      if (bar) {
+        if (show && localStorage.getItem('ma_pwa_dismiss') !== '1') bar.classList.add('show');
+        else bar.classList.remove('show');
+      }
+    }
+    function hideInstallUi() {
+      deferredPwaPrompt = null;
+      localStorage.setItem('ma_pwa_installed', '1');
+      setInstallBtnVisible(false);
+    }
     function setupPwaInstall() {
+      // تسجيل Service Worker من ملف sw.js (مطلوب لتثبيت PWA على الاستضافة)
+      try {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('./sw.js').then(() => {
+            console.log('SW registered');
+          }).catch((err) => console.log('SW failed', err));
+        }
+      } catch (e) {}
+
+      if (isAppInstalled()) {
+        setInstallBtnVisible(false);
+        return;
+      }
+      // أظهر الزر افتراضيًا (حتى يظهر على iOS مع تعليمات)، ويختفي بعد التثبيت
+      setInstallBtnVisible(true);
+
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPwaPrompt = e;
-        if (localStorage.getItem('ma_pwa_dismiss') === '1') return;
-        const bar = document.getElementById('pwaInstallBar');
-        if (bar) bar.classList.add('show');
+        setInstallBtnVisible(true);
       });
       window.addEventListener('appinstalled', () => {
-        deferredPwaPrompt = null;
-        const bar = document.getElementById('pwaInstallBar');
-        if (bar) bar.classList.remove('show');
+        hideInstallUi();
         toast('تم تثبيت التطبيق ✓');
       });
     }
     async function installPwa() {
-      if (!deferredPwaPrompt) {
-        alert('من المتصفح: القائمة ⋮ ثم «إضافة إلى الشاشة الرئيسية» أو Install app');
+      if (isAppInstalled()) {
+        hideInstallUi();
+        toast('التطبيق مثبت بالفعل');
         return;
       }
-      deferredPwaPrompt.prompt();
-      try { await deferredPwaPrompt.userChoice; } catch (e) {}
-      deferredPwaPrompt = null;
-      const bar = document.getElementById('pwaInstallBar');
-      if (bar) bar.classList.remove('show');
+      if (deferredPwaPrompt) {
+        try {
+          deferredPwaPrompt.prompt();
+          const choice = await deferredPwaPrompt.userChoice;
+          deferredPwaPrompt = null;
+          if (choice && choice.outcome === 'accepted') {
+            hideInstallUi();
+            toast('تم تثبيت التطبيق ✓');
+          }
+        } catch (e) {
+          deferredPwaPrompt = null;
+        }
+        return;
+      }
+      // iOS / متصفحات بدون beforeinstallprompt
+      const ua = navigator.userAgent || '';
+      const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      if (isIOS) {
+        alert('لتثبيت «موية عذبة» على الآيفون:\n1) اضغط زر المشاركة ⬜⬆️ في أسفل/أعلى المتصفح\n2) اختر «إضافة إلى الشاشة الرئيسية»\n3) ثم «إضافة»');
+      } else {
+        alert('لتثبيت «موية عذبة»:\nمن قائمة المتصفح ⋮ اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».\n\nملاحظة: التثبيت المباشر يعمل أفضل عند فتح الملف عبر رابط https (وليس من الملفات فقط).');
+      }
     }
     function dismissPwaBar() {
       localStorage.setItem('ma_pwa_dismiss', '1');
@@ -4037,6 +4099,8 @@
       const vatEl = document.getElementById('invVat'); if (vatEl) vatEl.value = '';
       document.getElementById('invCustomer').value = '';
       document.getElementById('invCustPhone').value = '';
+      const invTax = document.getElementById('invTaxNo'); if (invTax) invTax.value = '';
+      const invAddr = document.getElementById('invAddress'); if (invAddr) invAddr.value = '';
       document.getElementById('invCustId').value = '';
       const pick = document.getElementById('invCustPick'); if (pick) pick.value = '';
       const invCo = document.getElementById('invCompany'); if (invCo) invCo.value = '';
@@ -4218,8 +4282,12 @@
       // ===== بيانات العميل والفاتورة =====
       const boxTop = y;
       const colMid = W / 2;
+      const custTaxNo = (data.taxNo || '').trim();
+      const custAddress = (data.address || '').trim();
+      const hasExtraCust = !!(custTaxNo || custAddress || data.companyName);
+      const boxH = hasExtraCust ? 190 : 130;
       // خلفية خفيفة
-      rect(M, y, W - M * 2, 130, '#f8fafc', '#e2e8f0');
+      rect(M, y, W - M * 2, boxH, '#f8fafc', '#e2e8f0');
       y += 18;
       const invNo = isQuote ? String(data.no) : ('I-' + String(data.no));
       const invDate = data.date || '';
@@ -4230,9 +4298,20 @@
       T(fit(data.customer || '-', 420, 700, 18), W - M - 12, y + 22, { w: 700, sz: 18, c: '#0f172a' });
       T('الجوال / Phone', W - M - 12, y + 48, { w: 700, sz: 13, c: '#64748b' });
       T(data.phone || '-', W - M - 12, y + 70, { w: 600, sz: 16, c: '#0f172a' });
+      let cy = y + 92;
+      if (custTaxNo) {
+        T('الرقم الضريبي / VAT No.', W - M - 12, cy, { w: 700, sz: 13, c: '#64748b' });
+        T(custTaxNo, W - M - 12, cy + 20, { w: 600, sz: 15, c: '#0f172a' });
+        cy += 44;
+      }
+      if (custAddress) {
+        T('العنوان / Address', W - M - 12, cy, { w: 700, sz: 13, c: '#64748b' });
+        T(fit(custAddress, 400, 600, 14), W - M - 12, cy + 20, { w: 600, sz: 14, c: '#0f172a' });
+        cy += 44;
+      }
       if (data.companyName) {
-        T('الشركة / Company', W - M - 12, y + 92, { w: 700, sz: 13, c: '#64748b' });
-        T(fit(data.companyName, 400, 600, 15), W - M - 12, y + 112, { w: 600, sz: 15, c: '#0f172a' });
+        T('الشركة / Company', W - M - 12, cy, { w: 700, sz: 13, c: '#64748b' });
+        T(fit(data.companyName, 400, 600, 15), W - M - 12, cy + 20, { w: 600, sz: 15, c: '#0f172a' });
       }
 
       // يسار: أرقام الفاتورة
@@ -4245,7 +4324,7 @@
         T(dueDate, M + 12, y + 112, { w: 600, sz: 15, c: '#0f172a', a: 'left' });
       }
 
-      y = boxTop + 130 + 20;
+      y = boxTop + boxH + 20;
 
       // ===== جدول البنود =====
       // أعمدة من اليمين لليسار (RTL visual): # | الوصف | الكمية | السعر | المبلغ الخاضع | الضريبة% | المبلغ
@@ -4370,10 +4449,21 @@
       T('ملاحظات / Notes', W - M, y, { w: 700, sz: 14, c: '#64748b' });
       T('Bank Account Details', M, y, { w: 700, sz: 14, c: '#64748b', a: 'left' });
       y += 24;
-      const notes = data.notes || (isQuote ? 'هذا العرض صالح للمدة المحددة أعلاه.' : 'شكراً لتعاملكم معنا');
+      const notes = data.notes || (isQuote ? 'هذا العرض صالح للمدة المحددة.' : 'شكراً لتعاملكم معنا');
       T(fit(notes, 520, 600, 15), W - M, y, { w: 600, sz: 15, c: '#334155' });
       T('Bank Name: ' + SELLER.bankName, M, y, { w: 600, sz: 14, c: '#334155', a: 'left' });
       y += 22;
+      if (isQuote) {
+        const vDays = data.validDays ? String(data.validDays) : '';
+        const vUntil = data.validUntil || '';
+        let validLine = '';
+        if (vDays && vUntil) validLine = 'مدة العرض: ' + vDays + ' يوم — حتى تاريخ ' + vUntil;
+        else if (vUntil) validLine = 'صالح حتى: ' + vUntil;
+        else if (vDays) validLine = 'مدة العرض: ' + vDays + ' يوم';
+        if (validLine) {
+          T(validLine, W - M, y, { w: 700, sz: 14, c: '#0a4d8c' });
+        }
+      }
       T('Account No: ' + SELLER.accountNo, M, y, { w: 600, sz: 13, c: '#475569', a: 'left' });
       y += 20;
       T('IBAN: ' + SELLER.iban, M, y, { w: 600, sz: 13, c: '#475569', a: 'left' });
@@ -4393,10 +4483,16 @@
     function finalizeInvoice() {
       if (lastInvoice) return lastInvoice;
       if (invoiceItems.length === 0) { alert('أضف منتجات للفاتورة أولاً'); return null; }
-      const customer = document.getElementById('invCustomer').value.trim();
-      if (!customer) { alert('اختر أو اكتب اسم العميل عشان يظهر في الفاتورة'); document.getElementById('invCustomer').focus(); return null; }
-      const phone = document.getElementById('invCustPhone').value.trim();
       const custId = document.getElementById('invCustId').value || '';
+      const customer = document.getElementById('invCustomer').value.trim();
+      if (!custId || !customer) {
+        alert('اختر عميل من قائمة العملاء أولاً');
+        document.getElementById('invCustPick')?.focus();
+        return null;
+      }
+      const phone = document.getElementById('invCustPhone').value.trim();
+      const taxNo = (document.getElementById('invTaxNo')?.value || '').trim();
+      const address = (document.getElementById('invAddress')?.value || '').trim();
       const companyId = document.getElementById('invCompany')?.value || '';
       const company = companies.find(c => c.id === companyId);
       const companyName = company ? company.name : '';
@@ -4430,7 +4526,7 @@
       const iso = now.toISOString();
       const date = now.toLocaleDateString('en-GB') + '  ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
       const data = {
-        no, customer, phone, custId, date, dateIso: iso,
+        no, customer, phone, taxNo, address, custId, date, dateIso: iso,
         items: invoiceItems.map(i => ({ ...i })),
         subtotal, discount, vatPct, vat, total,
         companyId, companyName,
@@ -4857,6 +4953,10 @@
       document.getElementById('cvAdd').classList.toggle('active', v === 'add');
       document.getElementById('cvList').classList.toggle('active', v === 'list');
       if (v === 'list') renderCustomers();
+      if (v === 'add') {
+        const d = document.getElementById('cDate');
+        if (d && !d.value) d.value = plusMonthsStr(6);
+      }
     }
 
     function openCustomersView(v) {
@@ -4874,25 +4974,56 @@
     }
 
     function saveCustomer() {
-      const name = document.getElementById('cName').value.trim();
-      const date = document.getElementById('cDate').value;
-      const phone = document.getElementById('cPhone').value.trim();
-      const code = document.getElementById('cCode').value.trim();
-      const notes = document.getElementById('cNotes').value.trim();
-      const points = Math.max(0, Math.floor(parseFloat(document.getElementById('cPoints')?.value) || 0));
-      if (!name || !date) { alert('أدخل الاسم وتاريخ الصيانة'); return; }
-      if (code && customers.some(c => codeEq(c.code, code))) { alert('الكود ده مستخدم لعميل تاني'); return; }
-      const id = Date.now().toString();
-      customers.push({ id, name, date, phone, code, notes, history: [], points });
-      saveCustomers();
-      fillCustomerPicks();
-      ['cName', 'cDate', 'cPhone', 'cCode', 'cNotes'].forEach(x => document.getElementById(x).value = '');
-      const cp = document.getElementById('cPoints'); if (cp) cp.value = '0';
-      custSort = 'new'; lastAddedId = id;
-      document.getElementById('cSearch').value = '';
-      custView('list');
-      toast('تمت إضافة العميل ✓ وظهر في قائمة العملاء');
-      setTimeout(() => { const el = document.querySelector('.cust-card.flash'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 150);
+      try {
+        const nameEl = document.getElementById('cName');
+        const dateEl = document.getElementById('cDate');
+        const name = (nameEl?.value || '').trim();
+        let date = (dateEl?.value || '').trim();
+        const phone = (document.getElementById('cPhone')?.value || '').trim();
+        const code = (document.getElementById('cCode')?.value || '').trim();
+        const taxNo = (document.getElementById('cTaxNo')?.value || '').trim();
+        const address = (document.getElementById('cAddress')?.value || '').trim();
+        const notes = (document.getElementById('cNotes')?.value || '').trim();
+        const points = Math.max(0, Math.floor(parseFloat(document.getElementById('cPoints')?.value) || 0));
+        if (!name) {
+          alert('أدخل اسم العميل');
+          nameEl?.focus();
+          return;
+        }
+        // لو تاريخ الصيانة فاضي → افتراضي بعد 6 أشهر
+        if (!date) {
+          date = plusMonthsStr(6);
+          if (dateEl) dateEl.value = date;
+        }
+        if (code && customers.some(c => codeEq(c.code, code))) {
+          alert('الكود ده مستخدم لعميل تاني');
+          return;
+        }
+        const id = Date.now().toString();
+        customers.push({ id, name, date, phone, code, taxNo, address, notes, history: [], points: points || 0 });
+        saveCustomers();
+        try { fillCustomerPicks(id); } catch (e) {}
+        ['cName', 'cDate', 'cPhone', 'cCode', 'cTaxNo', 'cAddress', 'cNotes'].forEach(x => {
+          const el = document.getElementById(x); if (el) el.value = '';
+        });
+        const cp = document.getElementById('cPoints'); if (cp) cp.value = '0';
+        // إعادة تعيين تاريخ افتراضي للنموذج
+        if (dateEl) dateEl.value = plusMonthsStr(6);
+        custSort = 'new';
+        lastAddedId = id;
+        const searchEl = document.getElementById('cSearch');
+        if (searchEl) searchEl.value = '';
+        custView('list');
+        try { renderCustomers(); } catch (e) {}
+        toast('تمت إضافة العميل ✓ وظهر في قائمة العملاء');
+        setTimeout(() => {
+          const el = document.querySelector('.cust-card.flash');
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 180);
+      } catch (err) {
+        console.error('saveCustomer error', err);
+        alert('تعذر حفظ العميل: ' + (err && err.message ? err.message : err));
+      }
     }
 
     function custInfo(c) {
@@ -4948,7 +5079,7 @@
       const el = document.getElementById('customersList');
       if (customers.length === 0) { el.innerHTML = '<div class="empty-state"><div class="icon">👥</div>لا يوجد عملاء بعد<br><small>اضغط «إضافة عميل» من فوق</small></div>'; return; }
       const q = (document.getElementById('cSearch')?.value || '').trim().toLowerCase();
-      let list = customers.filter(c => !q || [c.name, c.phone, c.code, c.notes].some(v => String(v || '').toLowerCase().includes(q)));
+      let list = customers.filter(c => !q || [c.name, c.phone, c.code, c.notes, c.taxNo, c.address].some(v => String(v || '').toLowerCase().includes(q)));
       if (custSort === 'due') list = list.filter(c => custInfo(c).days <= 5);
       if (custSort === 'new') list.sort((a, b) => Number(b.id) - Number(a.id));
       else list.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -5590,17 +5721,31 @@
       document.getElementById('qTotal').textContent = total.toFixed(2) + ' ر.س';
       return { sub, vatPct, vat, disc, total, beforeDisc };
     }
+    function updateQuoteValidHint() {
+      const days = Math.max(1, parseInt(document.getElementById('qValid')?.value) || 7);
+      const until = new Date(Date.now() + days * 86400000);
+      const daysEl = document.getElementById('qValidDaysTxt');
+      const untilEl = document.getElementById('qValidUntilTxt');
+      if (daysEl) daysEl.textContent = String(days);
+      if (untilEl) untilEl.textContent = until.toLocaleDateString('en-GB');
+    }
     function clearQuote() {
       qItems = [];
-      ['qCustomer', 'qPhone', 'qDiscount', 'qVat', 'qNotes', 'qCustId'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+      ['qCustomer', 'qPhone', 'qTaxNo', 'qAddress', 'qDiscount', 'qVat', 'qNotes', 'qCustId'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
       const pick = document.getElementById('qCustPick'); if (pick) pick.value = '';
-      document.getElementById('qValid').value = 7;
+      const qv = document.getElementById('qValid'); if (qv) qv.value = 7;
+      updateQuoteValidHint();
       renderQuoteItems();
     }
     async function downloadQuotePDF() {
       if (!qItems.length) { alert('أضف منتجات للعرض أولاً'); return; }
+      const custId = document.getElementById('qCustId').value || '';
       const customer = document.getElementById('qCustomer').value.trim();
-      if (!customer) { alert('اختر أو اكتب اسم العميل'); document.getElementById('qCustomer').focus(); return; }
+      if (!custId || !customer) {
+        alert('اختر عميل من قائمة العملاء أولاً');
+        document.getElementById('qCustPick')?.focus();
+        return;
+      }
       showLoading('جاري تجهيز عرض السعر...');
       const { sub, vatPct, vat, disc, total } = calcQuote();
       const no = parseInt(localStorage.getItem('ma_qno') || '1000') + 1;
@@ -5608,13 +5753,15 @@
       const now = new Date();
       const days = Math.max(1, parseInt(document.getElementById('qValid').value) || 7);
       const until = new Date(now.getTime() + days * 86400000);
-      const custId = document.getElementById('qCustId').value || '';
       const phone = document.getElementById('qPhone').value.trim();
+      const taxNo = (document.getElementById('qTaxNo')?.value || '').trim();
+      const address = (document.getElementById('qAddress')?.value || '').trim();
       const data = {
         kind: 'quote', title: 'عرض سعر', no: 'Q-' + no, customer, custId,
-        phone,
+        phone, taxNo, address,
         date: now.toLocaleDateString('en-GB') + '  ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
         items: qItems.map(i => ({ ...i })), subtotal: sub, discount: disc, vatPct, vat, total,
+        validDays: days,
         validUntil: until.toLocaleDateString('en-GB'),
         notes: document.getElementById('qNotes').value.trim()
       };
@@ -5717,10 +5864,17 @@
     let lastQuote = null;
     function buildQuoteDataFromForm() {
       if (!qItems.length) { alert('أضف منتجات لعرض السعر أولاً'); return null; }
+      const custId = document.getElementById('qCustId')?.value || '';
       const customer = (document.getElementById('qCustomer')?.value || '').trim();
-      if (!customer) { alert('اكتب اسم العميل'); return null; }
+      if (!custId || !customer) {
+        alert('اختر عميل من قائمة العملاء أولاً');
+        document.getElementById('qCustPick')?.focus();
+        return null;
+      }
       const phone = (document.getElementById('qPhone')?.value || '').trim();
       if (!normalizeWaPhone(phone)) { alert('أدخل رقم جوال العميل'); return null; }
+      const taxNo = (document.getElementById('qTaxNo')?.value || '').trim();
+      const address = (document.getElementById('qAddress')?.value || '').trim();
       const { sub, vatPct, vat, disc, total } = calcQuote();
       const no = parseInt(localStorage.getItem('ma_qno') || '1000') + 1;
       localStorage.setItem('ma_qno', String(no));
@@ -5729,8 +5883,9 @@
       const until = new Date(now.getTime() + days * 86400000);
       const data = {
         kind: 'quote', title: 'عرض سعر', no: 'Q-' + no, customer,
-        custId: document.getElementById('qCustId')?.value || '',
-        phone,
+        custId,
+        phone, taxNo, address,
+        validDays: days,
         date: now.toLocaleDateString('en-GB') + '  ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
         dateIso: now.toISOString(),
         items: qItems.map(i => ({ ...i })),
@@ -6072,13 +6227,19 @@
     function saveQuickCustomer(prefix) {
       const nameEl = document.getElementById(prefix === 'inv' ? 'invNewCustName' : 'qNewCustName');
       const phoneEl = document.getElementById(prefix === 'inv' ? 'invNewCustPhone' : 'qNewCustPhone');
+      const taxEl = document.getElementById(prefix === 'inv' ? 'invNewCustTaxNo' : 'qNewCustTaxNo');
+      const addrEl = document.getElementById(prefix === 'inv' ? 'invNewCustAddress' : 'qNewCustAddress');
       const name = (nameEl?.value || '').trim();
       const phone = (phoneEl?.value || '').trim();
+      const taxNo = (taxEl?.value || '').trim();
+      const address = (addrEl?.value || '').trim();
       if (!name) { alert('اكتب اسم العميل'); nameEl?.focus(); return; }
       const c = {
         id: Date.now().toString(),
         name,
         phone,
+        taxNo,
+        address,
         date: plusMonthsStr(6),
         code: '',
         notes: 'أُضيف من ' + (prefix === 'inv' ? 'الفاتورة' : 'عرض السعر')
@@ -6092,17 +6253,25 @@
         document.getElementById('invCustPick').value = c.id;
         document.getElementById('invCustomer').value = c.name;
         document.getElementById('invCustPhone').value = c.phone || '';
+        const it = document.getElementById('invTaxNo'); if (it) it.value = c.taxNo || '';
+        const ia = document.getElementById('invAddress'); if (ia) ia.value = c.address || '';
         document.getElementById('invQuickCust').style.display = 'none';
         if (nameEl) nameEl.value = '';
         if (phoneEl) phoneEl.value = '';
+        if (taxEl) taxEl.value = '';
+        if (addrEl) addrEl.value = '';
       } else {
         document.getElementById('qCustId').value = c.id;
         document.getElementById('qCustPick').value = c.id;
         document.getElementById('qCustomer').value = c.name;
         document.getElementById('qPhone').value = c.phone || '';
+        const qt = document.getElementById('qTaxNo'); if (qt) qt.value = c.taxNo || '';
+        const qa = document.getElementById('qAddress'); if (qa) qa.value = c.address || '';
         document.getElementById('qQuickCust').style.display = 'none';
         if (nameEl) nameEl.value = '';
         if (phoneEl) phoneEl.value = '';
+        if (taxEl) taxEl.value = '';
+        if (addrEl) addrEl.value = '';
       }
       toast('تم حفظ العميل في قائمة العملاء ✓');
     }
@@ -6127,10 +6296,14 @@
         document.getElementById('invCustId').value = c ? c.id : '';
         document.getElementById('invCustomer').value = c ? c.name : '';
         document.getElementById('invCustPhone').value = c ? (c.phone || '') : '';
+        const it = document.getElementById('invTaxNo'); if (it) it.value = c ? (c.taxNo || '') : '';
+        const ia = document.getElementById('invAddress'); if (ia) ia.value = c ? (c.address || '') : '';
       } else {
         document.getElementById('qCustId').value = c ? c.id : '';
         document.getElementById('qCustomer').value = c ? c.name : '';
         document.getElementById('qPhone').value = c ? (c.phone || '') : '';
+        const qt = document.getElementById('qTaxNo'); if (qt) qt.value = c ? (c.taxNo || '') : '';
+        const qa = document.getElementById('qAddress'); if (qa) qa.value = c ? (c.address || '') : '';
       }
     }
     function goAdminTab(tab) {
@@ -6146,6 +6319,8 @@
       document.getElementById('invCustPick').value = c.id;
       document.getElementById('invCustomer').value = c.name;
       document.getElementById('invCustPhone').value = c.phone || '';
+      const it = document.getElementById('invTaxNo'); if (it) it.value = c.taxNo || '';
+      const ia = document.getElementById('invAddress'); if (ia) ia.value = c.address || '';
       goAdminTab('invoice');
       fillInvoiceSelect();
       toast('تم اختيار العميل: ' + c.name + ' — أضف المنتجات للفاتورة');
@@ -6159,6 +6334,8 @@
       document.getElementById('qCustPick').value = c.id;
       document.getElementById('qCustomer').value = c.name;
       document.getElementById('qPhone').value = c.phone || '';
+      const qt = document.getElementById('qTaxNo'); if (qt) qt.value = c.taxNo || '';
+      const qa = document.getElementById('qAddress'); if (qa) qa.value = c.address || '';
       goAdminTab('quote');
       fillQuoteSelect();
       toast('تم اختيار العميل: ' + c.name + ' — أضف البنود لعرض السعر');
@@ -6214,6 +6391,8 @@
         ${pointsWinHtml(getCustomerPoints(c), 'كل ' + loyaltyRule.amount + ' ر.س = ' + loyaltyRule.points + ' نقطة · يمكن استبدالها بمنتج أو صيانة مجانية')}
         <div class="cd-info">
           📞 ${c.phone ? `<span dir="ltr">${esc(c.phone)}</span>` : '-'}<br>
+          ${c.taxNo ? `🧾 الرقم الضريبي: <b dir="ltr">${esc(c.taxNo)}</b><br>` : ''}
+          ${c.address ? `📍 العنوان: <b>${esc(c.address)}</b><br>` : ''}
           📅 موعد الصيانة القادم: <b>${esc(c.date)}</b><br>
           🏷️ الكود: ${c.code ? `<b dir="ltr">${esc(c.code)}</b>` : '<span style="color:var(--muted)">بدون كود</span>'}<br>
           ⭐ النقاط: <b>${getCustomerPoints(c)}</b><br>
@@ -6304,6 +6483,10 @@
           <input type="tel" id="ecPhone" value="${esc(c.phone || '')}" style="flex:1" autocomplete="tel">
           <button type="button" class="btn btn-outline btn-sm" onclick="pickContactPhone('ecPhone','ecName')">📇</button>
         </div>
+        <label>الرقم الضريبي <span class="opt">(اختياري)</span></label>
+        <input type="text" id="ecTaxNo" value="${esc(c.taxNo || '')}" dir="ltr" placeholder="الرقم الضريبي إن وُجد">
+        <label>عنوان العميل <span class="opt">(اختياري)</span></label>
+        <input type="text" id="ecAddress" value="${esc(c.address || '')}" placeholder="المدينة / الحي / الشارع">
         <label>موعد الصيانة القادم</label><input type="date" id="ecDate" value="${esc(c.date)}">
         <label>ملاحظات</label><input type="text" id="ecNotes" value="${esc(c.notes || '')}">
         <label>نقاط الولاء</label><input type="number" id="ecPoints" min="0" step="1" value="${getCustomerPoints(c)}">
@@ -6327,6 +6510,8 @@
       c.code = code;
       c.name = name; c.date = date;
       c.phone = document.getElementById('ecPhone').value.trim();
+      c.taxNo = (document.getElementById('ecTaxNo')?.value || '').trim();
+      c.address = (document.getElementById('ecAddress')?.value || '').trim();
       c.notes = document.getElementById('ecNotes').value.trim();
       c.points = Math.max(0, Math.floor(parseFloat(document.getElementById('ecPoints')?.value) || 0));
       saveCustomers(); renderCustomers(); openCustomer(id);
@@ -6359,6 +6544,8 @@
         <h2>بيانات العميل</h2>
         <div class="info">
           <div><b>الاسم:</b> ${esc(c.name)}</div><div><b>الجوال:</b> <span dir="ltr">${esc(c.phone || '-')}</span></div>
+          <div><b>الرقم الضريبي:</b> <span dir="ltr">${esc(c.taxNo || '-')}</span></div>
+          <div><b>العنوان:</b> ${esc(c.address || '-')}</div>
           <div><b>الكود:</b> <span dir="ltr">${esc(c.code || '-')}</span></div>
           <div><b>موعد الصيانة القادم:</b> ${esc(c.date)} (${inf.label.replace(/[^؀-ۿ0-9 a-zA-Z]/g, '').trim()})</div><div><b>ملاحظات:</b> ${esc(c.notes || '-')}</div>
         </div>
